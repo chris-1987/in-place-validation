@@ -1,0 +1,85 @@
+% !TeX spellcheck = en_US	
+\documentclass[10pt,journal,compsoc]{IEEEtran}
+
+\usepackage{color}
+
+% *** CITATION PACKAGES ***
+\ifCLASSOPTIONcompsoc
+\usepackage[nocompress]{cite}
+\else
+\usepackage{cite}
+\fi
+
+\begin{document}
+
+\title{Building and Checking Suffix Array in External Memory}
+
+\author{Yi~Wu,
+	Ge~Nong,
+	Wai~Hong~Chan,
+	and~Bin~Lao
+	\IEEEcompsocitemizethanks{
+		\IEEEcompsocthanksitem Y. Wu, G. Nong (corresponding author) and B. Lao are with the Department of Computer Science, Sun Yat-sen University, Guangzhou 510275, China. E-mails: wu.yi.christian@gmail.com, issng@mail.sysu.edu.cn, Laobin@mail3.sysu.edu.cn.
+		
+		\IEEEcompsocthanksitem Wai Hong Chan (corresponding author) is with the Department of Mathematics and Information Technology, The Education University of Hong Kong, Hong Kong. E-mail: waihchan@ied.edu.hk.
+}}% <-this % stops a space
+
+
+\IEEEtitleabstractindextext{%
+\begin{abstract}
+	
+Suffix array~(SA) can be built within linear time and space by means of the induced sorting~(IS) method. The recently proposed IS suffix sorter fSAIS has a performance competitive to that of the state-of-the-art parallel construction algorithms in external memory, which indicates a great potential for improving the other disk-based IS alternatives by engineering them carefully. In view of this, we redesign the reduction phase of DSA-IS by using a new substring sorting and naming method and implement the variant, called DSA-IS+, by using several space-saving techinques previously applied to fSAIS.
+
+A constructed SA should be checked to ensure its correctness. We present in this paper a method that enables any IS suffix sorter to perform building and checking simultaneously, where the consumption for checking is negligible in comparison with that for building in our experiments. 
+
+\end{abstract}
+
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+Suffix array, construction and verification, external memory.
+\end{IEEEkeywords}}
+
+
+% make the title area
+\maketitle
+
+\IEEEdisplaynontitleabstractindextext
+
+\IEEEpeerreviewmaketitle
+
+\section{Introduction}\label{sec:introduction}
+
+
+The suffix array~(SA)~\cite{Manber1993} is an essential data structure for string processing and information retrieval. Among the existing internal-memory algorithms for SA construction, SA-IS~\cite{Nong11} achieves the optimal time and space complexities using the induced sorting principle, where the key operation is to retrieve the preceding characters of sorted suffixes in order for inducing the lexical order of unsorted ones. To handle massive datasets , several external memory algorithms have been proposed for building massive suffix arrays in recent years, e.g., DC3~\cite{Dementiev2008a}, bwt-disk~\cite{Ferragina2012}, SAscan~\cite{Karkkainen2014}, pSAscan~\cite{Karkkainen2015}, eSAIS~\cite{Bingmann2013}, EM-SA-DS~\cite{Nong2014} and DSA-IS~\cite{Nong2015}. Among them, the latter three algorithms are based on the induced sorting~(IS) method described in SA-IS~\cite{Nong2011}.
+
+
+ This algorithm employs the IS method to induce the lexical order of all the suffixes from a selected subset. 
+
+ This algorithm uses the induced sorting method to 
+
+In the past decades, great effort has been taken to study efficient algorithms for SA construction. th
+
+extensive works have been put on designing time and space efficient suffix sorting algorithms
+
+data structure that has been widely used in many string processing applications, e.g., biological sequence alignment, time series analysis and text clustering. Given an input string, traversing its suffix tree can be emulated by using the corresponding enhanced suffix array~\cite{Abouelhodaa2004}, which mainly consists of the suffix and the longest common prefix arrays. It has been realized that the application scope of an index mainly depends on the construction speed and the space requirement. This leads to intensive works on designing time and space efficient suffix sorting algorithms over the past decade, assuming different computation models such as internal memory, external memory, parallel and distributed models. Particularly, 
+
+The basic idea behind the induced sorting method is to induce the lexicographical order of all the substrings/suffixes from a sorted subset of substrings/suffixes. Following the idea, an IS-based suffix sorting algorithm is typically comprised of a reduction phase for sorting and naming substrings to reduce a string $x[0,n)$ to a short string $x1[0,n1)$ with $n1 \le \frac{1}{2}n$ and an induction phase for sorting suffixes to induce ${\sf SA}(x)$ from ${\sf SA}(x1)$. During the two phases, the key operation is to retrieve the preceding character of a sorted substring/suffix. This can be done very quickly when $x$ is fully accommodated in the internal memory, but will become slow when $x$ resides in the external memory, as each operation takes a random disk access. For a high I/O efficiency, eSAIS, EM-SA-DS and DSA-IS use different auxiliary data structures to retrieve the preceding characters in a disk-friendly way. Particularly, both eSAIS and EM-SA-DS split a long substring into pieces and represent each piece by a fixed-size tuple, while DSA-IS does not. With an elaborate arrangement of the I/O operations, the programs for these three algorithms are competitive with those for others in terms of both time and space efficiencies.
+
+
+Among the existing internal-memory suffix sorters, SA-IS~\cite{Nong11} achieves the optimal time and space complexities using the induced sorting method, the key operation of which is to retrieve the preceding characters of sorted suffixes in order for inducing the lexical order of unsorted ones. In the past five years, several works adapted SA-IS to design suffix sorters specific for EM models~\cite{Nong14, Nong15, Karkkainen2014, Liu2015}. These variants use different approaches to retrieve the preceding characters by sequential I/O operations. However, they all suffer from a space bottleneck for taking at least twice disk space as SA-IS on real-world datasets. Recently, it was presented in~\cite{xxx} a new engineering version of SA-IS that achieves nearly optimal space efficiency, indicating a great potential for improving the other disk-based IS alternatives by engineering them carefully.
+
+
+Spae
+
+
+\section{Conclusion}
+xxx
+
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,bibfile}
+
+\end{document}
+
+
