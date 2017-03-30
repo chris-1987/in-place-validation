@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6100) (preloaded format=pdflatex 2017.1.21)  15 MAR 2017 21:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6100) (preloaded format=pdflatex 2017.1.21)  21 MAR 2017 18:54
 entering extended mode
 **./draft.tex
 (draft.tex
@@ -167,95 +167,103 @@ LaTeX Font Info:    ... okay on input line 13.
 \makeMPintoPDFobject=\count100
 \everyMPtoPDFconversion=\toks16
 )
-LaTeX Font Info:    Try loading font information for OT1+phv on input line 44.
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 42.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1phv.fd"
 File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <8.03> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 44.
-LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 44
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 42.
+LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 42
 .
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <11.04124> on input line 44.
+(Font)              <11.04124> on input line 42.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7.72884> on input line 44.
+(Font)              <7.72884> on input line 42.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5.52061> on input line 44.
-LaTeX Font Info:    Try loading font information for U+pzd on input line 44.
+(Font)              <5.52061> on input line 42.
+LaTeX Font Info:    Try loading font information for U+pzd on input line 42.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\upzd.fd"
 File: upzd.fd 2001/06/04 font definitions for U/pzd.
 )
-LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 44.
+LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 42.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8.03> on input line 44.
+(Font)              <8.03> on input line 42.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5.62097> on input line 44.
+(Font)              <5.62097> on input line 42.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <4.015> on input line 44.
+(Font)              <4.015> on input line 42.
 
-Underfull \hbox (badness 2961) in paragraph at lines 44--44
+Underfull \hbox (badness 2961) in paragraph at lines 42--42
 \OT1/ppl/m/it/8.03 China. E-mails: wu.yi.christian@gmail.com, issng@mail.sysu.e
 du.cn,
  []
 
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <11.04124> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 48.
 LaTeX Font Info:    Font shape `OT1/phv/bx/sc' in size <11.04124> not available
 
-(Font)              Font shape `OT1/phv/b/sc' tried instead on input line 50.
+(Font)              Font shape `OT1/phv/b/sc' tried instead on input line 48.
 
-LaTeX Warning: Citation `Manber1993' on page 1 undefined on input line 53.
-
-
-LaTeX Warning: Citation `Dementiev2008a' on page 1 undefined on input line 53.
+LaTeX Warning: Citation `Manber1993' on page 1 undefined on input line 81.
 
 
-LaTeX Warning: Citation `Ferragina2012' on page 1 undefined on input line 53.
+LaTeX Warning: Citation `Manber1993' on page 1 undefined on input line 84.
 
 
-LaTeX Warning: Citation `Bingmann2013' on page 1 undefined on input line 53.
+LaTeX Warning: Citation `Manber1993' on page 1 undefined on input line 89.
 
 
-LaTeX Warning: Citation `Nong2014' on page 1 undefined on input line 53.
+LaTeX Warning: Citation `Dementiev2008a' on page 1 undefined on input line 89.
 
 
-LaTeX Warning: Citation `Nong2015' on page 1 undefined on input line 53.
+LaTeX Warning: Citation `Ferragina2012' on page 1 undefined on input line 89.
 
 
-LaTeX Warning: Citation `Nong2011' on page 1 undefined on input line 53.
+LaTeX Warning: Citation `Bingmann2013' on page 1 undefined on input line 89.
 
 
-LaTeX Warning: Citation `Abouelhodaa2004' on page 1 undefined on input line 64.
+LaTeX Warning: Citation `Nong2014' on page 1 undefined on input line 89.
 
 
-LaTeX Font Info:    Calculating math sizes for size <9.53561> on input line 66.
+LaTeX Warning: Citation `Nong2015' on page 1 undefined on input line 89.
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9.53561> on input line 66.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6.6749> on input line 66.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <4.7678> on input line 66.
 
-LaTeX Warning: Citation `xxx' on page 1 undefined on input line 69.
+LaTeX Warning: Citation `Nong2011' on page 1 undefined on input line 89.
+
+
+LaTeX Warning: Citation `Abouelhodaa2004' on page 1 undefined on input line 100
+.
 
 [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 
-] (draft.bbl) [2
-
 ]
-(draft.aux)
+LaTeX Font Info:    Calculating math sizes for size <9.53561> on input line 102
+.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9.53561> on input line 102.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6.6749> on input line 102.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <4.7678> on input line 102.
+
+
+LaTeX Warning: Citation `Liu2015' on page 2 undefined on input line 105.
+
+
+LaTeX Warning: Citation `xxx' on page 2 undefined on input line 105.
+
+(draft.bbl) [2] (draft.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 2011 strings out of 493333
- 32427 string characters out of 3139200
- 94063 words of memory out of 3000000
- 5564 multiletter control sequences out of 15000+200000
+ 2013 strings out of 493333
+ 32446 string characters out of 3139200
+ 95066 words of memory out of 3000000
+ 5566 multiletter control sequences out of 15000+200000
  39141 words of font info for 87 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  29i,6n,22p,1285b,299s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -271,7 +279,7 @@ TeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/
 type1/urw/palatino/uplr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/pala
 tino/uplri8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/zapfding/uzdr.pfb
 >
-Output written on draft.pdf (2 pages, 129557 bytes).
+Output written on draft.pdf (2 pages, 131441 bytes).
 PDF statistics:
  58 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

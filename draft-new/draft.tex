@@ -28,15 +28,13 @@
 \IEEEtitleabstractindextext{%
 \begin{abstract}
 	
-Suffix array~(SA) can be built within linear time and space by means of the induced sorting~(IS) method. The recently proposed IS suffix sorter fSAIS has a performance competitive to that of the state-of-the-art parallel construction algorithms in external memory, which indicates a great potential for improving the other disk-based IS alternatives by engineering them carefully. In view of this, we redesign the reduction phase of DSA-IS by using a new substring sorting and naming method and implement the variant, called DSA-IS+, by using several space-saving techinques previously applied to fSAIS.
-
-A constructed SA should be checked to ensure its correctness. We present in this paper a method that enables any IS suffix sorter to perform building and checking simultaneously, where the consumption for checking is negligible in comparison with that for building in our experiments. 
+Currently, there exist several external-memory suffix sorting algorithms that build a suffix array~(SA) using the induced sorting~(IS) method, where the biggest difference between them is the way of retrieving the preceding characters of sorted suffixes when inducing the order of unsorted ones. It was reported recently that a careful engineering of these algorithms can build an SA using nearly optimal disk space, with the time and I/O complexities less than the state-of-the-art SA construction solutions. In this paper, we further employ the IS method to design an SA checking algorithm that verifies a suffix array when it is being built by any IS suffix sorting algorithms, where the time, space and I/O consumptions for checking is negligible in comparison with that for building in our experiments. This indicates that the IS method can serve as a basis for developing an efficient solution to the situations where checking is a must for a constructed SA.  
 
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-Suffix array, construction and verification, external memory.
+Suffix array, in-place verification, external memory.
 \end{IEEEkeywords}}
 
 
@@ -48,6 +46,44 @@ Suffix array, construction and verification, external memory.
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}\label{sec:introduction}
+
+For a text drawn from a constant or integer alphabet, its suffix array can be built within linear time and space by the internal-memory algorithm SA-IS~\cite{Nong11}. 
+
+
+
+
+This algorithm sort suffixes using the induced sorting method, which sorts two suffixes by comparing their heading characters and the lexical order of the ones starting at the next positions.
+
+
+ the induced sorting principle. The  main idea behind the IS method is to 
+
+ the main idea of which is to induce the lexicographical order of all the suffixes from that of a sorted subset. Recently, the IS method has been successfully applied to designing three suffix sorting algorithms~eSAIS~\cite{Bingmann12}, SAIS-PQ~\cite{Liu15} and DSA-IS~\cite{Nong15} for external memory models. These disk-based variants commonly use a priority queue to simulate SA-IS, but they differ from each other in the way of retrieving the preceding character of a sorted suffix when inserting it 
+
+ when inserting the unsorted ones into the SA. 
+
+
+several works successfully applied the IS method to designing efficient SA construction algorithms on external memory models, where the biggest difference between them is the way of retrieving the preceding characters of sorted suffixes for inducing the order of unsorted ones.
+
+
+The internal-memory IS algorithms for sorting suffixes can build an SA in linear time and space~\cite{Nong11}. Recently, several works successfully applied the IS method to construct suffix arrays for massive datasets using external memory.
+
+For an given string, its suffix array can be built in linear time and space using the induced sorting method.  
+
+
+Suffix array can be 
+
+
+The algorithm SA-IS is currently the fastest SA construction algorithm 
+
+SA-IS is currently the fastest 
+
+
+The suffix array~(SA)~\cite{Manber1993} can be built in linear time and space using the induced sorting method~\cite{Nong11}. Currently, there are three works  
+
+
+The suffix array~(SA)~\cite{Manber1993} can be built in linear time and space 
+
+These algorithms have been implemented for demonstration and experiment purposes, 
 
 
 The suffix array~(SA)~\cite{Manber1993} is an essential data structure for string processing and information retrieval. Among the existing internal-memory algorithms for SA construction, SA-IS~\cite{Nong11} achieves the optimal time and space complexities using the induced sorting principle, where the key operation is to retrieve the preceding characters of sorted suffixes in order for inducing the lexical order of unsorted ones. To handle massive datasets , several external memory algorithms have been proposed for building massive suffix arrays in recent years, e.g., DC3~\cite{Dementiev2008a}, bwt-disk~\cite{Ferragina2012}, SAscan~\cite{Karkkainen2014}, pSAscan~\cite{Karkkainen2015}, eSAIS~\cite{Bingmann2013}, EM-SA-DS~\cite{Nong2014} and DSA-IS~\cite{Nong2015}. Among them, the latter three algorithms are based on the induced sorting~(IS) method described in SA-IS~\cite{Nong2011}.

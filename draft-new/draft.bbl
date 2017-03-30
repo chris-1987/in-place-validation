@@ -26,6 +26,22 @@ G.~Nong, S.~Zhang, and W.~H. Chan, ``{Two Efficient Algorithms for Linear Time
   Suffix Array Construction},'' \emph{IEEE Transactions on Computers}, vol.~60,
   no.~10, pp. 1471--1484, October 2011.
 
+\bibitem{Bingmann12}
+T.~Bingmann, J.~Fischer, and V.~Osipov, ``{Inducing Suffix and LCP Arrays in
+  External Memory},'' in \emph{Proceedings of the 15th Workshop on Algorithm
+  Engineering and Experiments}, 2012, pp. 88--102.
+
+\bibitem{Liu15}
+W.~J. Liu, G.~Nong, W.~H. Chan, and Y.~Wu, ``{Induced Sorting Suffixes in
+  External Memory with Better Design and Less Space},'' in \emph{Proceedings of
+  the 22nd International Symposium on String Processing and Information
+  Retrieval}, London, UK, September 2015, pp. 83--94.
+
+\bibitem{Nong15}
+G.~Nong, W.~H. Chan, S.~Q. Hu, and Y.~Wu, ``{Induced Sorting Suffixes in
+  External Memory},'' \emph{ACM Transactions on Information Systems}, vol.~33,
+  no.~3, pp. 12:1--12:15, March 2015.
+
 \bibitem{Karkkainen2014}
 J.~K\"{a}rkk\"{a}inen and D.~Kempa, ``{Engineering a Lightweight External
   Memory Suffix Array Construction Algorithm},'' in \emph{Proceedings of the
@@ -42,16 +58,5 @@ J.~K\"{a}rkk\"{a}inen, D.~Kempa, and S.~J. Puglisi, ``{Parallel External Memory
 G.~Nong, W.~H. Chan, S.~Zhang, and X.~F. Guan, ``{Suffix Array Construction in
   External Memory Using D-Critical Substrings},'' \emph{ACM Transactions on
   Information Systems}, vol.~32, no.~1, pp. 1:1--1:15, January 2014.
-
-\bibitem{Nong15}
-G.~Nong, W.~H. Chan, S.~Q. Hu, and Y.~Wu, ``{Induced Sorting Suffixes in
-  External Memory},'' \emph{ACM Transactions on Information Systems}, vol.~33,
-  no.~3, pp. 12:1--12:15, March 2015.
-
-\bibitem{Liu2015}
-W.~J. Liu, G.~Nong, W.~H. Chan, and Y.~Wu, ``{Induced Sorting Suffixes in
-  External Memory with Better Design and Less Space},'' in \emph{Proceedings of
-  the 22nd International Symposium on String Processing and Information
-  Retrieval}, London, UK, September 2015, pp. 83--94.
 
 \end{thebibliography}
