@@ -12,7 +12,7 @@
 
 \begin{document}
 
-\title{Building and Checking Suffix Array in External Memory}
+\title{Building and In-Place Checking Suffix Array in External Memory}
 
 \author{Yi~Wu,
 	Ge~Nong,
@@ -28,7 +28,10 @@
 \IEEEtitleabstractindextext{%
 \begin{abstract}
 	
-Currently, there exist several external-memory suffix sorting algorithms that build a suffix array~(SA) using the induced sorting~(IS) method, where the biggest difference between them is the way of retrieving the preceding characters of sorted suffixes when inducing the order of unsorted ones. It was reported recently that a careful engineering of these algorithms can build an SA using nearly optimal disk space, with the time and I/O complexities less than the state-of-the-art SA construction solutions. In this paper, we further employ the IS method to design an SA checking algorithm that verifies a suffix array when it is being built by any IS suffix sorting algorithms, where the time, space and I/O consumptions for checking is negligible in comparison with that for building in our experiments. This indicates that the IS method can serve as a basis for developing an efficient solution to the situations where checking is a must for a constructed SA.  
+The induced sorting~(IS) method has been used to design disk-based algorithms for suffix array~(SA) construction. A recent engineering of these algorithms achieved nearly optimal disk space, with both the I/O and the time complexities better than the current fastest external-memory suffix sorters. In this paper, we propose a checking algorithm that enables any IS suffix sorting algorithms to check an SA when it is being constructed. Our experimental results indicate that the time, space and I/O volume for verification by our checking program is negiligible in comparison with that for construction by our 
+
+Recently, these algorithms have been carefully engineered to achieve nearly optimal disk space, with both the I/O and the time complexities better than the current fastest external-memory suffix sorters. In this paper, we propose a checking algorithm that enables any IS suffix sorting algorithm to build and check an SA simultaneously. Our experimental results indicate that, in comparison with that for building, the time, space and I/O consumptions for checking is negligible. This convinence us that the proposed checking algorithm can be combined with the existing IS suffix sorting algorithms to develop efficient solutions for the situations where checking is a must for a constructed SA.
+
 
 \end{abstract}
 
@@ -47,8 +50,12 @@ Suffix array, in-place verification, external memory.
 
 \section{Introduction}\label{sec:introduction}
 
-For a text drawn from a constant or integer alphabet, its suffix array can be built within linear time and space by the internal-memory algorithm SA-IS~\cite{Nong11}. 
+On RAM models, the suffix array for any text can be built within linear time and space using the SA-IS algorithm~\cite{Nong11}. Recently, this algorithm has been successfully adapted to design three external-memory suffix sorting algorithms~eSAIS~\cite{Bingmann12}, DSA-IS~\cite{Nong15} and SAIS-PQ~\cite{Liu15}.　To avoid random I/O accesses, these algorithms adopt different approaches to retrieve the head characters of unsorted suffixes for inducing their lexical order. However, they all suffer from a disk space bottleneck and 
 
+
+Although these algorithms can achieve 
+
+These algorithms use different approaches to retrieve the head characters of suffixes to be sorted when  when inducing their lexical order from the sorted ones. Although the experimental  
 
 
 
