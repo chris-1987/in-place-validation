@@ -2,19 +2,10 @@ This is BibTeX, Version 0.99dThe top-level auxiliary file: draft.aux
 The style file: IEEEtran.bst
 Database file #1: IEEEabrv.bib
 Database file #2: bibfile.bib
-Warning--I didn't find a database entry for "Manber1993"
-Warning--I didn't find a database entry for "Dementiev2008a"
-Warning--I didn't find a database entry for "Ferragina2012"
-Warning--I didn't find a database entry for "Bingmann2013"
-Warning--I didn't find a database entry for "Nong2014"
-Warning--I didn't find a database entry for "Nong2015"
-Warning--I didn't find a database entry for "Nong2011"
-Warning--I didn't find a database entry for "Abouelhodaa2004"
-Warning--I didn't find a database entry for "Liu2015"
 Warning--I didn't find a database entry for "xxx"
 -- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 
 Done.
-(There were 10 warnings)
+(There was 1 warning)

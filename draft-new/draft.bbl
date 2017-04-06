@@ -42,21 +42,10 @@ W.~J. Liu, G.~Nong, W.~H. Chan, and Y.~Wu, ``{Induced Sorting Suffixes in
   the 22nd International Symposium on String Processing and Information
   Retrieval}, London, UK, September 2015, pp. 83--94.
 
-\bibitem{Karkkainen2014}
-J.~K\"{a}rkk\"{a}inen and D.~Kempa, ``{Engineering a Lightweight External
-  Memory Suffix Array Construction Algorithm},'' in \emph{Proceedings of the
-  2nd International Conference on Algorithms for Big Data}, Palermo, Italy,
-  April 2014, pp. 53--60.
-
 \bibitem{Karkkainen2015}
 J.~K\"{a}rkk\"{a}inen, D.~Kempa, and S.~J. Puglisi, ``{Parallel External Memory
   Suffix Sorting},'' in \emph{In proceedings of the 26th Annual Symposium on
   Combinatorial Pattern Matching}, Ischia Island, Italy, July 2015, pp.
   329--342.
-
-\bibitem{Nong14}
-G.~Nong, W.~H. Chan, S.~Zhang, and X.~F. Guan, ``{Suffix Array Construction in
-  External Memory Using D-Critical Substrings},'' \emph{ACM Transactions on
-  Information Systems}, vol.~32, no.~1, pp. 1:1--1:15, January 2014.
 
 \end{thebibliography}
