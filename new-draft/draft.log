@@ -1,0 +1,778 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.31)  21 APR 2017 16:20
+entering extended mode
+**./draft.tex
+(draft.tex
+LaTeX2e <2016/03/31> patch level 3
+Babel <3.9r> and hyphenation patterns for 75 language(s) loaded.
+(IEEEtran.cls
+Document Class: IEEEtran 2014/09/17 V1.8a by Michael Shell
+-- See the "IEEEtran_HOWTO" manual for usage information.
+-- http://www.michaelshell.org/tex/ieeetran/
+\@IEEEtrantmpdimenA=\dimen102
+\@IEEEtrantmpdimenB=\dimen103
+\@IEEEtrantmpdimenC=\dimen104
+\@IEEEtrantmpcountA=\count79
+\@IEEEtrantmpcountB=\count80
+\@IEEEtrantmpcountC=\count81
+\@IEEEtrantmptoksA=\toks14
+-- Using IEEE Computer Society mode.
+LaTeX Font Info:    Try loading font information for OT1+ppl on input line 458.
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ppl.fd"
+File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
+)
+-- Using 8.5in x 11in (letter) paper.
+-- Using PDF output.
+\@IEEEnormalsizeunitybaselineskip=\dimen105
+-- This is a 10 point document.
+\CLASSINFOnormalsizebaselineskip=\dimen106
+\CLASSINFOnormalsizeunitybaselineskip=\dimen107
+\IEEEnormaljot=\dimen108
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <5.01874> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1039.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/it' in size <5.01874> not available
+(Font)              Font shape `OT1/ppl/b/it' tried instead on input line 1039.
+
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <7.02625> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1039.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/it' in size <7.02625> not available
+(Font)              Font shape `OT1/ppl/b/it' tried instead on input line 1039.
+
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <8.03> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1039.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/it' in size <8.03> not available
+(Font)              Font shape `OT1/ppl/b/it' tried instead on input line 1039.
+
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <9.03374> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1039.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/it' in size <9.03374> not available
+(Font)              Font shape `OT1/ppl/b/it' tried instead on input line 1039.
+
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <9.53561> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1039.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/it' in size <9.53561> not available
+(Font)              Font shape `OT1/ppl/b/it' tried instead on input line 1039.
+
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <11.04124> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1039.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/it' in size <11.04124> not available
+
+(Font)              Font shape `OT1/ppl/b/it' tried instead on input line 1039.
+
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12.045> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1039.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/it' in size <12.045> not available
+(Font)              Font shape `OT1/ppl/b/it' tried instead on input line 1039.
+
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <17.06374> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1039.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/it' in size <17.06374> not available
+
+(Font)              Font shape `OT1/ppl/b/it' tried instead on input line 1039.
+
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <20.075> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1039.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/it' in size <20.075> not available
+(Font)              Font shape `OT1/ppl/b/it' tried instead on input line 1039.
+
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <24.09> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 1039.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/it' in size <24.09> not available
+(Font)              Font shape `OT1/ppl/b/it' tried instead on input line 1039.
+
+\IEEEquantizedlength=\dimen109
+\IEEEquantizedlengthdiff=\dimen110
+\IEEEquantizedtextheightdiff=\dimen111
+\IEEEilabelindentA=\dimen112
+\IEEEilabelindentB=\dimen113
+\IEEEilabelindent=\dimen114
+\IEEEelabelindent=\dimen115
+\IEEEdlabelindent=\dimen116
+\IEEElabelindent=\dimen117
+\IEEEiednormlabelsep=\dimen118
+\IEEEiedmathlabelsep=\dimen119
+\IEEEiedtopsep=\skip41
+\c@section=\count82
+\c@subsection=\count83
+\c@subsubsection=\count84
+\c@paragraph=\count85
+\c@IEEEsubequation=\count86
+\abovecaptionskip=\skip42
+\belowcaptionskip=\skip43
+\c@figure=\count87
+\c@table=\count88
+\@IEEEeqnnumcols=\count89
+\@IEEEeqncolcnt=\count90
+\@IEEEsubeqnnumrollback=\count91
+\@IEEEquantizeheightA=\dimen120
+\@IEEEquantizeheightB=\dimen121
+\@IEEEquantizeheightC=\dimen122
+\@IEEEquantizeprevdepth=\dimen123
+\@IEEEquantizemultiple=\count92
+\@IEEEquantizeboxA=\box26
+\@IEEEtmpitemindent=\dimen124
+\c@IEEEbiography=\count93
+\@IEEEtranrubishbin=\box27
+) ("D:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks15
+)
+("D:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+Package: graphics 2016/07/10 v1.0t Standard LaTeX Graphics (DPC,SPQR)
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+("D:\Program Files\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\graphics-def\pdftex.def"
+File: pdftex.def 2016/07/10 v0.06j Graphics/color for pdfTeX
+
+("D:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+("D:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count94
+))
+\Gin@req@height=\dimen125
+\Gin@req@width=\dimen126
+)
+(C:\Users\liuwjun\AppData\Roaming\MiKTeX\2.9\tex\latex\algorithm2e\algorithm2e.
+sty
+Package: algorithm2e 2013/01/06 v5.00 algorithms environments
+\c@AlgoLine=\count95
+ ("D:\Program Files\MiKTeX 2.9\tex\latex\base\ifthen.sty"
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\algocf@hangindent=\skip44
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\tools\xspace.sty"
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
+)
+("D:\Program Files\MiKTeX 2.9\tex\latex\ltxmisc\relsize.sty"
+Package: relsize 2003/07/04 ver 3.1
+)
+********************************************************
+Package `algorithm2e' Release 5.1 -- october 19 2015 --
+- algorithm2e-announce@lirmm.fr mailing list for announcement about releases
+- algorithm2e-discussion@lirmm.fr mailing list for discussion about package
+subscribe by emailing sympa@lirmm.fr with 'subscribe <list> <firstname name>'
+- Author: Christophe Fiorio (christophe.fiorio@umontpellier.fr)
+********************************************************
+\skiptotal=\skip45
+\skiplinenumber=\skip46
+\skiprule=\skip47
+\skiphlne=\skip48
+\skiptext=\skip49
+\skiplength=\skip50
+\algomargin=\skip51
+\skipalgocfslide=\skip52
+\algowidth=\dimen127
+\inoutsize=\dimen128
+\inoutindent=\dimen129
+\interspacetitleruled=\dimen130
+\interspacealgoruled=\dimen131
+\interspacetitleboxruled=\dimen132
+\algocf@ruledwidth=\skip53
+\algocf@inoutbox=\box28
+\algocf@inputbox=\box29
+\AlCapSkip=\skip54
+\AlCapHSkip=\skip55
+\algoskipindent=\skip56
+\algocf@nlbox=\box30
+\algocf@hangingbox=\box31
+\algocf@untilbox=\box32
+\algocf@skipuntil=\skip57
+\algocf@capbox=\box33
+\algoheightruledefault=\skip58
+\algoheightrule=\skip59
+\algotitleheightruledefault=\skip60
+\algotitleheightrule=\skip61
+\c@algocfline=\count96
+\c@algocfproc=\count97
+\c@algocf=\count98
+\algocf@algoframe=\box34
+\algocf@algobox=\box35
+) (C:\Users\liuwjun\AppData\Roaming\MiKTeX\2.9\tex\latex\url\url.sty
+\Urlmuskip=\muskip10
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+("D:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf.sty"
+Package: epstopdf 2016/05/15 v2.6 Conversion with epstopdf on the fly (HO)
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty"
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\grfext.sty"
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+("D:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\kvdefinekeys.sty"
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+))
+("D:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+("D:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\kvsetkeys.sty"
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+("D:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\etexcmds.sty"
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+
+("D:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifluatex.sty"
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+("D:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty"
+Package: pdftexcmds 2016/05/21 v0.22 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+("D:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2016/05/14 v3.1 Provides the ifpdf switch
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+))
+("D:\Program Files\MiKTeX 2.9\tex\latex\tools\indentfirst.sty"
+Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
+)
+(C:\Users\liuwjun\AppData\Roaming\MiKTeX\2.9\tex\latex\subfigure\subfigure.sty
+Package: subfigure 2002/07/30 v2.1.4 subfigure package
+\subfigtopskip=\skip62
+\subfigcapskip=\skip63
+\subfigcaptopadj=\dimen133
+\subfigbottomskip=\skip64
+\subfigcapmargin=\dimen134
+\subfiglabelskip=\skip65
+\c@subfigure=\count99
+\c@lofdepth=\count100
+\c@subtable=\count101
+\c@lotdepth=\count102
+
+****************************************
+* Local config file subfigure.cfg used *
+****************************************
+(C:\Users\liuwjun\AppData\Roaming\MiKTeX\2.9\tex\latex\subfigure\subfigure.cfg)
+\subfig@top=\skip66
+\subfig@bottom=\skip67
+) ("D:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsmath.sty"
+Package: amsmath 2016/06/28 v2.15d AMS math features
+\@mathmargin=\skip68
+
+For additional information on amsmath, use the `?' option.
+("D:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amstext.sty"
+Package: amstext 2000/06/29 v2.01 AMS text
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsgen.sty"
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks16
+\ex@=\dimen135
+))
+("D:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsbsy.sty"
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen136
+)
+("D:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsopn.sty"
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count103
+LaTeX Info: Redefining \frac on input line 199.
+\uproot@=\count104
+\leftroot@=\count105
+LaTeX Info: Redefining \overline on input line 297.
+\classnum@=\count106
+\DOTSCASE@=\count107
+LaTeX Info: Redefining \ldots on input line 394.
+LaTeX Info: Redefining \dots on input line 397.
+LaTeX Info: Redefining \cdots on input line 518.
+\Mathstrutbox@=\box36
+\strutbox@=\box37
+\big@size=\dimen137
+LaTeX Font Info:    Redeclaring font encoding OML on input line 634.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 635.
+\macc@depth=\count108
+\c@MaxMatrixCols=\count109
+\dotsspace@=\muskip11
+\c@parentequation=\count110
+\dspbrk@lvl=\count111
+\tag@help=\toks17
+\row@=\count112
+\column@=\count113
+\maxfields@=\count114
+\andhelp@=\toks18
+\eqnshift@=\dimen138
+\alignsep@=\dimen139
+\tagshift@=\dimen140
+\tagwidth@=\dimen141
+\totwidth@=\dimen142
+\lineht@=\dimen143
+\@envbody=\toks19
+\multlinegap=\skip69
+\multlinetaggap=\skip70
+\mathdisplay@stack=\toks20
+LaTeX Info: Redefining \[ on input line 2739.
+LaTeX Info: Redefining \] on input line 2740.
+)
+("D:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+("D:\Program Files\MiKTeX 2.9\tex\latex\multirow\multirow.sty"
+\bigstrutjot=\dimen144
+)
+("D:\Program Files\MiKTeX 2.9\tex\latex\graphics\color.sty"
+Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\00miktex\color.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 147.
+)
+("D:\Program Files\MiKTeX 2.9\tex\latex\tools\enumerate.sty"
+Package: enumerate 2015/07/23 v3.00 enumerate extensions (DPC)
+\@enLab=\toks21
+)
+\c@theorem=\count115
+
+(C:\Users\liuwjun\AppData\Roaming\MiKTeX\2.9\tex\latex\cite\cite.sty
+LaTeX Info: Redefining \cite on input line 302.
+LaTeX Info: Redefining \nocite on input line 332.
+Package: cite 2015/02/27  v 5.5
+)
+(draft.aux)
+\openout1 = `draft.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+
+-- Lines per column: 61 (exact).
+(C:\Users\liuwjun\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count116
+\scratchdimen=\dimen145
+\scratchbox=\box38
+\nofMPsegments=\count117
+\nofMParguments=\count118
+\everyMPshowfont=\toks22
+\MPscratchCnt=\count119
+\MPscratchDim=\dimen146
+\MPnumerator=\count120
+\makeMPintoPDFobject=\count121
+\everyMPtoPDFconversion=\toks23
+)
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 57.
+ ("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1phv.fd"
+File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
+)
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <8.03> not available
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 57.
+LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 57.
+LaTeX Font Info:    Try loading font information for U+msa on input line 57.
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 57.
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 57
+.
+LaTeX Font Info:    Try loading font information for U+pzd on input line 57.
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\upzd.fd"
+File: upzd.fd 2001/06/04 font definitions for U/pzd.
+)
+Underfull \hbox (badness 2961) in paragraph at lines 57--57
+\OT1/ppl/m/it/8.03 China. E-mails: wu.yi.christian@gmail.com, issng@mail.sysu.e
+du.cn,
+ []
+
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <11.04124> not available
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 63.
+LaTeX Font Info:    Font shape `OT1/phv/bx/sc' in size <11.04124> not available
+
+(Font)              Font shape `OT1/phv/b/sc' tried instead on input line 63.
+LaTeX Font Info:    Calculating math sizes for size <9.53561> on input line 65.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1{C:/Users/liuwjun/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
+
+
+]
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <9.53561> not available
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 75.
+LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <6.62196> not available
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 93.
+ [2]
+Underfull \hbox (badness 10000) in paragraph at lines 202--206
+
+ []
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 227--231
+
+ []
+
+
+Underfull \hbox (badness 2261) in paragraph at lines 238--239
+[]\OT1/ppl/m/n/9.53561 Suppose $\OML/cmm/m/it/10 i < j$ \OT1/ppl/m/n/9.53561 an
+d $[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 sa\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 i\OT
+1/cmr/m/n/10 ]) \OML/cmm/m/it/10 > []\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 sa\OT1/c
+mr/m/n/10 [\OML/cmm/m/it/10 j\OT1/cmr/m/n/10 ])$\OT1/ppl/m/n/9.53561 . If
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 250--254
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 264--264
+[][][]\OT1/ppl/m/n/8.03 https://panthema.net/2012/1119-eSAIS-Inducing-Suffix-an
+d-
+ []
+
+[4]
+Underfull \hbox (badness 1424) in paragraph at lines 286--286
+[]\OT1/ppl/m/n/8.03 UniProt Knowl-edge-base re-lease 4.0, at $ftp : / / ftp . e
+xpasy . org / databases / . . . /
+ []
+
+
+Underfull \hbox (badness 2435) in paragraph at lines 291--291
+ \OT1/phv/b/n/9.53561 4.1 Per-for-mance Eval-u-a-tion on Con-struc-tion Al-go-
+ []
+
+Package epstopdf Info: Source file: <pdu_cmp1.eps>
+(epstopdf)                    date: 2017-04-06 14:53:51
+(epstopdf)                    size: 1427887 bytes
+(epstopdf)             Output file: <pdu_cmp1-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:52:45
+(epstopdf)                    size: 10651 bytes
+(epstopdf)             Command: <epstopdf --outfile=pdu_cmp1-eps-converted-to.p
+df pdu_cmp1.eps>
+(epstopdf)             \includegraphics on input line 299.
+Package epstopdf Info: Output file is already uptodate.
+<pdu_cmp1-eps-converted-to.pdf, id=35, 420.57124pt x 317.185pt>
+File: pdu_cmp1-eps-converted-to.pdf Graphic file (type pdf)
+
+<use pdu_cmp1-eps-converted-to.pdf>
+Package pdftex.def Info: pdu_cmp1-eps-converted-to.pdf used on input line 299.
+(pdftex.def)             Requested size: 227.64894pt x 171.68872pt.
+Package epstopdf Info: Source file: <iov_cmp1.eps>
+(epstopdf)                    date: 2017-04-06 14:53:51
+(epstopdf)                    size: 1427886 bytes
+(epstopdf)             Output file: <iov_cmp1-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:52:59
+(epstopdf)                    size: 10684 bytes
+(epstopdf)             Command: <epstopdf --outfile=iov_cmp1-eps-converted-to.p
+df iov_cmp1.eps>
+(epstopdf)             \includegraphics on input line 304.
+Package epstopdf Info: Output file is already uptodate.
+
+<iov_cmp1-eps-converted-to.pdf, id=36, 420.57124pt x 317.185pt>
+File: iov_cmp1-eps-converted-to.pdf Graphic file (type pdf)
+
+<use iov_cmp1-eps-converted-to.pdf>
+Package pdftex.def Info: iov_cmp1-eps-converted-to.pdf used on input line 304.
+(pdftex.def)             Requested size: 227.64894pt x 171.68872pt.
+Package epstopdf Info: Source file: <ct_cmp1.eps>
+(epstopdf)                    date: 2017-04-06 14:53:50
+(epstopdf)                    size: 1427887 bytes
+(epstopdf)             Output file: <ct_cmp1-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:53:02
+(epstopdf)                    size: 10572 bytes
+(epstopdf)             Command: <epstopdf --outfile=ct_cmp1-eps-converted-to.pd
+f ct_cmp1.eps>
+(epstopdf)             \includegraphics on input line 309.
+Package epstopdf Info: Output file is already uptodate.
+
+<ct_cmp1-eps-converted-to.pdf, id=37, 420.57124pt x 317.185pt>
+File: ct_cmp1-eps-converted-to.pdf Graphic file (type pdf)
+
+<use ct_cmp1-eps-converted-to.pdf>
+Package pdftex.def Info: ct_cmp1-eps-converted-to.pdf used on input line 309.
+(pdftex.def)             Requested size: 227.64894pt x 171.68872pt.
+
+
+LaTeX Warning: Reference `sec:dsais_plus' on page 5 undefined on input line 334
+.
+
+
+LaTeX Warning: Reference `subsec:dsais_plus_method_b' on page 5 undefined on in
+put line 334.
+
+[5 <./pdu_cmp1-eps-converted-to.pdf> <./iov_cmp1-eps-converted-to.pdf> <./ct_cm
+p1-eps-converted-to.pdf>]
+Package epstopdf Info: Source file: <pdu_cmp2_guten.eps>
+(epstopdf)                    date: 2017-04-06 14:53:51
+(epstopdf)                    size: 11035 bytes
+(epstopdf)             Output file: <pdu_cmp2_guten-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:53:04
+(epstopdf)                    size: 4415 bytes
+(epstopdf)             Command: <epstopdf --outfile=pdu_cmp2_guten-eps-converte
+d-to.pdf pdu_cmp2_guten.eps>
+(epstopdf)             \includegraphics on input line 344.
+Package epstopdf Info: Output file is already uptodate.
+
+<pdu_cmp2_guten-eps-converted-to.pdf, id=50, 420.57124pt x 316.18124pt>
+File: pdu_cmp2_guten-eps-converted-to.pdf Graphic file (type pdf)
+
+<use pdu_cmp2_guten-eps-converted-to.pdf>
+Package pdftex.def Info: pdu_cmp2_guten-eps-converted-to.pdf used on input line
+ 344.
+(pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
+Package epstopdf Info: Source file: <iov_cmp2_guten.eps>
+(epstopdf)                    date: 2017-04-06 14:53:51
+(epstopdf)                    size: 10906 bytes
+(epstopdf)             Output file: <iov_cmp2_guten-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:53:05
+(epstopdf)                    size: 4383 bytes
+(epstopdf)             Command: <epstopdf --outfile=iov_cmp2_guten-eps-converte
+d-to.pdf iov_cmp2_guten.eps>
+(epstopdf)             \includegraphics on input line 344.
+Package epstopdf Info: Output file is already uptodate.
+
+<iov_cmp2_guten-eps-converted-to.pdf, id=51, 420.57124pt x 316.18124pt>
+File: iov_cmp2_guten-eps-converted-to.pdf Graphic file (type pdf)
+
+<use iov_cmp2_guten-eps-converted-to.pdf>
+Package pdftex.def Info: iov_cmp2_guten-eps-converted-to.pdf used on input line
+ 344.
+(pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
+Package epstopdf Info: Source file: <ct_cmp2_guten.eps>
+(epstopdf)                    date: 2017-04-06 14:53:50
+(epstopdf)                    size: 10920 bytes
+(epstopdf)             Output file: <ct_cmp2_guten-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:53:06
+(epstopdf)                    size: 4400 bytes
+(epstopdf)             Command: <epstopdf --outfile=ct_cmp2_guten-eps-converted
+-to.pdf ct_cmp2_guten.eps>
+(epstopdf)             \includegraphics on input line 344.
+Package epstopdf Info: Output file is already uptodate.
+
+<ct_cmp2_guten-eps-converted-to.pdf, id=52, 420.57124pt x 316.18124pt>
+File: ct_cmp2_guten-eps-converted-to.pdf Graphic file (type pdf)
+
+<use ct_cmp2_guten-eps-converted-to.pdf>
+Package pdftex.def Info: ct_cmp2_guten-eps-converted-to.pdf used on input line 
+344.
+(pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
+Package epstopdf Info: Source file: <pdu_cmp2_enwiki.eps>
+(epstopdf)                    date: 2017-04-06 14:53:51
+(epstopdf)                    size: 11029 bytes
+(epstopdf)             Output file: <pdu_cmp2_enwiki-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:53:07
+(epstopdf)                    size: 4421 bytes
+(epstopdf)             Command: <epstopdf --outfile=pdu_cmp2_enwiki-eps-convert
+ed-to.pdf pdu_cmp2_enwiki.eps>
+(epstopdf)             \includegraphics on input line 351.
+Package epstopdf Info: Output file is already uptodate.
+
+<pdu_cmp2_enwiki-eps-converted-to.pdf, id=53, 420.57124pt x 316.18124pt>
+File: pdu_cmp2_enwiki-eps-converted-to.pdf Graphic file (type pdf)
+
+<use pdu_cmp2_enwiki-eps-converted-to.pdf>
+Package pdftex.def Info: pdu_cmp2_enwiki-eps-converted-to.pdf used on input lin
+e 351.
+(pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
+Package epstopdf Info: Source file: <iov_cmp2_enwiki.eps>
+(epstopdf)                    date: 2017-04-06 14:53:51
+(epstopdf)                    size: 10905 bytes
+(epstopdf)             Output file: <iov_cmp2_enwiki-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:53:07
+(epstopdf)                    size: 4390 bytes
+(epstopdf)             Command: <epstopdf --outfile=iov_cmp2_enwiki-eps-convert
+ed-to.pdf iov_cmp2_enwiki.eps>
+(epstopdf)             \includegraphics on input line 351.
+Package epstopdf Info: Output file is already uptodate.
+
+<iov_cmp2_enwiki-eps-converted-to.pdf, id=54, 420.57124pt x 316.18124pt>
+File: iov_cmp2_enwiki-eps-converted-to.pdf Graphic file (type pdf)
+
+<use iov_cmp2_enwiki-eps-converted-to.pdf>
+Package pdftex.def Info: iov_cmp2_enwiki-eps-converted-to.pdf used on input lin
+e 351.
+(pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
+Package epstopdf Info: Source file: <ct_cmp2_enwiki.eps>
+(epstopdf)                    date: 2017-04-06 14:53:50
+(epstopdf)                    size: 10921 bytes
+(epstopdf)             Output file: <ct_cmp2_enwiki-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:53:08
+(epstopdf)                    size: 4410 bytes
+(epstopdf)             Command: <epstopdf --outfile=ct_cmp2_enwiki-eps-converte
+d-to.pdf ct_cmp2_enwiki.eps>
+(epstopdf)             \includegraphics on input line 351.
+Package epstopdf Info: Output file is already uptodate.
+
+<ct_cmp2_enwiki-eps-converted-to.pdf, id=55, 420.57124pt x 316.18124pt>
+File: ct_cmp2_enwiki-eps-converted-to.pdf Graphic file (type pdf)
+
+<use ct_cmp2_enwiki-eps-converted-to.pdf>
+Package pdftex.def Info: ct_cmp2_enwiki-eps-converted-to.pdf used on input line
+ 351.
+(pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
+LaTeX Font Info:    Try loading font information for OMS+phv on input line 352.
+
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omsphv.fd"
+File: omsphv.fd 
+)
+LaTeX Font Info:    Font shape `OMS/phv/m/n' in size <8.03> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 352.
+Package epstopdf Info: Source file: <pdu_cmp3.eps>
+(epstopdf)                    date: 2017-04-06 14:53:51
+(epstopdf)                    size: 12188 bytes
+(epstopdf)             Output file: <pdu_cmp3-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:53:09
+(epstopdf)                    size: 4577 bytes
+(epstopdf)             Command: <epstopdf --outfile=pdu_cmp3-eps-converted-to.p
+df pdu_cmp3.eps>
+(epstopdf)             \includegraphics on input line 381.
+Package epstopdf Info: Output file is already uptodate.
+
+<pdu_cmp3-eps-converted-to.pdf, id=56, 420.57124pt x 316.18124pt>
+File: pdu_cmp3-eps-converted-to.pdf Graphic file (type pdf)
+
+<use pdu_cmp3-eps-converted-to.pdf>
+Package pdftex.def Info: pdu_cmp3-eps-converted-to.pdf used on input line 381.
+(pdftex.def)             Requested size: 227.64894pt x 171.1454pt.
+Package epstopdf Info: Source file: <iov_cmp3.eps>
+(epstopdf)                    date: 2017-04-06 14:53:51
+(epstopdf)                    size: 12068 bytes
+(epstopdf)             Output file: <iov_cmp3-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:53:09
+(epstopdf)                    size: 4645 bytes
+(epstopdf)             Command: <epstopdf --outfile=iov_cmp3-eps-converted-to.p
+df iov_cmp3.eps>
+(epstopdf)             \includegraphics on input line 387.
+Package epstopdf Info: Output file is already uptodate.
+
+<iov_cmp3-eps-converted-to.pdf, id=57, 420.57124pt x 316.18124pt>
+File: iov_cmp3-eps-converted-to.pdf Graphic file (type pdf)
+
+<use iov_cmp3-eps-converted-to.pdf>
+Package pdftex.def Info: iov_cmp3-eps-converted-to.pdf used on input line 387.
+(pdftex.def)             Requested size: 227.64894pt x 171.1454pt.
+Package epstopdf Info: Source file: <ct_cmp3.eps>
+(epstopdf)                    date: 2017-04-06 14:53:50
+(epstopdf)                    size: 11978 bytes
+(epstopdf)             Output file: <ct_cmp3-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-04-21 09:53:10
+(epstopdf)                    size: 4663 bytes
+(epstopdf)             Command: <epstopdf --outfile=ct_cmp3-eps-converted-to.pd
+f ct_cmp3.eps>
+(epstopdf)             \includegraphics on input line 393.
+Package epstopdf Info: Output file is already uptodate.
+
+<ct_cmp3-eps-converted-to.pdf, id=58, 420.57124pt x 316.18124pt>
+File: ct_cmp3-eps-converted-to.pdf Graphic file (type pdf)
+
+<use ct_cmp3-eps-converted-to.pdf>
+Package pdftex.def Info: ct_cmp3-eps-converted-to.pdf used on input line 393.
+(pdftex.def)             Requested size: 227.64894pt x 171.1454pt.
+
+
+LaTeX Warning: Citation `Karkkainen2003' on page 6 undefined on input line 436.
+
+
+
+LaTeX Warning: Reference `subsec:sachecker:implementation' on page 6 undefined 
+on input line 436.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6]
+[7 <./pdu_cmp2_guten-eps-converted-to.pdf> <./iov_cmp2_guten-eps-converted-to.p
+df> <./ct_cmp2_guten-eps-converted-to.pdf> <./pdu_cmp2_enwiki-eps-converted-to.
+pdf> <./iov_cmp2_enwiki-eps-converted-to.pdf> <./ct_cmp2_enwiki-eps-converted-t
+o.pdf>] (draft.bbl) [8
+
+] [9
+
+ <./pdu_cmp3-eps-converted-to.pdf> <./iov_cmp3-eps-converted-to.pdf> <./ct_cmp3
+-eps-converted-to.pdf>] (draft.aux)
+
+LaTeX Warning: There were undefined references.
+
+ )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 1061 ({)
+### bottom level 
+Here is how much of TeX's memory you used:
+ 4866 strings out of 493334
+ 74677 string characters out of 3139245
+ 172890 words of memory out of 3000000
+ 8272 multiletter control sequences out of 15000+200000
+ 51802 words of font info for 127 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 42i,18n,30p,2078b,3276s stack positions out of 5000i,500n,10000p,200000b,50000s
+{D:/Program Files/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<D
+:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><D:/Progra
+m Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cmextra/cmex8.pfb><D:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><D:/Program Files/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><D:/Program Files/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmmi8.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmr10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmr6.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
+/cmr7.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb>
+<D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss10.pfb><D:/Prog
+ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss8.pfb><D:/Program Files
+/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><D:/Program Files/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><D:/Program Files/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmsy8.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/ur
+w/helvetic/uhvb8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhv
+r8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><D:/Pr
+ogram Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplbi8a.pfb><D:/Program Files/M
+iKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><D:/Program Files/MiKTeX 2.9/font
+s/type1/urw/palatino/uplri8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/z
+apfding/uzdr.pfb>
+Output written on draft.pdf (9 pages, 319661 bytes).
+PDF statistics:
+ 171 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+
