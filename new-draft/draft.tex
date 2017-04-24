@@ -43,13 +43,13 @@
 \IEEEtitleabstractindextext{% 
 \begin{abstract}
 
-In the past decade, the induced sorting~(IS) method has been successively used to design disk-based suffix array~(SA) construction algorithms that have better time and I/O complexities than the existing alternatives. However, their current programs commonly suffer from a performance bottleneck due to large disk space in need. Recently, it was reported a carefully engineered IS suffix sorter that takes less than $8n$ disk space for constructing an SA encoded by 40-bit integers. This indicates a great potential for improving space efficiency of the prior arts, such as DSA-IS and SAIS-PQ. In this paper, we present a checking method that enables any IS suffix sorting algorithms to check an SA when it is being built. For performance analysis, we integrate the proposed method into DSA-IS and implement the enhanced algorithm to evaluate the checking overhead, where the program design of DSA-IS has been optimized for a better speed and smaller peak disk use. From our experiments, the time, space and I/O consumptions for verification is negligible in comparison with that for construction. In view of the high performance of this checker and the existing IS suffix sorters, we are convinced that our checking method, in accompanied with the state-of-the-art IS suffix sorting algorithm, can constitute an efficient solution to the situations where checking is a must for a constructed SA.
+In the past decade, the induced sorting~(IS) method has been successively used to design disk-based suffix array~(SA) construction algorithms that have better time and I/O complexities than the existing alternatives. However, their current programs commonly suffer from a performance bottleneck due to large disk space in need. Recently, it was reported a carefully engineered IS suffix sorter that takes less than $8n$ disk space for constructing an SA encoded by 40-bit integers. This indicates a great potential for improving space efficiency of the prior arts, such as DSA-IS and SAIS-PQ. In this paper, we present two checking methods that enable any IS suffix sorting algorithms to check an SA when it is being built, where the second method can also be applied to ensure the correctness of an LCP array. For performance analysis, we integrate the proposed methods into DSA-IS and implement the enhanced algorithm to evaluate the checking overhead, where the program design of DSA-IS has been optimized for a better speed and smaller peak disk use. From our experiments, the time, space and I/O consumptions for verification is negligible in comparison with that for construction. In view of the high performance of these checkers and the existing IS suffix sorters, we are convinced that our checking methods, in accompanied with the state-of-the-art IS suffix sorting algorithm, constitute efficient solutions to the situations where checking is a must after construction.
 
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-Suffix array, construction and verification, external memory.
+Suffix and LCP arrays, construction and verification, external memory.
 \end{IEEEkeywords}}
 
 
@@ -70,7 +70,7 @@ For performance analysis, we integrate the proposed method into the optimized DS
 The rest of the paper is organized as follows. We first describe in Sections~\ref{sec:build_sa} and~\ref{sec:check_sa} the adapted algorithmic design of DSA-IS and the proposed checking method, respectively. Then, we demonstrate the experimental results in Section~\ref{sec:experiments} and draw the concluding remarks in Section~\ref{sec:conclusion}.
 
 
-\section{SA Builder}~\label{sec:build_sa}
+\section{Builder}~\label{sec:build_sa}
 
 \subsection{Preliminaries}
 
@@ -193,7 +193,7 @@ From our experiments, sorting substrings by the priority queues takes long CPU t
 
 As demonstrated in Section~\ref{sec:experiments}, our implementation for the enhanced DSA-IS has an advantage over that for eSAIS in terms of time, space and I/O volume, but its peak disk use remains at a high level. This is mainly because it fails to gradually clean up the temporary data when they are being used. On the contrary, fSAIS stores the temporary data using multiple files and deletes each file immediately when all that residing on it is longer to use. Therefore, it is reasonable to believe that our program can achieve a substantial improvement following the same technique. Currently, we are attempting to further improve the algorithmic and implementation designs of DSA-IS. 
 
-\section{SA Checker}~\label{sec:check_sa}
+\section{Checkers}~\label{sec:check_sa}
 
 \subsection{Details} 
 

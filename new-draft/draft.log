@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.31)  21 APR 2017 16:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.31)  23 APR 2017 22:46
 entering extended mode
 **./draft.tex
 (draft.tex
@@ -433,10 +433,7 @@ LaTeX Font Info:    Font shape `OT1/phv/bx/sc' in size <11.04124> not available
 (Font)              Font shape `OT1/phv/b/sc' tried instead on input line 63.
 LaTeX Font Info:    Calculating math sizes for size <9.53561> on input line 65.
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [1{C:/Users/liuwjun/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
+[1{C:/Users/liuwjun/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 
 ]
@@ -444,7 +441,8 @@ LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <9.53561> not available
 (Font)              Font shape `OT1/phv/b/n' tried instead on input line 75.
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <6.62196> not available
 (Font)              Font shape `OT1/ppl/b/n' tried instead on input line 93.
- [2]
+
+[2]
 Underfull \hbox (badness 10000) in paragraph at lines 202--206
 
  []
@@ -770,7 +768,7 @@ ogram Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplbi8a.pfb><D:/Program Files/M
 iKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><D:/Program Files/MiKTeX 2.9/font
 s/type1/urw/palatino/uplri8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/z
 apfding/uzdr.pfb>
-Output written on draft.pdf (9 pages, 319661 bytes).
+Output written on draft.pdf (9 pages, 319695 bytes).
 PDF statistics:
  171 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
