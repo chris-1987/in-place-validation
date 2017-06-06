@@ -1,0 +1,2144 @@
+#ifndef MY_DSAIS_H
+#define MY_DSAIS_H
+
+#include "common.h"
+#include "io.h"
+#include "utility.h"
+#include "tuple.h" 
+#include "tuple_sorter.h"
+#include "substr_sorter.h"
+#include "test.h"
+
+#include <string>
+
+template<typename alphabet_type, typename offset_type, uint8 D>
+class DSAComputation;
+
+/// \brief portal for executing DSA-IS to compute a suffix array
+///
+template<typename alphabet_type, typename offset_type>
+class DSAIS{
+
+private:
+	
+	typedef typename ExVector<alphabet_type>::vector alphabet_vector_type;
+
+	typedef typename ExVector<offset_type>::vector offset_vector_type;
+	
+	typedef typename ExQueue<alphabet_type>::queue alphabet_queue_type;
+
+	typedef typename ExQueue<offset_type>::queue offset_queue_type;
+
+	typedef typename ExDeque<offset_type>::deque offset_deque_type;
+
+public:
+
+	DSAIS(const std::string &_s_fname, const std::string &_sa_fname);
+
+	void preprocess(const std::string &_s_fname, alphabet_vector_type *&_s_target);
+	
+	void outputResult(offset_deque_type *_sa_reverse, const std::string &_sa_fname);
+}; 
+
+/// \brief ctor
+/// 
+template<typename alphabet_type, typename offset_type>
+DSAIS<alphabet_type, offset_type>::DSAIS(const std::string & _s_fname, const std::string & _sa_fname) {
+
+	// preprocess the input string
+	alphabet_vector_type *s = nullptr;
+
+	preprocess(_s_fname, s);
+
+	// compute SA
+	offset_deque_type *sa_reverse = nullptr;
+
+	uint32 level = 0;
+
+	DSAComputation<alphabet_type, offset_type, D_LOW>(s, level, sa_reverse);
+
+#ifdef MY_DEBUG_1
+
+	outputResult(sa_reverse, _sa_fname);	// output SA	
+
+#endif
+
+}
+
+/// \brief format input string. Eliminates std::numeric_limits<alphabet_type>::max() and increment each element by 1
+///
+template<typename alphabet_type, typename offset_type>
+void DSAIS<alphabet_type, offset_type>::preprocess(const std::string & _s_fname, alphabet_vector_type *& _s_target) {
+
+	stxxl::syscall_file *s_origin_file = new stxxl::syscall_file(_s_fname, stxxl::syscall_file::RDWR | stxxl::syscall_file::DIRECT);
+
+	alphabet_vector_type *s_origin = new alphabet_vector_type(s_origin_file);
+
+	typename alphabet_vector_type::bufreader_type *s_origin_reader = new typename alphabet_vector_type::bufreader_type(*s_origin);
+
+	_s_target = new alphabet_vector_type(); 
+
+	for (; !s_origin_reader->empty(); ++(*s_origin_reader)) {
+
+		if (*(*s_origin_reader) != std::numeric_limits<alphabet_type>::max()) {
+
+			_s_target->push_back(*(*s_origin_reader) + 1);
+		}
+		else {
+
+			// get rid of max
+		}
+	}
+
+	_s_target->push_back(alphabet_type(0)); // push the sentinel
+
+	delete s_origin_reader; s_origin_reader = nullptr;
+
+	delete s_origin; s_origin = nullptr;
+
+	delete s_origin_file; s_origin_file = nullptr;
+
+	//test_output_vector(_s_target);
+}
+
+
+/// \brief output result
+///
+template<typename alphabet_type, typename offset_type>
+void DSAIS<alphabet_type, offset_type>::outputResult(offset_deque_type * _sa_reverse, const std::string & _sa_fname) {
+	
+	stxxl::syscall_file *sa_target_file = new stxxl::syscall_file(
+		_sa_fname, stxxl::syscall_file::CREAT | stxxl::syscall_file::RDWR | stxxl::syscall_file::DIRECT);
+
+	offset_vector_type *sa_target = new offset_vector_type(sa_target_file); 
+
+	sa_target->resize(_sa_reverse->size() - 1); // exclude the sentinel when output the result
+
+	typename offset_vector_type::bufwriter_type *sa_target_writer = new typename offset_vector_type::bufwriter_type(*sa_target);
+
+	(*_sa_reverse).pop_back();
+
+	while (!_sa_reverse->empty()) {
+
+		(*sa_target_writer) << (*_sa_reverse).back();
+
+		(*_sa_reverse).pop_back();
+	}
+
+	(*sa_target_writer).finish();
+
+	delete sa_target_writer; sa_target_writer = nullptr;
+
+	delete sa_target; sa_target = nullptr;
+
+	delete sa_target_file; sa_target_file = nullptr;
+
+	delete _sa_reverse; _sa_reverse = nullptr;
+}
+
+/// \brief compute SA
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+class DSAComputation{
+
+private:
+
+	typedef typename ExVector<alphabet_type>::vector alphabet_vector_type;
+
+	typedef typename ExVector<offset_type>::vector offset_vector_type;
+	
+	typedef typename ExQueue<alphabet_type>::queue alphabet_queue_type;
+
+	typedef typename ExQueue<offset_type>::queue offset_queue_type;
+
+	typedef typename ExQueue<uint8>::queue uint8_queue_type;
+
+	typedef typename ExQueue<uint32>::queue uint32_queue_type;
+	
+	typedef typename ExDeque<alphabet_type>::deque alphabet_deque_type;
+
+	typedef typename ExDeque<offset_type>::deque offset_deque_type;
+
+	typedef typename ExDeque<uint8>::deque uint8_deque_type;
+
+private:
+
+	/// \brief record block information
+	///
+	/// scan input string leftward to split it into blocks. For each block, record its static information in a blockinfo struct
+	struct BlockInfo{
+
+	public:
+
+		static uint8 m_created; ///< number of created blocks, assume no greater than 128
+
+		uint32 m_capacity; ///< block capacity, assume no greater than 2^32
+
+		uint64 m_beg_pos; ///< start position in x (including)
+
+		uint64 m_end_pos; ///< end position in x (including)
+
+		uint64 m_size; ///< block size
+
+		uint32 m_lms_num; ///< number of lms-substr in the block
+
+		uint8 m_id; ///< block id, rightmost is numbered as 0
+
+	public:
+
+		/// \brief ctor
+		///
+		BlockInfo(const uint64 &_end_pos) : m_end_pos(_end_pos) {
+
+//			if (D == D_LOW) { // level 0
+//
+//				double div = std::max(sizeof(uint32) + sizeof(alphabet_type), sizeof(alphabet_type) + sizeof(uint32), 
+//					sizeof(alphabet_type) + sizeof(uint32) + sizeof(uint32) + (double)3 / 8);
+//
+//				m_capacity = MAX_MEM / div;
+//			}
+//			else { // high level
+//
+//				double div = std::max(sizeof(uint32) + sizeof(alphabet_type), sizeof(alphabet_type) + sizeof(uint32),
+//					sizeof(alphabet_type) + sizeof(uint32) + sizeof(uint32) + sizeof(uint32) + (double)3 / 8);
+//
+//				m_capacity = MAX_MEM / div;
+//			}
+
+			m_capacity = 8; // test only
+
+			//m_capacity = 1024 * 1024 * 10; // test only
+
+			m_size = 0;
+
+			m_lms_num = 0;
+
+			m_id = m_created;
+
+			++m_created;
+		}
+
+		/// \brief assign copy
+		///
+		BlockInfo& operator=(const BlockInfo &_bi) {
+
+			m_capacity = _bi.m_capacity;
+
+			m_beg_pos = _bi.m_beg_pos;
+
+			m_end_pos = _bi.m_end_pos;
+
+			m_size = _bi.m_size;
+
+			m_lms_num = _bi.m_lms_num;
+
+			m_id = _bi.m_id;
+
+			return *this;
+		}
+
+		/// \brief check if block is currently empty
+		///
+		bool is_empty() {
+	
+			return m_lms_num == 0;
+		}
+
+		/// \brief check if block contains only a single lms-substr
+		///
+		bool is_single() {
+
+			return m_lms_num == 1;
+		}
+
+		/// \brief check if an lms-substr can be inserted into current block
+		///
+		/// \note an empty block can afford an lms-substr of any size
+		bool try_fill(const uint64 _lms_size) {
+
+			if (is_empty() || m_size + _lms_size - 1 <= m_capacity) { // if not empty, two successive lms-substr overlap a char
+
+				return true;
+			}
+
+			return false;
+		}
+
+		/// \brief fill the lms-substr into current block
+		///
+		/// \note two cases: if empty, add all characters; otherwise, add all but the last character
+		void fill(const uint64 _lms_size) {
+
+			if (is_empty()) {
+
+				m_size = m_size + _lms_size;
+			}
+			else {
+
+				m_size = m_size + _lms_size - 1; // overlapped character is eliminated
+			}
+
+			++m_lms_num;
+		}
+
+		/// \brief close the block
+		///
+		void close() {
+
+			m_beg_pos = m_end_pos - m_size + 1;
+		}
+	};
+
+private:
+
+	std::vector<BlockInfo> m_blocks_info; ///< block_info handlers
+
+	std::vector<uint8> m_block_id_of_samplings; ///< block id to which the samplings belong
+
+	alphabet_vector_type *m_s; ///< input handler
+
+	uint32 m_level; ///< recursion level, start counting from 0
+
+	std::vector<alphabet_queue_type*> m_short_lms_seqs; ///< store sorted short lms-substr for each block
+
+	std::vector<alphabet_queue_type*> m_long_lms_seqs; ///< store sorted long lms-substr for each block
+
+	std::vector<alphabet_queue_type*> m_long_bwt_seqs; ///< bwt for sorting long lms-substr for each block
+
+	std::vector<uint32_queue_type*> m_short_pos_seqs; ///< start positions of short S*-type substrs
+	
+	offset_deque_type *m_long_pos_seq; ///< start positions of long S*-type substrs
+
+	uint8_deque_type *m_long_aux; ///< 7 bits for block_id, 1 bit for different or not
+
+	offset_vector_type *m_s1; ///< handler to reduced string		
+
+	std::vector<offset_queue_type*> m_lms_rank_seqs; /// rank of sorted lms substrs
+
+	std::vector<alphabet_queue_type*> m_bwt_seqs; ///< bwt for sorting suffixes for each block
+	
+public:
+
+	DSAComputation(alphabet_vector_type *_s, const uint32 _level, offset_deque_type*& _sa_reverse);	
+
+	bool sortSStarGlobal();
+
+	void partitionS();
+
+	void sortSStarBlock(const BlockInfo & _block_info);
+
+	void sortSStarSingleBlock(const BlockInfo & _block_info);
+
+	template<bool FORMAT>
+	void sortSStarMultiBlock(const BlockInfo & _block_info);	
+
+	template<typename U>
+	void getBuckets(const U *_s, const uint32 _s_size, uint32 *_bkt, const uint32 _bkt_num, const bool _end);
+
+	void formatMultiBlock(const BlockInfo &_block_info, alphabet_type *_block, uint32 *_fblock, uint32 &_max_alpha); 
+
+	void sortLongSStarGlobal();
+
+	void compute_block_id_of_samplings();
+
+	uint8 getBlockId(const offset_type &_pos);
+
+	bool mergeSortedSStarGlobal();
+
+#ifdef MY_DEBUG_1
+
+	void sortSuffixGlobal(offset_deque_type *_sa1_reverse);
+
+	void sortSuffixBlock(const BlockInfo & _block_info);
+
+	void sortSuffixSingleBlock(const BlockInfo & _block_info);
+
+	void sortSuffixMultiBlock(const BLockInfo & _block_info);
+
+	void sortSuffixMultiBlockLowLevel(const BlockInfo & _block_info);
+
+	void sortSuffixMultiBlockHighLevel(const BlockInfo & _block_info);
+
+	void mergeSortedSuffixGlobal();
+
+#endif
+};
+
+template<typename alphabet_type, typename offset_type, uint8 D>
+uint8 DSAComputation<alphabet_type, offset_type, D>::BlockInfo::m_created = 0;
+
+
+/// \brief
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+DSAComputation<alphabet_type, offset_type, D>::DSAComputation(
+		alphabet_vector_type* _s, const uint32 _level, offset_deque_type *& _sa_reverse) 
+		: m_s(_s), m_level(_level) {
+
+	bool is_unique = sortSStarGlobal(); // sort S*-type substrs	
+
+#ifdef MY_DEBUG_1
+
+	offset_deque_type *sa1_reverse = nullptr;
+
+	// check recursion condition
+	if (is_unique == false) {
+
+		if (true) {
+
+			// SAIS
+		}
+		else {
+
+			DSAComputation<offset_type, offset_type, D>(m_s1, _level + 1, sa1_reverse);
+		}
+	}
+	
+
+	// sort suffixes
+	sortSuffixGlobal(sa1_reverse);
+
+#endif
+
+}
+
+
+/// \brief sort S*-type substrs 
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+bool DSAComputation<alphabet_type, offset_type, D>::sortSStarGlobal() {
+
+	partitionS(); // split into blocks
+
+	// sort s*-type substrs in each block
+	for (uint8 i = 0; i < m_blocks_info.size(); ++i) {
+	
+		sortSStarBlock(m_blocks_info[i]);
+	}
+
+	// sort long lms-substrs using EM, output diff 
+	sortLongSStarGlobal();
+
+#ifdef DEBUG_1	
+	// merge sorted short and long lms-substrs
+	bool is_unique = mergeSortedSStarGlobal();
+
+#endif
+
+	return false;
+}
+
+/// \brief split s into blocks
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::partitionS() {
+
+	alphabet_type cur_ch, last_ch;
+
+	uint8 cur_t, last_t;
+
+	uint64 lms_end_pos, lms_size;
+
+	typename alphabet_vector_type::bufreader_reverse_type *s_reverse_reader = 
+			new typename alphabet_vector_type::bufreader_reverse_type(*m_s);
+
+	// start scanning
+	lms_end_pos = m_s->size() - 1; // sentinel is S*-type
+
+	BlockInfo block_info = BlockInfo(lms_end_pos); // create a block
+
+	lms_size = 1, ++(*s_reverse_reader); // include the sentinel
+
+	cur_ch = *(*s_reverse_reader), cur_t = L_TYPE, ++lms_size, ++(*s_reverse_reader); // the next is L-type 
+
+	last_ch = cur_ch, last_t = cur_t;
+
+	for (; !s_reverse_reader->empty(); ++(*s_reverse_reader)) {
+
+		cur_ch = *(*s_reverse_reader);
+
+		cur_t = (cur_ch < last_ch || (cur_ch == last_ch && last_t == S_TYPE)) ? S_TYPE : L_TYPE;
+
+		if (cur_t == L_TYPE && last_t == S_TYPE) {
+
+			if (block_info.try_fill(lms_size) == false) {
+
+				block_info.close(); // close the block
+				
+				m_blocks_info.push_back(block_info);
+
+				block_info = BlockInfo(lms_end_pos); // create a new block
+			}
+
+			block_info.fill(lms_size);
+
+			lms_end_pos = lms_end_pos - lms_size + 1;
+
+			lms_size = 1; // include the overlapped S*-type character
+		}
+
+		++lms_size; // include current scanned character
+
+		last_ch = cur_ch, last_t = cur_t;
+	}
+
+	block_info.close(); // the leftmost must not be S*-type character, cannot find anymore S*-type substr, close the block
+
+	if (!block_info.is_empty()) m_blocks_info.push_back(block_info); // note: s may contain no S*-type substrs
+
+	delete s_reverse_reader; s_reverse_reader = nullptr;
+
+	compute_block_id_of_samplings();
+
+	test_output_blocks_info(m_blocks_info);
+}
+
+
+/// \brief sort lms-substrs in the block
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::sortSStarBlock(const BlockInfo & _block_info) {
+
+	if (_block_info.m_lms_num == 1) {
+
+		sortSStarSingleBlock(_block_info);
+	}
+	else {
+
+		if (sizeof(alphabet_type) <= sizeof(uint32)) {
+	
+			sortSStarMultiBlock<false>(_block_info);
+		}
+		else {
+
+			sortSStarMultiBlock<true>(_block_info);
+		}
+	}
+}
+ 
+/// \brief only contain a single s*-type substr. If long, output the first D characters, otherwise, output the whole substr
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::sortSStarSingleBlock(const BlockInfo & _block_info) {
+
+	typename alphabet_vector_type::const_iterator s_it = m_s->begin() + _block_info.m_beg_pos;
+	
+	alphabet_queue_type *short_lms_seq = new alphabet_queue_type(), *long_lms_seq = new alphabet_queue_type();
+
+	uint32_queue_type *short_pos_seq = new uint32_queue_type(); // store relative position
+
+	 if (_block_info.m_size > D) {
+
+		// store the first D characters
+		for (uint8 i = 0; i < D; ++i, ++s_it) {
+
+			long_lms_seq->push(*s_it);
+		}		
+
+		// directly read bwt from m_s, no need to compute bwt
+	}
+	else {
+
+		// store the whole substr
+		for (uint8 i = 0; i < _block_info.m_size; ++i, ++s_it) {
+
+			short_lms_seq->push(*s_it);
+		}
+
+		short_lms_seq->push(alphabet_type(0)); // append a delimiter
+
+		// store the starting position
+		short_lms_seq->push(uint32(0));
+	}	
+
+	m_short_lms_seqs.push_back(short_lms_seq), m_long_lms_seqs.push_back(long_lms_seq);
+
+	m_short_pos_seqs.push_back(short_pos_seq);
+
+	m_long_bwt_seqs.push_back(nullptr); // directly read bwt from m_s
+}
+
+
+/// \brief sort the lms-substrs in the high-level multi-lms block
+///
+/// \note if alphabet_type > uint32, then format the block before inducing in RAM
+template<typename alphabet_type, typename offset_type, uint8 D>
+template<bool FORMAT>
+void DSAComputation<alphabet_type, offset_type, D>::sortSStarMultiBlock(const BlockInfo &_block_info) {
+
+	// load s into RAM, format s
+	uint32 block_size = _block_info.m_size;
+
+	alphabet_type *s = new alphabet_type[block_size];
+
+	uint32 *fs = nullptr;
+
+	uint32 max_alpha;
+
+	if (FORMAT == true) { // load and format s
+
+		fs = new uint32[block_size];
+	
+		formatMultiBlock(_block_info, s, fs, max_alpha);
+	}
+	else { // load s
+		typename alphabet_vector_type::const_iterator it = m_s->begin() + _block_info.m_beg_pos;
+
+		for (uint32 i = 0; i < block_size; ++i, ++it) s[i] = *it;
+	
+		//test_output_array_ram<alphabet_type>(s, block_size);
+
+		max_alpha = std::numeric_limits<alphabet_type>::max();
+	}
+
+	char *t_buf = new char[block_size / 8 + 1]; BitWrapper t(t_buf); // L_TYPE or S_TYPE
+
+	char *h_buf = new char[block_size / 8 + 1]; BitWrapper h(h_buf); // LONG_TYPE or SHORT_TYPE
+		
+	for(uint32 i = 0; i < block_size; ++i) h.set(i, SHORT_TYPE); // initialize h
+
+	uint32 *sa = new uint32[block_size];
+
+	for (uint32 i = 0; i < block_size; ++i) sa[i] = std::numeric_limits<uint32>::max();
+
+	uint32 *bkt = new uint32[max_alpha + 1];
+
+	if (FORMAT == true) getBuckets<uint32>(fs, block_size, bkt, max_alpha + 1, true);
+	else getBuckets<alphabet_type>(s, block_size, bkt, max_alpha + 1, true);
+
+	// compute t and h
+	uint32 lms_end_pos, lms_beg_pos, lms_size; 
+
+	lms_end_pos = block_size - 1, t.set(block_size - 1, S_TYPE), lms_size = 1; // rightmost is S*-type
+
+	if (FORMAT == true) sa[bkt[fs[lms_end_pos]]--] = lms_end_pos; 
+	else sa[bkt[s[lms_end_pos]]--] = lms_end_pos;
+
+	t.set(block_size - 2, L_TYPE), ++lms_size; // next is L-type
+
+	for(uint32 i = block_size - 3; ; --i) {
+	
+		if (s[i] < s[i + 1] || (s[i] == s[i + 1] && t.get(i + 1) == S_TYPE)) {
+
+			t.set(i, S_TYPE);
+		}
+		else {
+
+			t.set(i, L_TYPE);
+		}
+		
+		if (t.get(i) == L_TYPE && t.get(i + 1) == S_TYPE) { // LMS-type
+
+			// insert the lms-type substr
+			lms_beg_pos = lms_end_pos - lms_size + 1;
+
+			if (lms_size > D) {
+		
+				h.set(lms_beg_pos, LONG_TYPE);
+			}
+			else {
+
+				h.set(lms_beg_pos, SHORT_TYPE);
+			}
+
+			// insert lms-char 
+			lms_end_pos = lms_beg_pos;
+
+			lms_size = 1; // include the overlapped character 
+
+			if (FORMAT == true) sa[bkt[fs[lms_end_pos]]--] = lms_end_pos;
+			else sa[bkt[s[lms_end_pos]]--] = lms_end_pos;
+		}
+
+		++lms_size;
+
+		if (i == 0) break; // loop condition
+	} 
+
+	lms_beg_pos = lms_end_pos - lms_size + 1; // leftmost is S*-type
+
+	if (lms_size > D) {
+
+		h.set(lms_beg_pos, LONG_TYPE);
+	}
+	else {
+
+		h.set(lms_beg_pos, SHORT_TYPE);
+	}
+
+	// do not insert 0 into sa, because it has no preceding character
+
+	// induce lms substrs
+	alphabet_queue_type *short_lms_seq = new alphabet_queue_type(), *long_lms_seq = new alphabet_queue_type();
+
+	alphabet_queue_type *long_bwt_seq = new alphabet_queue_type();	
+
+	uint32_queue_type *short_pos_seq = new uint32_queue_type();
+
+	if (FORMAT == true) getBuckets<uint32>(fs, block_size, bkt, max_alpha + 1, false);
+	else getBuckets<alphabet_type>(s, block_size, bkt, max_alpha + 1, false);
+
+	for (uint32 i = 0; i < block_size; ++i) {
+
+		if (sa[i] != std::numeric_limits<uint32>::max()) {
+
+			uint32 j = sa[i] - 1; // >= 0
+
+			long_bwt_seq->push(s[j]); // push s[j] not fs[j]
+
+			if (t.get(j) == L_TYPE) {
+
+				if (FORMAT == true) sa[bkt[fs[j]]++] = j;	
+				else  sa[bkt[s[j]]++] = j;
+
+				sa[i] = std::numeric_limits<uint32>::max(); // only l*-type remains
+			}	
+		} 
+	}	
+
+	if (FORMAT == true) getBuckets<uint32>(fs, block_size, bkt, max_alpha + 1, true);
+	else getBuckets<alphabet_type>(s, block_size, bkt, max_alpha + 1, true);
+
+	for (uint32 i = block_size - 1; ; --i) {
+
+		if (sa[i] != std::numeric_limits<uint32>::max() && sa[i] != 0) {
+
+			uint32 j = sa[i] - 1;
+
+			long_bwt_seq->push(s[j]); // push s[j] not fs[j]
+
+			if (t.get(j) == S_TYPE) {
+
+				if (FORMAT == true) sa[bkt[fs[j]]--] = j;	
+				else  sa[bkt[s[j]]--] = j;
+
+				sa[i] = std::numeric_limits<uint32>::max(); // only S*-type remains (except for the rightmost)
+			}
+		}
+
+		if (i == 0) break; // loop condition i > 0
+	}
+	
+	delete [] bkt; bkt = nullptr;
+
+	// currently, each non-empty element in sa indicates the starting position of an non-size-one lms substr in the block
+	// output the sorted lms substrs
+	for (uint32 i = 0; i < block_size; ++i) {
+	
+		if (sa[i] != std::numeric_limits<uint32>::max()) {
+
+			if (h.get(sa[i]) == LONG_TYPE) {
+			
+				for (uint32 j = 0; j < D; ++j) {
+
+					long_lms_seq->push(s[sa[i] + j]);
+				}				
+			}
+			else {
+
+				uint32 j = sa[i];
+
+				short_lms_seq->push(s[j]); // first
+
+				++j;
+
+				while (t.get(j) == L_TYPE || t.get(j - 1) == S_TYPE) {
+
+					short_lms_seq->push(s[j]);
+
+					++j;
+				}
+
+				short_lms_seq->push(s[j]); // last
+
+				short_lms_seq->push(static_cast<alphabet_type>(0)); // delimiter
+
+				short_pos_seq->push(sa[i]);
+			}	
+		}
+	}
+
+	m_long_lms_seqs.push_back(short_lms_seq);
+
+	m_short_lms_seqs.push_back(long_lms_seq);
+
+	m_long_bwt_seqs.push_back(long_bwt_seq);
+
+	m_short_pos_seqs.push_back(short_pos_seq);
+
+	delete [] s; s = nullptr;
+
+	delete [] fs; fs = nullptr;
+
+	delete [] t_buf; t_buf = nullptr;
+
+	delete [] h_buf; h_buf = nullptr;
+
+	delete [] sa;
+}
+
+/// \brief get bucket end
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+template<typename U>
+void DSAComputation<alphabet_type, offset_type, D>::getBuckets(const U *_s, const uint32 _s_size, uint32 *_bkt, const uint32 _bkt_num, const bool _end) {
+
+	uint32 sum = 0;
+
+	for (uint32 i = 0; i < _bkt_num; ++i) _bkt[i] = 0;
+
+	for (uint32 i = 0; i < _s_size; ++i) ++_bkt[_s[i]];
+
+	for (uint32 i = 0; i < _bkt_num; ++i)  {sum += _bkt[i]; _bkt[i] = _end ? sum - 1 : sum - _bkt[i];}
+}
+
+/// \brief format multi-block in high recursion level
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::formatMultiBlock(const BlockInfo& _block_info, alphabet_type *_block, uint32 *_fblock, uint32 &_max_alpha) {
+
+	uint32 block_size = _block_info.m_size;
+
+	typename alphabet_vector_type::const_iterator it = m_s->begin() + _block_info.m_beg_pos;
+
+	typedef Pair<alphabet_type, uint32> pair_type;
+
+	typedef TupleAscCmp1<pair_type> pair_comparator_type; // sort <ch, pos> by ch
+
+	std::vector<pair_type> container = std::vector<pair_type>(block_size);
+
+	for (uint32 i = 0; i < block_size; ++i, ++it) container[i] = pair_type(*it, i);
+
+	std::sort(container.begin(), container.end(), pair_comparator_type());
+
+	//
+	alphabet_type pre_ch = container[0].first;
+
+	uint32 pre_name = 0;
+
+	_fblock[container[0].second] = pre_name;
+
+	_block[container[0].second] = pre_ch;
+
+	for (uint32 i = 1; i < block_size; ++i) {
+
+		if (container[i].first != pre_ch) {
+
+			pre_ch = container[i].first;
+
+			pre_name = pre_name + 1;
+		}
+
+		_fblock[container[i].second] = pre_name;
+
+		_block[container[i].second] = pre_ch;
+	}
+
+	_max_alpha = pre_name;
+}
+
+/// \brief sort long lms-substrs using external memory
+///
+/// \note scan s to obtain ch and pos
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::sortLongSStarGlobal() {
+
+	// sort <lms-ch, pos>
+	typedef Pair<alphabet_type, offset_type> pair_type;
+	
+	typedef TupleAscCmp2<pair_type> pair_comparator_type;
+	
+	typedef typename ExSorter<pair_type, pair_comparator_type>::sorter sorter_type;
+
+	sorter_type *sorter_lms = new sorter_type(pair_comparator_type(), MAX_MEM / 2);
+
+	typename alphabet_vector_type::bufreader_reverse_type *s_reverse_reader = 
+		new typename alphabet_vector_type::bufreader_reverse_type(*m_s);
+
+	uint8 cur_t, last_t;
+
+	alphabet_type cur_ch, last_ch, lms_end_ch;
+
+	uint64 lms_size, lms_beg_pos, lms_end_pos;
+
+	lms_end_pos = m_s->size() - 1, lms_end_ch = *(*s_reverse_reader), lms_size = 1, ++(*s_reverse_reader); // sentinel
+
+	cur_ch = *(*s_reverse_reader), cur_t = L_TYPE, ++lms_size, ++(*s_reverse_reader); // next to sentinel
+
+	last_ch = cur_ch, last_t = cur_t;
+
+	for (; !s_reverse_reader->empty(); ++(*s_reverse_reader)) {
+		
+		cur_ch = *(*s_reverse_reader);
+
+		cur_t = (cur_ch < last_ch || (cur_ch == last_ch && cur_t == S_TYPE)) ? S_TYPE : L_TYPE;
+
+		if (cur_t == L_TYPE && last_t == S_TYPE) {
+
+			if (lms_size > D) sorter_lms->push(pair_type(lms_end_ch, lms_end_pos));
+
+			lms_end_pos = lms_end_pos - lms_size + 1, lms_end_ch = last_ch;
+			
+			lms_size = 1;
+		}
+	
+		++lms_size;
+
+		last_ch = cur_ch, last_t = cur_t;
+	}
+
+	sorter_lms->sort();
+
+	typedef Triple<alphabet_type, offset_type, offset_type> triple_type;
+	
+	typedef TupleDscCmp3<triple_type> triple_comparator_type;
+
+	typedef typename ExHeap<triple_type, triple_comparator_type, MAX_MEM / 4, MAX_ITEM>::heap heap_type;
+
+	typedef typename heap_type::block_type heap_block_type;
+
+	typedef typename stxxl::read_write_pool<heap_block_type> heap_pool_type;
+
+	heap_pool_type * pq_l_pool = new heap_pool_type(MAX_MEM / 8 / heap_block_type::raw_size, MAX_MEM / 8 / heap_block_type::raw_size);
+
+	heap_type *pq_l = new heap_type(*pq_l_pool);
+
+	alphabet_deque_type *sorted_l_ch = new alphabet_deque_type();	
+
+	offset_deque_type *sorted_l_pos = new offset_deque_type();
+
+	uint8_deque_type *sorted_l_diff = new uint8_deque_type();
+
+	std::vector<typename alphabet_vector_type::const_reverse_iterator> rits(m_blocks_info.size()); // read bwt for single-lms block
+
+	for (uint8 i = 0; i < m_blocks_info.size(); ++i) rits[i] = m_s->rbegin() + m_s->size() - m_blocks_info[i].m_end_pos;  
+
+	// induce L-type substrs
+	{
+	
+		alphabet_type cur_bkt;
+
+		offset_type rank_cnt = 0;
+
+		alphabet_type last_l_ch, last_s_ch;
+
+		offset_type last_l_rank0, last_l_rank1, last_s_rank0, last_s_rank1; 
+
+		offset_type cur_l_rank0, cur_l_rank1, cur_s_rank0, cur_s_rank1;
+
+		bool l_diff; // current scanned l-type is different from the last scanned l-type
+
+		last_l_ch = 0;  // l_ch != 0
+
+		last_s_ch = std::numeric_limits<alphabet_type>::max(); // s_ch != max
+
+		cur_bkt = (*sorter_lms)->first; // sorter_lms is not empty at the beginning, the smallest is the sentinel
+	
+		while (true) {
+
+			while (!pq_l->empty() && pq_l->top().first == cur_bkt) {
+
+				const triple_type &cur_str = pq_l->top(); // <ch, rank, pos>
+
+				// compute rank
+				if (cur_bkt == last_l_ch && cur_str.second == last_l_rank0) {
+
+					cur_l_rank1 = last_l_rank1;
+
+					l_diff = false;
+				}
+				else {
+
+					cur_l_rank1 = rank_cnt;
+
+					rank_cnt = rank_cnt + 1;
+				
+					l_diff = true;
+				}	
+
+				// induce preceding l-type substr if exists
+				uint8 block_id = getBlockId(cur_str.third);
+	
+				alphabet_type pre_ch;
+
+				if (m_blocks_info[block_id].is_single() == true) {
+
+					pre_ch = *(rits[block_id]);
+
+					 ++rits[block_id];
+				}
+				else {
+
+					pre_ch = m_long_bwt_seqs[block_id]->front();
+
+					m_long_bwt_seqs[block_id]->pop();
+				}
+				
+				if (pre_ch >= cur_bkt) { // preceding is L-type
+					
+					pq_l->push(triple_type(pre_ch, cur_l_rank1, cur_str.third - 1));
+				}
+				else { // current is L*-type
+
+					(*sorted_l_ch).push_back(cur_str.first);
+
+					(*sorted_l_pos).push_back(cur_str.third);
+
+					(*sorted_l_diff).push_back(l_diff);
+				}
+
+				// iterate
+				last_l_ch = cur_bkt, last_l_rank0 = cur_str.second, last_l_rank1 = cur_l_rank1;
+
+				pq_l->pop();
+			}
+
+			
+			while (!sorter_lms->empty() && (*sorter_lms)->first == cur_bkt) {
+
+				const pair_type &cur_str = *(*sorter_lms); // <ch, pos>
+
+				// compute rank of current substr
+				if (cur_bkt == last_s_ch) {
+
+					cur_s_rank1 = last_s_rank1; 
+				}
+				else {
+
+					cur_s_rank1 = rank_cnt;
+
+					rank_cnt = rank_cnt + 1;
+				}
+				
+				// induce preceding
+				uint8 block_id = getBlockId(cur_str.second);
+
+				alphabet_type pre_ch;
+
+				if (m_blocks_info[block_id].is_single() == true) {
+
+					pre_ch = *(rits[block_id]);
+
+					++rits[block_id];
+				}
+				else {
+
+					pre_ch = m_long_bwt_seqs[block_id]->front();
+
+					m_long_bwt_seqs[block_id]->pop();
+				}
+
+				pq_l->push(triple_type(pre_ch, cur_s_rank1, cur_str.second - 1));
+
+				// iterate
+				last_s_ch = cur_str.first, last_s_rank1 = cur_s_rank1;
+
+				++(*sorter_lms);
+			}
+
+			if (!pq_l->empty()) {
+
+				cur_bkt = pq_l->top().first;
+
+				if (!sorter_lms->empty() && (*sorter_lms)->first < cur_bkt) {
+
+					cur_bkt = (*sorter_lms)->first;
+				}
+		
+			}
+			else if (!sorter_lms->empty()){
+
+				cur_bkt = (*sorter_lms)->first;
+			}
+			else {
+
+				break;
+			}
+		}	
+	}
+	
+
+	delete sorter_lms; sorter_lms = nullptr;
+
+	delete pq_l_pool; pq_l_pool = nullptr;
+
+	delete pq_l; pq_l = nullptr;
+
+	//
+	typedef TupleAscCmp3<triple_type> triple_comparator_type2;
+
+	typedef typename ExHeap<triple_type, triple_comparator_type2, MAX_MEM / 4, MAX_ITEM>::heap heap_type2;
+
+	typedef typename heap_type::block_type heap_block_type2;
+
+	typedef typename stxxl::read_write_pool<heap_block_type2> heap_pool_type2;
+
+	heap_pool_type2 * pq_s_pool = new heap_pool_type2(MAX_MEM / 8 / heap_block_type2::raw_size, MAX_MEM / 8 / heap_block_type2::raw_size);
+
+	heap_type2 *pq_s = new heap_type2(*pq_s_pool);
+
+	m_long_aux = new uint8_deque_type();
+
+	m_long_pos_seq = new offset_deque_type();
+
+	for (uint8 i = 0; i < m_blocks_info.size(); ++i) if (m_blocks_info[i].is_single() == true) --rits[i]; // note: backward one position 
+
+	{
+		alphabet_type cur_bkt;
+
+		offset_type rank_cnt = m_s->size() - 1;
+
+		alphabet_type last_l_ch, last_s_ch;
+
+		offset_type last_l_rank0, last_l_rank1, last_s_rank0, last_s_rank1;
+		
+		offset_type cur_l_rank0, cur_l_rank1, cur_s_rank0, cur_s_rank1;
+
+		bool last_l_diff = true; // current scanned and last scanned L-type substrs are different
+
+		last_l_ch = 0; // l_ch != 0
+
+		last_s_ch = std::numeric_limits<alphabet_type>::max(); // s_ch != max
+	
+		cur_bkt = sorted_l_ch->back(); // sorted_l_ch is not empty at the beginning
+
+		while (true) {
+
+			while (!pq_s->empty() && pq_s->top().first == cur_bkt) {
+
+				const triple_type & cur_str = pq_s->top();
+
+				std::cerr << "s-type bkt, ch: " << cur_bkt << " pos: " << cur_str.third << std::endl; 
+
+				uint8 aux;
+
+				// compute rank 
+				if (cur_bkt == last_s_ch && cur_str.second == last_s_rank0) {
+
+					cur_s_rank1 = last_s_rank1;
+
+					aux = 0; // equal, set highest bit to 0
+				}
+				else {
+
+					cur_s_rank1 = rank_cnt;
+
+					rank_cnt = rank_cnt - 1;					
+
+					aux = 128; // different, set highest bit to 1
+				}
+
+				// induce preceding
+				uint8 block_id = getBlockId(cur_str.third);
+
+				if (m_blocks_info[block_id].m_end_pos == cur_str.third) { // current is S*-type
+
+					std::cerr << "boundary\n";
+
+					aux = aux + block_id;
+
+					m_long_aux->push_back(aux);
+
+					m_long_pos_seq->push_back(cur_str.third);
+				}
+				else {
+
+					alphabet_type pre_ch;
+
+					if (m_blocks_info[block_id].is_single() == true) {
+
+						pre_ch = *(rits[block_id]);
+
+						 ++rits[block_id];
+
+						std::cerr << "single ";
+					}
+					else {
+
+						pre_ch = m_long_bwt_seqs[block_id]->front();
+
+						m_long_bwt_seqs[block_id]->pop();
+
+						std::cerr << "multi ";
+					}
+
+					std::cerr << "pre ch:" << pre_ch << std::endl;
+
+					if (pre_ch <= cur_bkt) { // preceding is S-type
+
+						pq_s->push(triple_type(pre_ch, cur_s_rank1, cur_str.third - 1));
+					}
+					else { // current is S*-type
+						
+						aux = aux + block_id;
+
+						m_long_aux->push_back(aux);
+
+						m_long_pos_seq->push_back(cur_str.third);
+					}	
+				}	
+
+				last_s_rank1 = cur_s_rank1, last_s_rank0 = cur_str.second, last_s_ch = cur_bkt;
+
+				std::cerr << (uint32)pre_ch << " " << cur_s_rank1 << " " << cur_str.third - 1 << std::endl;
+		
+				std::cerr << (uint32)cur_bkt << " " << cur_str.second << " " << cur_str.third << std::endl;
+				pq_s->pop();
+			}
+
+			while (!sorted_l_ch->empty() && sorted_l_ch->back() == cur_bkt) {
+
+				std::cerr << "last_l_diff: " << last_l_diff << " ch: " << sorted_l_ch->back() 
+					<< " pos: " << sorted_l_pos->back() << std::endl;
+ 
+				// compute rank of current substr
+				if (last_l_diff == false) {
+
+					cur_l_rank1 = last_l_rank1; 
+				} 
+				else {
+
+					cur_l_rank1 = rank_cnt;
+
+					rank_cnt = rank_cnt - 1;
+				}
+				
+				// induce preceding 
+				uint8 block_id = getBlockId(sorted_l_pos->back());
+
+				alphabet_type pre_ch;
+
+				if (m_blocks_info[block_id].is_single() == true) {
+
+					pre_ch = *(rits[block_id]), ++rits[block_id];
+
+					std::cerr << "single ";
+				}
+				else {
+
+					pre_ch = m_long_bwt_seqs[block_id]->front();
+
+					m_long_bwt_seqs[block_id]->pop();
+
+					std::cerr << "multi ";
+				}
+
+				std::cerr << "pre_ch: " << pre_ch << std::endl;
+					
+				pq_s->push(triple_type(pre_ch, cur_s_rank1, sorted_l_pos->back() - 1));
+
+				last_l_rank1 = cur_l_rank1, last_l_diff = sorted_l_diff->back();
+
+				sorted_l_ch->pop_back(), sorted_l_pos->pop_back(), sorted_l_diff->pop_back();
+			}
+
+			// determine the next bucket to be scanned
+			if (!pq_s->empty()) {
+
+				cur_bkt = pq_s->top().first;
+
+				if (!sorted_l_ch->empty() && sorted_l_ch->back() > cur_bkt) {
+
+					cur_bkt = sorted_l_ch->back();
+				}	
+			}
+			else if (!sorted_l_ch->empty()) {
+
+				cur_bkt = sorted_l_ch->back();
+			}
+			else {
+
+				break;
+			}
+		}			
+	}
+
+	delete sorted_l_ch; sorted_l_ch = nullptr;
+	
+	delete sorted_l_pos; sorted_l_pos = nullptr;
+
+	delete sorted_l_diff; sorted_l_diff = nullptr;
+		
+	delete pq_s_pool; pq_s_pool = nullptr;
+
+	delete pq_s; pq_s = nullptr;	
+}
+
+/// \brief compute block idx to which the sampling character is belonging to, where the characters are positions at 0, 1 * m_capacity, ....
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::compute_block_id_of_samplings() {
+
+	if (m_blocks_info.size() == 0) return; // m_s may contain no S*-type substr
+
+	uint64 sampling_pos = 0;
+
+	uint8 block_id = m_blocks_info.size() - 1;
+
+	while (sampling_pos < m_s->size() - 1) {
+
+		while (true) {
+
+			if (sampling_pos <= m_blocks_info[block_id].m_end_pos) {
+
+				m_block_id_of_samplings.push_back(block_id);
+
+				break;
+			}
+
+			--block_id;
+		}
+
+		sampling_pos += m_blocks_info[0].m_capacity;
+	}
+
+	// process the sampling character positioned at m_size() - 1
+	sampling_pos = m_s->size() - 1;
+
+	while (true) {
+
+		if (sampling_pos <= m_blocks_info[block_id].m_end_pos) {
+
+			m_block_id_of_samplings.push_back(block_id);
+
+			break;
+		}
+
+		--block_id;
+	}
+
+	return;
+}
+
+/// \brief return the block idx of the character at the given position
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+uint8 DSAComputation<alphabet_type, offset_type, D>::getBlockId(const offset_type &_pos) {
+
+	uint8 sampling_id = static_cast<uint8>(_pos / m_blocks_info[0].m_capacity);
+
+	uint8 block_id = m_block_id_of_samplings[sampling_id];
+
+	while (true) {
+
+		if (m_blocks_info[block_id].m_end_pos >= _pos) {
+
+			return block_id;
+		} 
+
+		--block_id;
+	}
+
+	return 0; // take no effects
+}
+
+/// \brief merge sorted short and long lms-substrs using a var-length string sorter
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+bool DSAComputation<alphabet_type, offset_type, D>::mergeSortedSStarGlobal() {
+	
+	std::vector<uint64> blocks_beg_pos;
+
+	uint64 s1_size = 0;
+
+	for (uint8 i = 0; i < m_blocks_info.size(); ++i) {
+
+		s1_size += m_blocks_info[i].m_lms_num;
+
+		blocks_beg_pos.push_back(m_blocks_info[i].m_beg_pos);		
+	}
+
+	s1_size = s1_size + 1; // plus sentinel
+
+	m_s1 = new offset_vector_type(); m_s1->resize(s1_size);
+
+//	typedef SubstrSorter<alphabet_type, offset_type, D> str_sorter_type;
+
+//	str_sorter_type str_sorter = 
+//		str_sorter_type(m_short_lms_seqs, m_long_lms_seqs, m_short_pos_seqs, m_long_pos_seq, m_long_aux, blocks_beg_pos);
+
+//	bool is_unique = str_sorter.process(m_s1);
+
+	bool is_unique = true;
+
+	return is_unique;
+}
+
+
+#ifdef MY_DEBUG_1
+/// \brief
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::sortSuffixGlobal(offset_deque_type *_sa1_reverse) {
+
+	for (uint8 i = 0; i < m_blocks_info.size(); ++i) m_lms_rank_seqs[i] = new alphabet_queue_type();
+
+	if (_sa1_reverse == nullptr) { // each character in s1 is unique
+
+		typename alphabet_vector_type::bufreader_reverse_type *s_reverse_reader = 
+			new typename alphabet_vector_type::bufreader_reverse_type(*m_s);
+
+		typename offset_vector_type::bufreader_reverse_type *s1_reverse_reader = 
+			new typename offset_vector_type::bufreader_reverse_type(*m_s1);
+
+		alphabet_type cur_ch, last_ch;
+
+		uint8 cur_t, last_t;
+
+		offset_type last_pos;
+
+		last_pos = m_s->size() - 1, last_ch = *(*s_reverse_reader), last_t = S_TYPE, ++(*s_reverse_reader);
+
+		for (offset_type last_pos = m_s->size() - 1; !s_reverse_reader->empty(); ++(*s_reverse_reader), --last_pos) {
+
+			cur_ch = *(*s_reverse_reader);
+
+			cur_t = (cur_ch < last_ch || cur_ch == last_ch && last_ch == S_TYPE) ? S_TYPE : L_TYPE;
+
+			if (cur_t == L_TYPE && last_t == S_TYPE) { // find an lms character
+
+				uint8 block_id = getBlockId(last_pos);
+
+				m_lms_rank_seqs[block_id]->push(*(*s1_reverse_reader));		
+				
+				++(*s1_reverse_reader);
+			}
+		}	
+
+		delete s1_reverse_reader; s1_reverse_reader;
+
+		delete m_s1; m_s1 = nullptr;
+
+		delete s_reverse_reader; s_reverse_reader = nullptr;
+	}
+	else {  // duplicate characters in s1
+
+		delete m_s1; m_s1 = nullptr;
+
+		typedef Pair<offset_type, offset_type> pair_type; // <rank, idx>
+
+		typedef TupleAscCmp1<pair_type> pair_comparator_type;
+		
+		typedef typename ExSorter<pair_type, pair_comparator_type>::sorter sorter_type;
+
+		sorter_type *sorter_rank = new sorter_type(pair_comparator_type(), MAX_MEM / 2);			
+
+		for (offset_type rank = 0; !_sa1_reverse->empty(); _sa1_reverse->pop_back(), ++rank) {
+
+			sorter_rank->push(pair_type(_sa1_reverse->back(), rank));
+		}
+					
+		delete _sa1_reverse; _sa1_reverse = nullptr;
+
+		sorter_rank->sort();
+		
+		typename alphabet_vector_type::bufreader_reverse_type *s_reverse_reader = 
+			new typename alphabet_vector_type::bufreader_reverse_type(*m_s);
+
+		alphabet_type cur_ch, last_ch;
+
+		uint8 cur_t, last_t;
+
+		offset_type last_pos;
+
+		last_pos = m_s->size() - 1, last_ch = *(*s_reverse_reader), last_t = S_TYPE, ++(*s_reverse_reader);
+
+		for (offset_type last_pos = m_s->size() - 1; !s_reverse_reader->empty(); ++(*s_reverse_reader), --last_pos) {
+
+			cur_ch = *(*s_reverse_reader);
+
+			cur_t = (cur_ch < last_ch || cur_ch == last_ch && last_ch == S_TYPE) ? S_TYPE : L_TYPE;
+
+			if (cur_t == L_TYPE && last_t == S_TYPE) { // find an lms character
+
+				uint8 block_id = getBlockId(last_pos);
+
+				m_lms_rank_seqs[block_id]->push((*sorter_rank).second);		
+				
+				++(*sorter_rank);
+			}
+		}	
+	
+		delete sorter_rank; sorter_rank = nullptr;
+	}	
+
+
+	//
+	for (uint8 i = 0; i < m_blocks_info.size(); ++i) {
+
+		sortSuffixBlock(m_blocks_info[i]);
+	}	
+
+
+	//
+	mergeSortedSuffixGlobal();
+
+}
+
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::sortSuffixBlock(const BlockInfo & _block_info) {
+
+	if (_block_info.m_lms_num == 1) {
+
+		sortSuffixSingleleBlock(_block_info);
+	}
+	else {
+
+		sortSuffixMultiBlock(_block_info);
+	}
+} 
+
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::sortSuffixSingleBlock(const BlockInfo & _block_info) {
+
+	// do nothing 
+	m_bwt_l_seqs.push_back(nullptr), m_bwt_s_seqs.push_back(nullptr);	
+}
+
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::sortSuffixMultiBlock(const BlockInfo & _block_info) {
+
+	if (m_level == 0) {
+
+		sortSuffixMultiBlockLowLevel(_block_info);	
+	}	
+	else {
+
+		sortSuffixMultiBlockHighLevel(_block_info);
+	}
+}
+
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::sortSuffixMultiBlockLowLevel(const BlockInfo & _block_info) {
+	
+	alphabet_queue_type *bwt_l_seq = new alphabet_queue_type(), *bwt_s_seq = new alphabet_queue_type();
+	
+	// load s into RAM
+	uint32 max_alpha = std::numeric_limits<alphabet_type>::max();
+
+	uint32 block_size = _block_info.m_size;
+
+	alphabet_type *s = new alphabet_type[block_size];
+
+	typename alphabet_vector_type::const_iterator it = m_s->begin() + _block_info.m_beg_pos;
+
+	for (uint32 i = 0; i < block_size; ++i, ++it) {
+
+		s[i] = *it;
+	}
+
+	// compute t and sort <lms_rank, pos> by lms_rank
+	typedef Pair<offset_type, uint32> pair_type;
+	
+	typedef TupleAscCmp2<pair_type> pair_comparator_type;
+	
+	std::vector<pair_type> *container = new std::vector<pair_type>(m_lms_rank_seqs[_block_info.m_id]->size());
+
+	sorter_type *sorter_pos = new sorter_type(pair_comparator_type(), MAX_MEM / 2);
+
+	char *t_buf = new char[block_size / 8 + 1]; BitWrapper t(t_buf); // L_TYPE or S_TYPE
+
+	t.set(block_size - 1, S_TYPE);
+
+	for (uint32 i = block_size - 2; ; --i) {
+
+		if (s[i] < s[i + 1] || s[i] == s[i + 1] && t.get(i + 1) == S_TYPE) {
+
+			t.set(i, S_TYPE);
+		}
+		else {
+
+			t.set(i, L_TYPE);
+		}
+
+		if (t.get(i) == L_TYPE && t.get(i + 1) == S_TYPE) {
+
+			container->push(pair_type(m_lms_rank_seqs[_block_info.m_id]->front(), i + 1));
+
+			m_lms_rank_seqs[_block_info.m_id]->pop();			
+		}
+
+		if (i == 0) break;
+	}
+
+	std::sort(container->begin(), container->end(), pair_comparator_type());
+
+	//
+	uint32 *sa = new uint32[block_size];
+
+	for (uint32 i = 0; i < block_size; ++i) sa[i] = std::numeric_limits<uint32>::max();
+	
+	uint32 *bkt = new uint32[std::numeric_limits<alphabet_type>::max() + 1];
+
+	// insert the sorted lms suffixes
+	getBuckets<alphabet_type>(s, block_size, bkt, std::numeric_limits<uint32>::max(), false);
+
+	for (uint32 i = container->size(); ; --i) {
+
+		sa[bkt[s[container[i].second]]--] = container[i].second;
+
+		if (i == 0) break;
+	}
+	
+	// induce l
+	getBuckets<alphabet_type>(s, block_size, bkt, std::numeric_limits<uint32>::max(), true);
+
+	for (uint32 i = 0; i < block_size; ++i) {
+
+		if (sa[i] != std::numeric_limits<uint32>::max() && sa[i] != 0) {
+
+			uint32 j = sa[i] - 1;
+
+			if (t.get(j) == L_TYPE) {
+
+				sa[bkt[s[j]]++] = j;
+			}	
+
+			bwt_l_seq.push(s[j]);
+		}
+	}
+
+	// induce s
+	getBuckets<alphabet_type>(s, block_size, bkt, std::numeric_limits<uint32>::max(), false);
+
+	for (uint32 i = block_size - 1; ; --i) {
+
+		if (sa[i] != std::numeric_limits<uint32>::max() && sa[i] != 0) {
+
+			uint32 j = sa[i] - 1;
+
+			if (t.get(j) == S_TYPE) {
+
+				sa[bkt[s[j]]--] = j;
+			}
+
+			bwt_s_seq.push(s[j]);
+		}
+		
+	}
+
+	m_bwt_l_seqs.push(bwt_l_seq), m_bwt_s_seqs.push(bwt_s_seq);
+
+	delete sa; sa = nullptr;
+
+	delete s; s = nullptr;
+
+	delete t_buf; t_buf = nullptr;
+
+	delete bkt; bkt = nullptr;
+}
+
+/// \brief
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::sortSuffixMultiBlockHighLevel(const BlockInfo & _block_info) {
+	
+	// load s into RAM, format s
+	uint32 block_size = _block_info.m_size;
+
+	alphabet_type *s = new alphabet_type[block_size];
+
+	uint32 *fs = new uint32[block_size];
+
+	uint32 max_alpha = formatMultiBlock(_block_info, s, fs);
+
+	alphabet_queue_type *bwt_l_seq = new alphabet_queue_type(), *bwt_s_seq = new alphabet_queue_type();
+	
+	// compute t and sort <lms_rank, pos> by lms_rank
+	typedef Pair<offset_type, uint32> pair_type;
+	
+	typedef TupleAscCmp2<pair_type> pair_comparator_type;
+	
+	std::vector<pair_type> *container = new std::vector<pair_type>(m_lms_rank_seqs[_block_info.m_id]->size());
+
+	sorter_type *sorter_pos = new sorter_type(pair_comparator_type(), MAX_MEM / 2);
+
+	char *t_buf = new char[block_size / 8 + 1]; BitWrapper t(t_buf); // L_TYPE or S_TYPE
+
+	t.set(block_size - 1, S_TYPE);
+
+	for (uint32 i = block_size - 2; ; --i) {
+
+		if (s[i] < s[i + 1] || s[i] == s[i + 1] && t.get(i + 1) == S_TYPE) {
+
+			t.set(i, S_TYPE);
+		}
+		else {
+
+			t.set(i, L_TYPE);
+		}
+
+		if (t.get(i) == L_TYPE && t.get(i + 1) == S_TYPE) {
+
+			container->push(pair_type(m_lms_rank_seqs[_block_info.m_id]->front(), i + 1));
+
+			m_lms_rank_seqs[_block_info.m_id]->pop();			
+		}
+
+		if (i == 0) break;
+	}
+
+	std::sort(container->begin(), container->end(), pair_comparator_type());
+
+	//
+	uint32 *sa = new uint32[block_size];
+
+	for (uint32 i = 0; i < block_size; ++i) sa[i] = std::numeric_limits<uint32>::max();
+	
+	uint32 *bkt = new uint32[max_alpha + 1];
+
+	// insert the sorted lms suffixes
+	getBuckets<uint32>(fs, block_size, bkt, max_alpha, false);
+
+	for (uint32 i = container->size(); ; --i) {
+
+		sa[bkt[fs[container[i].second]]--] = container[i].second;
+
+		if (i == 0) break;
+	}
+	
+	// induce l
+	getBuckets<uint32>(fs, block_size, bkt, max_alpha, true);
+
+	for (uint32 i = 0; i < block_size; ++i) {
+
+		if (sa[i] != std::numeric_limits<uint32>::max() && sa[i] != 0) {
+
+			uint32 j = sa[i] - 1;
+
+			if (t.get(j) == L_TYPE) {
+
+				sa[bkt[fs[j]]++] = j;
+			}	
+
+			bwt_l_seq.push(s[j]);
+		}
+	}
+
+	// induce s
+	getBuckets<alphabet_type>(s, block_size, bkt, std::numeric_limits<uint32>::max(), false);
+
+	for (uint32 i = block_size - 1; ; --i) {
+
+		if (sa[i] != std::numeric_limits<uint32>::max() && sa[i] != 0) {
+
+			uint32 j = sa[i] - 1;
+
+			if (t.get(j) == S_TYPE) {
+
+				sa[bkt[fs[j]]--] = j;
+			}
+
+			bwt_s_seq.push(s[j]);
+		}
+		
+	}
+
+	m_bwt_l_seqs.push(bwt_l_seq), m_bwt_s_seqs.push(bwt_s_seq);
+
+	delete sa; sa = nullptr;
+
+	delete s; s = nullptr;
+
+	delete fs; fs = nullptr;
+
+	delete t_buf; t_buf = nullptr;
+
+	delete bkt; bkt = nullptr;
+}
+
+
+/// \brief  
+///
+template<typename alphabet_type, typename offset_type, uint8 D>
+void DSAComputation<alphabet_type, offset_type, D>::mergeSortedSuffixGlobal(Offset_deque_type *_sa_reverse) {
+
+	typedef Triple<offset_type, alphabet_type, offset_type> triple_type; // <rank, ch, pos>
+	
+	typedef TupleAscCmp1<triple_type> triple_comparator_type;
+	
+	typedef typename ExSorter<triple_type, triple_comparator_type>::sorter triple_sorter_type;
+
+	triple_sorter_type *sorter_lms = nullptr;
+
+	if (_sa1_reverse == nullptr) { // highest recursion level
+
+		sorter_lms = new triple_sorter_type(triple_comparator_type(), MAX_MEM / 2);
+
+		typename alphabet_vector_type::bufreader_reverse_reader *s_reverse_reader = 
+			new alphabet_vector_type::bufreader_reverse_reader(*m_s);
+
+		typename offset_queue_type::bufreader_reverse_reader *s1_reverse_reader = 
+			new offset_vector_type::bufreader_reverse_reader(*m_s1);
+
+		alphabet_type cur_ch, last_ch;
+
+		uint8 cur_t, last_t;
+
+		last_ch = *(*s_reverse_reader), last_t = S_TYPE, ++(*s_reverse_reader);
+
+		for (offset_type last_pos = m_s->size() - 1; !s_reverse_reader->empty(); ++(*s_reverse_reader), --last_pos) {
+
+			cur_ch = *(*s_reverse_reader);
+
+			cur_t = (cur_ch == last_ch || cur_ch < last_ch && last_t == S_TYPE) ? S_TYPE : L_TYPE;
+
+			if (cur_t == L_TYPE && last_t == S_TYPE) {
+
+				sorter_lms->push(triple_type(*(*s1_reverse_reader), last_ch, last_pos);				
+			}
+		
+			last_t = cur_t, last_ch = cur_ch;
+		}		
+		
+		sorter_lms->sort();
+
+		delete s_reverse_reader; s_reverse_reader = nullptr;
+
+		delete s1_reverse_reader; s1_reverse_reader = nullptr;
+
+		delete m_s1; m_s1 = nullptr;
+	}
+	else {
+
+		typedef Pair<offset_type, offset_type> pair_type;
+
+		typedef TupleAscCmp1<pair_type> pair_comparator_type;
+
+		typedef typename ExSorter<pair_type, pair_comparator_type>::sorter pair_sorter_type;
+
+		pair_sorter_type *sorter_rank = new pair_sorter_type(pair_comparator_type(), MAX_MEM / 2);
+
+		for (offset_type rank = 0; !_sa1_reverse->empty(); _sa1_reverse->pop_back(), rank = rank + 1) {
+
+			sorter_rank->push(pair_type(_sa1_reverse->back(), rank));
+		}
+
+		sorter_rank->sort();
+
+		sorter_lms = new triple_sorter_type(triple_comparator_type(), MAX_MEM / 2); 
+
+		typename alphabet_vector_type::bufreader_reverse_reader *s_reverse_reader = 
+			new alphabet_vector_type::bufreader_reverse_reader(*m_s);
+
+		alphabet_type cur_ch, last_ch;
+
+		uint8 cur_t, last_t;
+
+		last_ch = *(*s_reverse_reader), last_t = S_TYPE, ++(*s_reverse_reader);
+
+		for (offset_type last_pos = m_s->size() - 1; !s_reverse_reader->empty(); ++(*s_reverse_reader), --last_pos) {
+
+			cur_ch = *(*s_reverse_reader);
+
+			cur_t = (cur_ch == last_ch || cur_ch < last_ch && last_t == S_TYPE) ? S_TYPE : L_TYPE;
+
+			if (cur_t == L_TYPE && last_t == S_TYPE) {
+
+				sorter_lms->push(triple_type(*(*s1_reverse_reader), last_ch, last_pos);
+			}
+
+			last_t = cur_t, last_ch = cur_ch;
+		}
+
+		sorter_lms->sort();
+
+		delete sorter_rank; sorter_rank = nullptr;
+
+		delete s_reverse_reader; s_reverse_reader = nullptr;
+
+		delete s1_reverse_reader; s1_reverse_reader = nullptr;
+
+		delete m_s1; m_s1 = nullptr;
+
+		delete _sa1_reverse; _sa1_reverse = nullptr;
+	}
+
+	// create pq for sorting l-type substrs <ch, rank, pos>
+	typedef Triple<alphabet_type, offset_type, offset_type> triple_type2; // <ch, rank, pos>
+
+	typedef TuplAscCmp2<triple_type2> triple_comparator_type2;
+
+	typedef typename ExHeap<triple_type2, triple_comparator_type2, MAX_MEM / 4, MAX_ITEM>::heap heap_type;
+
+	typedef typename heap_type::block_type heap_block_type;
+
+	typedef typename stxxl::read_write_pool<heap_block_type> heap_pool_type;
+
+	heap_pool_type *pq_l_pool = new heap_pool_type(MAX_MEM / 4 / heap_block_type::raw_size, MAX_MEM / 4 / heap:block_type::raw_size);
+
+	heap_type *pq_l = new heap_type(*pq_l_pool);
+
+	alphabet_queue_type *sorted_l_ch = new alphabet_queue_type();	
+
+	offset_queue_type *sorted_l_pos = new offset_queue_type();
+
+	uint8_queue_type *sorted_l_diff = new uint8_queue_type();
+
+	std::vector<typename alphabet_vector_type::const_reverse_iterator> rits(m_blocks_info.size());
+
+	for (uint8 i = 0; i < m_blocks_info.size(); ++i) {
+
+		if (m_blocks_info[i].is_single == true) {
+					
+			rits[i] = m_s->rbegin() + m_s->size() - m_blocks_info[i].m_end_pos; 
+		}
+	}
+
+	
+	// induce l
+	{
+		alphabet_type cur_bkt;
+
+		offset_type rank_cnt = 0;
+
+		alphabet_type last_l_ch, last_s_ch;
+
+		offset_type last_l_rank0, last_l_rank1, last_s_rank0, last_s_rank1;
+				
+		offset_type cur_l_rank0, cur_l_rank1, cur_s_rank0, cur_s_rank1;
+
+		cur_bkt = (*sorter_lms).second; // sorter_lms is not empty at the beginning	
+		
+		while (true) {
+
+			while (!pq_l->empty() && pq_l->top().first == cur_bkt) {
+
+				const triple_type &cur_str = pq_l->top(); // <ch, rank, pos>
+
+				bool l_diff;
+				// compute rank of current substr
+				if (cur_bkt == last_l_ch && cur_str.second == last_l_rank0) {
+
+					cur_l_rank1 = last_l_rank1;
+
+					l_diff = false;
+				}
+				else {
+
+					cur_l_rank1 = rank_cnt;
+
+					rank_cnt = rank_cnt + 1;
+				
+					l_diff = true;
+				}	
+
+				// induce preceding l-type substr if exists
+				if (0 != cur_str.third) {
+
+					uint8 block_id = getBlockId(cur_str.third);
+					
+					alphabet_type pre_ch;
+
+					if (m_blocks_info[block_id].is_single() == true) {
+
+						pre_ch = rits[block_id], ++rits[block_id];
+					}
+					else {
+
+						pre_ch = m_bwt_l_seqs[block_id].pop_front();
+					}
+				
+					if (pre_ch >= cur_bkt) {
+					
+						pq_l->push(triple_type(pre_ch, cur_l_rank1, cur_str.third - 1));
+					}
+					else { // L*-substr
+
+						(*sorted_l_ch).push(cur_str.first);
+
+						(*sorted_l_pos).push(cur_str.third);
+
+						(*sorted_l_diff).push(l_diff);
+					}
+				}		
+
+				// iterate
+				last_l_ch = cur_str.first, last_l_rank0 = cur_str.second, last_l_rank1 = cur_l_rank1;
+
+				pq_l->pop();
+			}
+
+			while (!sorter_lms->empty() && (*sorter_lms).first == cur_bkt) {
+
+				const pair_type &cur_str = (*sorter_lms); // <ch, pos>
+
+				// compute rank of current substr
+				if (cur_bkt == last_s_ch) {
+
+					cur_s_rank1 = rank_cnt; 
+				}
+				else {
+
+					cur_s_rank1 = rank_cnt;
+
+					rank_cnt = rank_cnt + 1;
+				}
+				
+				// induce preceding
+				if (0 != cur_str.second) {
+
+					uint8 block_id = getBlockId(cur_str.second);
+
+					alphabet_type pre_ch;
+
+					if (m_blocks_info[block_id].is_single() == true) {
+
+						pre_ch = rits[block_id], ++rits[block_id];
+					}
+					else {
+
+						pre_ch = m_bwt_l_seqs[block_id].pop_front();
+					}
+
+					pq_l->push(triple_type(pre_ch, cur_s_rank1, cur_str.second - 1));
+				}
+
+				// iterate
+				last_s_ch = cur_str.first, last_s_rank1 = cur_s_rank1;
+
+				++(*sorter_lms);
+			}
+
+			if (!pq_l->empty()) {
+
+				cur_bkt = pq_l->top().first;
+
+				if (!sorter_lms->empty() && (*sorter_lms).first < cur_bkt) {
+
+					cur_bkt = (*sorter_lms).first;
+				}
+		
+			}
+			else if (!sorter_lms->empty()){
+
+				cur_bkt = (*sorter_lms).first;
+			}
+			else {
+
+				break;
+			}
+		}
+	}
+
+	delete sorter_lms; sorter_lms = nullptr;
+
+	delete pq_l_pool; pq_l_pool = nullptr;
+
+	delete pq_l; pq_l = nullptr;
+
+	//
+	heap_pool_type * pq_s_pool = new heap_pool_type(MAX_MEM / 4 / heap_block_type::raw_size, MAX_MEM / 4 / heap_block_type::raw_size);
+
+	heap_type *pq_s = new heap_type(*pq_s_pool);
+	
+	_sa_reverse = new offset_deque_type();
+
+	{
+		alphabet_type cur_bkt;
+
+		offset_type rank_cnt = m_s->size() - 1;
+
+		cur_bkt = (*sorted_l_ch); // sorted_l_ch is not empty at the beginning
+
+		bool last_l_diff = true;
+
+		while (true) {
+
+			while (!pq_s->empty() && pq_s->top().first == cur_bkt) {
+
+				const triple_type & cur_str = pq_s->top();
+
+				_sa_reverse.push_back(cur_str.third);
+				
+				// induce preceding
+				if (0 != cur_str.third) {
+
+					uint8 block_id = getBlockId(cur_str.third);
+
+					alphabet_type pre_ch;
+
+					if (m_blocks_info[block_id].is_single() == true) {
+
+						pre_ch = rits[block_id], ++rits[block_id];
+					}
+					else {
+
+						pre_ch = m_bwt_s_seqs[block_id]->pop();
+					}
+
+					if (pre_ch <= cur_bkt) {
+
+						pq_s->push(triple_type(pre_ch, rank_cnt, cur_str.third - 1));
+					}
+				}	
+
+				last_s_rank1 = cur_s_rank1, last_s_ch = cur_str.first, rank_cnt = rank_cnt - 1;
+
+				 pq_s->pop();
+			}
+
+			while (!sorted_l_ch->empty() && (*sorted_l_ch) == cur_bkt) {
+
+				_sa_reverse->push_back(*sorted_l_pos);
+	
+				// induce preceding 
+				if (0 != (*sorted_l_pos)) {
+
+					uint8 block_id = getBlockId(*sorted_l_pos);
+
+					alphabet_type pre_ch;
+
+					if (m_blocks_info[block_id].is_single() == true) {
+
+						pre_ch = rits[block_id], ++rits[block_id];
+					}
+					else {
+
+						pre_ch = m_bwt_s_seqs[block_id].pop_front();
+					}
+					
+					pq_s->push(triple_type(pre_ch, rank_cnt, (*sorted_l_pos) - 1));
+				}
+
+				last_l_rank1 = cur_l_rank1, rank_cnt = rank_cnt - 1;
+
+				sorted_l_ch->pop(), sorted_l_pos->pop();
+			}
+
+		
+			// determine the next bucket to be scanned
+			if (!pq_s->empty()) {
+
+				pq_s->top() = cur_bkt;
+
+				if (!sorted_l_ch->empty() && (*sorted_l_ch) > cur_bkt) {
+
+					cur_bkt = (*sorted_l_ch);
+				}	
+			}
+			else if (!sorted_l_ch->empty()) {
+
+				cur_bkt = (*sorted_l_ch);
+			}
+			else {
+
+				break;
+			}
+		}			
+	}
+
+	delete sorted_l_ch; sorted_l_ch = nullptr;
+	
+	delete sorted_l_pos; sorted_l_pos = nullptr;
+	
+	delete pq_s_pool; pq_s_pool = nullptr;
+
+	delete pq_s; pq_s = nullptr;	
+}
+
+#endif
+
+
+#endif // MY_DSAIS_H
+
