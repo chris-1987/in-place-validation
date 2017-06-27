@@ -69,10 +69,10 @@ J.~K\"{a}rkk\"{a}inen, D.~Kempa, S.~J. Puglisi, and et~al., ``{Engineering
   External Memory Induced Suffix Sorting},'' in \emph{In Proceedings of the
   19th Workshop on Algorithm Engineering and Experiments}, 2017, pp. 98--108.
 
-\bibitem{Dementiev2007}
-R.~Dementiev, L.~Kettner, and P.~Sanders, ``{STXXL: Standard Template Library
-  for XXL Data Sets},'' \emph{Software: Practice and Experience}, vol.~38,
-  no.~6, pp. 589--637, 2008.
+\bibitem{Karp1987}
+R.~Karp and M.~Rabin, ``{Efficient Randomized Pattern Matching Algorithms},''
+  \emph{IBM Journal of Research and Development}, vol.~31, no.~2, pp. 249--260,
+  March 1987.
 
 \bibitem{wu2017}
 Y.~Wu, G.~Nong, W.~H. Chan, and L.~B. Han, ``{Checking Big Suffix and LCP

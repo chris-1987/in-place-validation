@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.31)  6 JUN 2017 08:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.10.31)  26 JUN 2017 21:19
 entering extended mode
 **./draft.tex
 (draft.tex
@@ -397,60 +397,58 @@ LaTeX Font Info:    ... okay on input line 29.
 \makeMPintoPDFobject=\count121
 \everyMPtoPDFconversion=\toks23
 )
-LaTeX Font Info:    Try loading font information for OT1+phv on input line 60.
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 58.
  ("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1phv.fd"
 File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <8.03> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 60.
-LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 60
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 58.
+LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 58
 .
-LaTeX Font Info:    Try loading font information for U+msa on input line 60.
+LaTeX Font Info:    Try loading font information for U+msa on input line 58.
 
 ("D:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 60.
+LaTeX Font Info:    Try loading font information for U+msb on input line 58.
 
 ("D:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+pzd on input line 60.
+LaTeX Font Info:    Try loading font information for U+pzd on input line 58.
 
 ("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\upzd.fd"
 File: upzd.fd 2001/06/04 font definitions for U/pzd.
 )
-LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 60.
+LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 58.
 
-Underfull \hbox (badness 2961) in paragraph at lines 60--60
+Underfull \hbox (badness 2961) in paragraph at lines 58--58
 \OT1/ppl/m/it/8.03 China. E-mails: wu.yi.christian@gmail.com, issng@mail.sysu.e
 du.cn,
  []
 
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <11.04124> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 66.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 64.
 LaTeX Font Info:    Font shape `OT1/phv/bx/sc' in size <11.04124> not available
 
-(Font)              Font shape `OT1/phv/b/sc' tried instead on input line 66.
-LaTeX Font Info:    Calculating math sizes for size <9.53561> on input line 68.
+(Font)              Font shape `OT1/phv/b/sc' tried instead on input line 64.
+LaTeX Font Info:    Calculating math sizes for size <9.53561> on input line 66.
 
-LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <9.53561> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 76.
 [1{C:/Users/liuwjun/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 
 ]
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <9.53561> not available
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 93.
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <6.62196> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 97.
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 101.
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 153--157
+Underfull \hbox (badness 10000) in paragraph at lines 163--167
 
  []
 
-LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <9.53561> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 167.
-<example.pdf, id=21, 478.78876pt x 639.38875pt>
+<example.pdf, id=22, 478.78876pt x 639.38875pt>
 File: example.pdf Graphic file (type pdf)
  <use example.pdf>
 Package pdftex.def Info: example.pdf used on input line 195.
@@ -466,45 +464,46 @@ Underfull \hbox (badness 10000) in paragraph at lines 214--219
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 234--238
+Underfull \hbox (badness 10000) in paragraph at lines 237--241
 
  []
 
 
-Underfull \hbox (badness 2261) in paragraph at lines 245--246
-[]\OT1/ppl/m/n/9.53561 Suppose $\OML/cmm/m/it/10 i < j$ \OT1/ppl/m/n/9.53561 an
-d $[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 sa\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 i\OT
-1/cmr/m/n/10 ]) \OML/cmm/m/it/10 > []\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 sa\OT1/c
-mr/m/n/10 [\OML/cmm/m/it/10 j\OT1/cmr/m/n/10 ])$\OT1/ppl/m/n/9.53561 . If
+Underfull \hbox (badness 1484) in paragraph at lines 248--250
+\OT1/ppl/m/n/9.53561 see $[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 sa[]\OT1/cmr/m/n/
+10 [\OML/cmm/m/it/10 i[]\OT1/cmr/m/n/10 ]) \OML/cmm/m/it/10 > []\OT1/cmr/m/n/10
+ (\OML/cmm/m/it/10 sa[]\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 j[]\OT1/cmr/m/n/10 ])$
+ \OT1/ppl/m/n/9.53561 and $[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 sa[]\OT1/cmr/m/n
+/10 [\OML/cmm/m/it/10 i[]\OT1/cmr/m/n/10 ]) \OML/cmm/m/it/10 <
  []
 
 [4 <./example.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 256--260
+Underfull \hbox (badness 10000) in paragraph at lines 255--259
 
  []
 
-<example2.pdf, id=55, 302.12875pt x 154.5775pt>
+<example2.pdf, id=54, 302.12875pt x 154.5775pt>
 File: example2.pdf Graphic file (type pdf)
  <use example2.pdf>
-Package pdftex.def Info: example2.pdf used on input line 269.
+Package pdftex.def Info: example2.pdf used on input line 268.
 (pdftex.def)             Requested size: 227.64894pt x 116.4706pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 308--308
+Underfull \hbox (badness 10000) in paragraph at lines 307--307
 []\OT1/ppl/m/n/8.03 Swissprot database, at $http : / /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 308--308
+Underfull \hbox (badness 10000) in paragraph at lines 307--307
 \OT1/ppl/m/n/8.03 pizzachili . dcc . uchile . cl / texts / protein$,
  []
 
 
-Underfull \hbox (badness 3058) in paragraph at lines 309--309
+Underfull \hbox (badness 3058) in paragraph at lines 308--308
 []\OT1/ppl/m/n/8.03 UniProt Knowl-edge-base re-lease 4.0,
  []
 
 
-Underfull \hbox (badness 7451) in paragraph at lines 309--309
+Underfull \hbox (badness 7451) in paragraph at lines 308--308
 \OT1/ppl/m/n/8.03 at $ftp : / / ftp . expasy . org / databases / . . . /
  []
 
@@ -517,15 +516,15 @@ df>
 (epstopdf)                    size: 4432 bytes
 (epstopdf)             Command: <epstopdf --outfile=construction_pdu_enwiki-eps
 -converted-to.pdf construction_pdu_enwiki.eps>
-(epstopdf)             \includegraphics on input line 323.
+(epstopdf)             \includegraphics on input line 322.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_pdu_enwiki-eps-converted-to.pdf, id=56, 420.57124pt x 316.18124pt
+<construction_pdu_enwiki-eps-converted-to.pdf, id=55, 420.57124pt x 316.18124pt
 >
 File: construction_pdu_enwiki-eps-converted-to.pdf Graphic file (type pdf)
  <use construction_pdu_enwiki-eps-converted-to.pdf>
 Package pdftex.def Info: construction_pdu_enwiki-eps-converted-to.pdf used on i
-nput line 323.
+nput line 322.
 (pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
 Package epstopdf Info: Source file: <construction_iov_enwiki.eps>
 (epstopdf)                    date: 2017-06-05 10:44:32
@@ -536,15 +535,15 @@ df>
 (epstopdf)                    size: 4433 bytes
 (epstopdf)             Command: <epstopdf --outfile=construction_iov_enwiki-eps
 -converted-to.pdf construction_iov_enwiki.eps>
-(epstopdf)             \includegraphics on input line 323.
+(epstopdf)             \includegraphics on input line 322.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_iov_enwiki-eps-converted-to.pdf, id=57, 420.57124pt x 316.18124pt
+<construction_iov_enwiki-eps-converted-to.pdf, id=56, 420.57124pt x 316.18124pt
 >
 File: construction_iov_enwiki-eps-converted-to.pdf Graphic file (type pdf)
  <use construction_iov_enwiki-eps-converted-to.pdf>
 Package pdftex.def Info: construction_iov_enwiki-eps-converted-to.pdf used on i
-nput line 323.
+nput line 322.
 (pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
 Package epstopdf Info: Source file: <construction_ct_enwiki.eps>
 (epstopdf)                    date: 2017-06-05 10:45:09
@@ -555,14 +554,14 @@ f>
 (epstopdf)                    size: 4435 bytes
 (epstopdf)             Command: <epstopdf --outfile=construction_ct_enwiki-eps-
 converted-to.pdf construction_ct_enwiki.eps>
-(epstopdf)             \includegraphics on input line 323.
+(epstopdf)             \includegraphics on input line 322.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_ct_enwiki-eps-converted-to.pdf, id=58, 420.57124pt x 316.18124pt>
+<construction_ct_enwiki-eps-converted-to.pdf, id=57, 420.57124pt x 316.18124pt>
 File: construction_ct_enwiki-eps-converted-to.pdf Graphic file (type pdf)
 <use construction_ct_enwiki-eps-converted-to.pdf>
 Package pdftex.def Info: construction_ct_enwiki-eps-converted-to.pdf used on in
-put line 323.
+put line 322.
 (pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
 Package epstopdf Info: Source file: <construction_pdu_guten.eps>
 (epstopdf)                    date: 2017-06-05 10:52:40
@@ -573,14 +572,14 @@ f>
 (epstopdf)                    size: 4440 bytes
 (epstopdf)             Command: <epstopdf --outfile=construction_pdu_guten-eps-
 converted-to.pdf construction_pdu_guten.eps>
-(epstopdf)             \includegraphics on input line 330.
+(epstopdf)             \includegraphics on input line 329.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_pdu_guten-eps-converted-to.pdf, id=59, 420.57124pt x 316.18124pt>
+<construction_pdu_guten-eps-converted-to.pdf, id=58, 420.57124pt x 316.18124pt>
 File: construction_pdu_guten-eps-converted-to.pdf Graphic file (type pdf)
 <use construction_pdu_guten-eps-converted-to.pdf>
 Package pdftex.def Info: construction_pdu_guten-eps-converted-to.pdf used on in
-put line 330.
+put line 329.
 (pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
 Package epstopdf Info: Source file: <construction_iov_guten.eps>
 (epstopdf)                    date: 2017-06-05 11:00:50
@@ -591,14 +590,14 @@ f>
 (epstopdf)                    size: 4432 bytes
 (epstopdf)             Command: <epstopdf --outfile=construction_iov_guten-eps-
 converted-to.pdf construction_iov_guten.eps>
-(epstopdf)             \includegraphics on input line 330.
+(epstopdf)             \includegraphics on input line 329.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_iov_guten-eps-converted-to.pdf, id=60, 420.57124pt x 316.18124pt>
+<construction_iov_guten-eps-converted-to.pdf, id=59, 420.57124pt x 316.18124pt>
 File: construction_iov_guten-eps-converted-to.pdf Graphic file (type pdf)
 <use construction_iov_guten-eps-converted-to.pdf>
 Package pdftex.def Info: construction_iov_guten-eps-converted-to.pdf used on in
-put line 330.
+put line 329.
 (pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
 Package epstopdf Info: Source file: <construction_ct_guten.eps>
 (epstopdf)                    date: 2017-06-05 10:53:48
@@ -609,41 +608,41 @@ Package epstopdf Info: Source file: <construction_ct_guten.eps>
 (epstopdf)                    size: 4439 bytes
 (epstopdf)             Command: <epstopdf --outfile=construction_ct_guten-eps-c
 onverted-to.pdf construction_ct_guten.eps>
-(epstopdf)             \includegraphics on input line 330.
+(epstopdf)             \includegraphics on input line 329.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_ct_guten-eps-converted-to.pdf, id=61, 420.57124pt x 316.18124pt>
+<construction_ct_guten-eps-converted-to.pdf, id=60, 420.57124pt x 316.18124pt>
 File: construction_ct_guten-eps-converted-to.pdf Graphic file (type pdf)
 
 <use construction_ct_guten-eps-converted-to.pdf>
 Package pdftex.def Info: construction_ct_guten-eps-converted-to.pdf used on inp
-ut line 330.
+ut line 329.
 (pdftex.def)             Requested size: 233.06917pt x 175.22214pt.
-LaTeX Font Info:    Try loading font information for OMS+phv on input line 331.
+LaTeX Font Info:    Try loading font information for OMS+phv on input line 330.
 
 
 ("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omsphv.fd"
 File: omsphv.fd 
 )
 LaTeX Font Info:    Font shape `OMS/phv/m/n' in size <8.03> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 331.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 330.
  [5 <./example2.pdf>]
 Package epstopdf Info: Source file: <verification_pdu.eps>
-(epstopdf)                    date: 2017-06-05 16:44:33
-(epstopdf)                    size: 1427886 bytes
+(epstopdf)                    date: 2017-06-16 13:28:09
+(epstopdf)                    size: 1427889 bytes
 (epstopdf)             Output file: <verification_pdu-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-06-05 16:53:54
-(epstopdf)                    size: 13395 bytes
+(epstopdf)                    date: 2017-06-16 13:28:42
+(epstopdf)                    size: 12715 bytes
 (epstopdf)             Command: <epstopdf --outfile=verification_pdu-eps-conver
 ted-to.pdf verification_pdu.eps>
-(epstopdf)             \includegraphics on input line 364.
+(epstopdf)             \includegraphics on input line 363.
 Package epstopdf Info: Output file is already uptodate.
-<verification_pdu-eps-converted-to.pdf, id=92, 420.57124pt x 317.185pt>
+<verification_pdu-eps-converted-to.pdf, id=90, 420.57124pt x 317.185pt>
 File: verification_pdu-eps-converted-to.pdf Graphic file (type pdf)
 
 <use verification_pdu-eps-converted-to.pdf>
 Package pdftex.def Info: verification_pdu-eps-converted-to.pdf used on input li
-ne 364.
+ne 363.
 (pdftex.def)             Requested size: 227.64894pt x 171.68872pt.
 Package epstopdf Info: Source file: <verification_iov.eps>
 (epstopdf)                    date: 2017-06-05 16:45:04
@@ -653,15 +652,15 @@ Package epstopdf Info: Source file: <verification_iov.eps>
 (epstopdf)                    size: 13417 bytes
 (epstopdf)             Command: <epstopdf --outfile=verification_iov-eps-conver
 ted-to.pdf verification_iov.eps>
-(epstopdf)             \includegraphics on input line 369.
+(epstopdf)             \includegraphics on input line 368.
 Package epstopdf Info: Output file is already uptodate.
 
-<verification_iov-eps-converted-to.pdf, id=93, 420.57124pt x 317.185pt>
+<verification_iov-eps-converted-to.pdf, id=91, 420.57124pt x 317.185pt>
 File: verification_iov-eps-converted-to.pdf Graphic file (type pdf)
 
 <use verification_iov-eps-converted-to.pdf>
 Package pdftex.def Info: verification_iov-eps-converted-to.pdf used on input li
-ne 369.
+ne 368.
 (pdftex.def)             Requested size: 227.64894pt x 171.68872pt.
 Package epstopdf Info: Source file: <verification_ct.eps>
 (epstopdf)                    date: 2017-06-05 16:56:36
@@ -671,61 +670,58 @@ Package epstopdf Info: Source file: <verification_ct.eps>
 (epstopdf)                    size: 11906 bytes
 (epstopdf)             Command: <epstopdf --outfile=verification_ct-eps-convert
 ed-to.pdf verification_ct.eps>
-(epstopdf)             \includegraphics on input line 374.
+(epstopdf)             \includegraphics on input line 373.
 Package epstopdf Info: Output file is already uptodate.
 
-<verification_ct-eps-converted-to.pdf, id=94, 420.57124pt x 317.185pt>
+<verification_ct-eps-converted-to.pdf, id=92, 420.57124pt x 317.185pt>
 File: verification_ct-eps-converted-to.pdf Graphic file (type pdf)
 
 <use verification_ct-eps-converted-to.pdf>
 Package pdftex.def Info: verification_ct-eps-converted-to.pdf used on input lin
-e 374.
+e 373.
 (pdftex.def)             Requested size: 227.64894pt x 171.68872pt.
- (draft.bbl [6]) [7
-
-] [8 <./construction_pdu_enwiki-eps-converted-to.pdf> <./construction_iov_enwik
-i-eps-converted-to.pdf> <./construction_ct_enwiki-eps-converted-to.pdf> <./cons
-truction_pdu_guten-eps-converted-to.pdf> <./construction_iov_guten-eps-converte
-d-to.pdf> <./construction_ct_guten-eps-converted-to.pdf>] [9
+ (draft.bbl) [6] [7 <./construction_pdu_enwiki-eps-converted-to.pdf> <./constru
+ction_iov_enwiki-eps-converted-to.pdf> <./construction_ct_enwiki-eps-converted-
+to.pdf> <./construction_pdu_guten-eps-converted-to.pdf> <./construction_iov_gut
+en-eps-converted-to.pdf> <./construction_ct_guten-eps-converted-to.pdf>] [8
 
 
  <./verification_pdu-eps-converted-to.pdf> <./verification_iov-eps-converted-to
 .pdf> <./verification_ct-eps-converted-to.pdf>] (draft.aux) )
-(\end occurred inside a group at level 1)
+(\end occurred inside a group at level 2)
 
+### simple group (level 2) entered at line 236 ({)
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4855 strings out of 493334
- 74683 string characters out of 3139245
- 161861 words of memory out of 3000000
- 8260 multiletter control sequences out of 15000+200000
- 52870 words of font info for 127 fonts, out of 3000000 for 9000
+ 4851 strings out of 493334
+ 74602 string characters out of 3139245
+ 160851 words of memory out of 3000000
+ 8258 multiletter control sequences out of 15000+200000
+ 50984 words of font info for 125 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,12n,26p,1866b,3253s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,12n,26p,1747b,3253s stack positions out of 5000i,500n,10000p,200000b,50000s
 {D:/Program Files/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<D
 :/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><D:/Progra
 m Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><D:/Program Files/M
 iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><D:/Program Files/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmr10.pfb><D:/Program Files/MiKTeX 2.9/fonts/ty
-pe1/public/amsfonts/cm/cmr6.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public
-/amsfonts/cm/cmr7.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
-cm/cmr8.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss10.
-pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss8.pfb><D:/P
-rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><D:/Program F
-iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><D:/Program Files/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><D:/Program Files/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/cm/cmsy8.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1
-/urw/helvetic/uhvb8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/
-uhvr8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvro8a.pfb><D
-:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><D:/Program File
-s/MiKTeX 2.9/fonts/type1/urw/palatino/uplbi8a.pfb><D:/Program Files/MiKTeX 2.9/
-fonts/type1/urw/palatino/uplr8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/ur
-w/palatino/uplri8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/zapfding/uz
-dr.pfb>
-Output written on draft.pdf (9 pages, 601121 bytes).
+pe1/public/amsfonts/cm/cmr7.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public
+/amsfonts/cm/cmr8.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmss10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmss8
+.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><D:
+/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><D:/Program 
+Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><D:/Program Files/MiK
+TeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><D:/Program Files/MiKTeX 2.9/f
+onts/type1/urw/helvetic/uhvb8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw
+/helvetic/uhvr8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplb
+8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplbi8a.pfb><D:/Pr
+ogram Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb><D:/Program Files/Mi
+KTeX 2.9/fonts/type1/urw/palatino/uplri8a.pfb><D:/Program Files/MiKTeX 2.9/font
+s/type1/urw/zapfding/uzdr.pfb>
+Output written on draft.pdf (8 pages, 584685 bytes).
 PDF statistics:
- 207 PDF objects out of 1000 (max. 8388607)
+ 196 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  56 words of extra memory for PDF output out of 10000 (max. 10000000)
 
