@@ -156,11 +156,11 @@ The experimental results in Section~\ref{sec:experiments} indicate that, by usin
 
 \color{red}{The software packages for DC3 and eSAIS provide users a checker to ensure the correctness of their outputs. Below we describe the main idea behind this checker and refer interested readers to ~\cite{Dementiev2008a} for more details.}
 
-\begin{lemma} \label{lemma:1}
+\begin{theorem} \label{theorem:1}
 	$sa[0, n)$ is the SA for $x[0, n)$ if and only if the following conditions are satisfied:\\
 	(1) $sa$ is a permutation of $[0, n)$. \\	
 	(2) ${\sf r_i < r_j} \Leftrightarrow (x[i], r_{i + 1}) < (x[i], r_{j + 1})$ for $ i, j \in [0, n)$ and $i\ne j$, where $r_i$ and $r_j$ represent the ranks of ${\sf suf}(i)$ and ${\sf suf}(j)$ among all the suffixes, respectively. \\
-\end{lemma}
+\end{theorem}
 
 \begin{IEEEproof}The first condition indicates that $sa$ is a permutation of all the suffixes in $x$. The second condition indicates that the order of suffixes in $sa$ corresponds to that of their heading characters and successors. Because a comparison between any two suffixes can be done by comparing their heading characters and successors, the above conditions are sufficient and necessary for SA verification.
 
@@ -169,7 +169,6 @@ The experimental results in Section~\ref{sec:experiments} indicate that, by usin
 The disk-based implementation of this checker conducts two passes of integer sorts and each sort arranges the order of $n$ fixed-size tuples using external memory. As can be observed from Section~\ref{sec:experiments}, the peak disk use and the I/O volume for an SA encoded by 40-bit integers are around $26n$ and $53n$, respectively.
 
 \subsection{Proposals} \label{sec:checkers:proposals}
-
 Recall that, an IS suffix sorting algorithm recursively perform the reduction phase to compute the reduced string $s_1$ until $s_1$ contains no duplicate characters. Afterward, it produces $sa_1$ from $s_1$ and recursively perform the induction phase to compute $sa$ until reaching the top recursion level, where the induction phase executes mainly consists of the following steps:
 
 \begin{enumerate}[S1'']
@@ -183,8 +182,11 @@ Recall that, an IS suffix sorting algorithm recursively perform the reduction ph
 	
 \end{enumerate}
 
-A running example of S\ref{induction_phase:2}-Sp\ref{induction_phase:4} is shown in Fig.~\ref{fig:example1}. Given $sa^*$ is already known, line 6 inserts each S*-type suffix into the right part of the corresponding bucket and arranges them according to their sorted order indicated by $sa^*$. For example, $\sf suf(8)$, $\sf suf(5)$, $\sf suf(2)$ are placed into the right part of $\sf sa\_bkt(i)$ and arranged in their sorted order indicated by $sa^*$. Then, we find the leftmost position of each bucket (marked by the symbol $\wedge$) and scan $sa$ rightward for inducing the order of L-type suffixes. To do this, we first check $sa[0] = 14$ (marked by the symbol @) and induce the predecessor of $\sf suf(14)$ in lines 8-9. Because $x[13] = i$ is L-type, we put $\sf suf(13)$ into the current leftmost empty position in $\sf sa\_bkt_L(i)$. To step through $sa$ in this way, we get all the L-type suffixes sorted in line 17. Afterward, we find the rightmost position of each bucket and scan $sa$ leftward for inducing the order of S-type suffixes. When scanning $sa[14] = 4$ in lines 19-20, we see $x[3] = i$ is S-type and thus put $\sf suf(3)$ into the current rightmost empty position in $\sf sa\_bkt_S(i)$. Following the same idea, we get all the S-type suffixes sorted in line 28. Based on the discussion, we show in Lemma~\ref{lemma:2} a set of sufficient and necessary conditions for SA verification.
+A running example of S\ref{induction_phase:2}-\ref{induction_phase:4} is shown in Fig.~\ref{fig:example1}. Given $sa^*$ is already known, line 6 inserts each S*-type suffix into the right part of the corresponding bucket and arranges them according to their sorted order indicated by $sa^*$. For example, $\sf suf(8)$, $\sf suf(5)$, $\sf suf(2)$ are placed into the right part of $\sf sa\_bkt(i)$ and arranged in their sorted order indicated by $sa^*$. Then, we scan $sa$ rightward for inducing the order of L-type suffixes. Specifically, lines 8-9 check $sa[0]$ (marked by the symbol @) and retrieve the heading character of its predecessor $\sf suf(13)$. Because $t[13] = i$ is not smaller than $t[14] = \#$, $\sf suf(13)$ is L-type and we put $\sf suf(13)$ into the current leftmost empty position in $\sf sa\_bkt(i)$. To step through $sa$ in this way, we get all the L-type suffixes in line 17. Afterward, we scan $sa$ leftward for inducing the order of S-type suffixes. When scanning $sa[14]$ in lines 19-20,
 
+
+
+ddhe ending position of each bucket and insert the sorted S*-type suffixes into the right part of the corresponding buckets. Afterward, we first find the heading position of each bucket (marked by the symbol $\wedge$) and scan $sa$ rightward for inducing the order of L-type suffixes as following. In lines 8-9, we check $\sf suf(14)$ (marked by the symbol $@$) and find its predecessor ${\sf suf(13)}$ is L-type, thus we put ${\sf suf(13)}$ into the current leftmost empty position in ${\sf sa\_bkt_L}(i)$. To step through $sa$ in this way, we get all the L-type suffixes sorted in line 17. After that, we find the ending position of each bucket and scan $sa$ leftward for inducing the order of S-type suffixes in lines 18-28. When scanning $sa[14]$, we see $x[3]$ is S-type and thus put ${\sf suf(3)}$ into the current rightmost empty position in ${\sf sa\_bkt_S}(i)$. Following the same, we get all the S-type suffixes sorted in line 28.
 
 \begin{figure}[t]
 	\centering
@@ -198,58 +200,50 @@ A running example of S\ref{induction_phase:2}-Sp\ref{induction_phase:4} is shown
 \end{figure}
 
 
-\begin{lemma} \label{lemma:2}
-    $sa[0, n)$ is the SA for $x[0, n)$ if and only if the following conditions are satisfied: \\
-    (1) $sa^*$ is correctly computed. \\
-    (2) S\ref{induction_phase:1}-S\ref{induction_phase:4} are correctly implemented. \\
-\end{lemma}
-
-\begin{IEEEproof} Given two suffixes placed at $sa[i]$ and $sa[j]$ and their successors placed at $sa[p]$ and $sa[q]$, we prove the statement as follows.
-
-Because S\ref{induction_phase:1}-S\ref{induction_phase:4} are correctly implemented, $i < j \iff (x[sa[i]], p) < (x[sa[j]], q)$. This satisfies the second condition of Lemma~\ref{lemma:1}. 
-
-Further, suppose $sa[i] = sa[j]$ and $i \ne j$, then $sa[p] = sa[q]$ and $p \ne q$. Repeatedly replacing $(i, j)$ with $(p, q)$ until $\sf suf(sa[i])$ is S*-type, then $sa^*$ contain duplicate elements. Because $sa^*$ is correctly computed, each element in $sa^*$ must be unique. This leads to a contradiction.
-\end{IEEEproof}
- 
-The above lemma indicates that, if the first condition of Lemma~\ref{lemma:2} is true, we can check the correctness of $sa^*$ instead of $sa$ at the top recursion level to perform SA verification. It should be noticed that the code snippet for the induction phase at the top recursion level only consists of tens of C++ code lines. This is considerable smaller than the whole program for a disk-based suffix sorting algorithm. Following the idea, we assume S\ref{induction_phase:1}-S\ref{induction_phase:4} are correctly implemented and propose two methods for checking computation errors caused by implementation bugs and I/O errors caused by hardware malfunctions. The algorithms designed by these methods can be seamlessly integrated into any IS suffix sorting algorithms for building and checking an SA at the same time.
-
-\subsubsection{Method A} \label{sec:proposals:method_a}
-
-Our first method is directly extended from Lemma~\ref{lemma:2}. 
+As stated below, S\ref{induction_phase:1}''-S\ref{induction_phase:3}'' also constitute the sufficient and necessary conditions for a correct $sa$.
 
 \begin{lemma} \label{lemma:3}
-	Assume the induction phase at the top recursion level is correctly implemented, the output $sa[0, n)$ of an IS suffix sorting algorithm is the SA for the input string $x[0, n)$ if and only if the following conditions are satisfied: \\
+	For any IS suffix sorting algorithm, its output $sa[0, n)$ is the SA for the input string $x[0, n)$ if and only if the following conditions are satisfied: \\
 	(1) $sa^*$ is correct. \\
-	(2) $sa[i]$ is equal to the value calculated by S\ref{induction_phase:1}''-S\ref{induction_phase:4}''. \\
+	(2) $sa[i]$ is equal to the value calculated by S\ref{induction_phase:1}''-S\ref{induction_phase:3}''. \\
 	
 \end{lemma}
 
-The first condition of Lemma~\ref{lemma:3} can be checked by a sparse SA checker like~\cite{wu2017}. Notice that each suffix induced into $sa$ will be latter scanned for inducing the order of its predecessor during S\ref{induction_phase:2}'' and S\ref{induction_phase:4}''. The second condition intends for detecting I/O errors and can be checked by determining whether the induced and scanned values for each suffix are equal. The problem to be solved here is that when a suffix is induced into a bucket, its corresponding value in $sa$ may not be scanned at once. Our solution is to integrate the checking process into the building process, by ensuring the sequence of values placed at a bucket is identical to that scanned later. For the purpose, we use a fingerprinting function to increasingly compute the fingerprints of both sequences and check their equality in constant time at the end of the induction phase. If the two fingerprints for each bucket are equal, then the second condition of Lemma~\ref{lemma:3} will be seen with a high probability. As a result, $sa$ can be built and probabilistically checked at the same time. In this way, we design Algorithm~\ref{alg:1} to probabilistically check $sa[0, n)$ during the induction phase at the top recursion level of an IS suffix sorting algorithm. 
-
+Suppose $sa^*$ is correct\footnote{The correctness of $sa^*$ can be checked by a sparse SA checker, such as~\cite{wu2017}. It should be noticed that the checking processes for $sa^*$ and $sa$ can be executed in parallel.}, this lemma suggests a method to check $sa$ when it is induced from $sa^*$ during the induction phase. Specifically, in S\ref{induction_phase:2}'' and S\ref{induction_phase:3}'', each item induced into $sa$ will be scanned later to induce the order of its predecessor. If the induced and scanned values for each item are equal, then $sa$ is correct according to Lemma~\ref{lemma:3}. The problem to be solved here is that when an item is induced into a bucket, its value in $sa$ will not be scanned at once. One solution for this is to record the induced and scanned values separately during the building process and check their equality afterward. Our solution is to integrate the building and checking processes into a whole, by ensuring the sequence of items induced into a bucket is identical to that scanned later. For the purpose, we can use a fingerprinting function to increasingly compute the fingerprints of both sequences and check their equality in constant time at the end of induction phase. If the two fingerprints for each bucket are equal, then the second condition of Lemma~\ref{lemma:3} will be seen with a high probability. As a result, $sa$ can be built and probabilistically checked at the same time. Following the previous discussion, we design a probabilistic algorithm based on  Corollary~\ref{corollary:1}.
 	
-\begin{theorem} \label{theorem:1}
-    Assume the induction phase at the top recursion level is correctly implemented, the output $sa[0, n)$ for the input string $x[0, n)$ if and only if the following conditions are satisfied for all $c \in \Sigma$: \\
+\begin{corollary} \label{corollary:1}
+	$sa[0, n)$ is the SA for the input string $x[0, n)$ with a high probability if the following conditions are satisfied for all $c \in \Sigma$: \\
 	(1) $sa^*$ is correct.\\
 	(2) The fingerprints of ${\sf sa_{I1}}(c)$ and ${\sf sa_{S1}}(c)$ are equal. \\
 	(3) The fingerprints of ${\sf sa_{I2}}(c)$ and ${\sf sa_{S2}}(c)$ are equal. \\
 	
-\end{theorem}
+\end{corollary}
 
-In Algorithm~\ref{alg:1}, ${\sf sa_{I1}}(c)$ and ${\sf sa_{I2}}(c)$ are two sequences respectively induced into ${\sf sa\_bkt_L}$ and ${\sf sa\_bkt_S}$, while ${\sf sa_{S1}}(c)$ and ${\sf sa_{S2}}(c)$ are two sequences respectively scanned from ${\sf sa\_bkt_L}$ and ${\sf sa\_bkt_S}$. It should be noticed that Method A can be also applied to checking $lcp$ when it is being built from $lcp^*$ following the IS principle~\cite{Fischer11}. 
+Notice that ${\sf sa_{I1}}(c)$ and ${\sf sa_{I2}}(c)$ are two sequences respectively induced into ${\sf sa\_bkt_L}$ and ${\sf sa\_bkt_S}$, while ${\sf sa_{S1}}(c)$ and ${\sf sa_{S2}}(c)$ are two sequences respectively scanned from ${\sf sa\_bkt_L}$ and ${\sf sa\_bkt_S}$.
 
-\subsubsection{Method B}\label{sec:proposals:method_b}
+We point out that Method A can be also applied to checking $lcp$ when it is being built from $lcp^*$ following the IS principle~\cite{Fischer11}. In general, this is done by comparing the sequences of induced and scanned items for all the buckets in $lcp$.
 
-As shown in Lemma~\ref{lemma:4}, our second method uses a different way to check the correctness of $sa^*$. Before the presentation, we first introduce a notation called $\overline{sa^*}$. The same as $sa^*$, $\overline{sa^*}$ also represents the suffix array for all the S*-type suffixes. Both two integer arrays are computed at the top recursion level of an IS suffix sorting algorithm. To be specific, $sa^*$ is computed from $sa_1$ and $\overline{sa^*}$ is retrieved from the constructed $sa$.
+
+\subsection{Method B}\label{sec:checkers:method_b}
+
+{\color{red} 1. $\overline{sa^*}$ is a subset of the final $sa$, what is $sa^*[i]$? These two symbols have not been defined clearly and are confusing.
+
+2. Notice: The whole algorithm for induced sorting suffixes consists of many processes, the inducing process is only one of them. The checking takes place only at the top level by reusing the inducing process there. For the checking algorithm to work, it must be correctly implemented, this implies that the inducing process at the top level is also implicitly assumed to be correctly implemented. This needs to be specified/assumed for clarity.
+
+3. A checking method using Theorem \ref{theorem:1} can be: (1) Compute BWT from $sa$; (2) Apply the inducing method on $sa$ and BWT to check $sa$. Explain in detail (1-2 pages in the appendix, must be detailed enough for readers to understand) such a checking process designed by Theorem \ref{theorem:1} is identical as the suffix inducing process at the top level. Hence, we first implement a correct checker in this way, then reuse this implementation for the inducing process at the top level.
+}
+
+Our second Method is based on Theorem~\ref{theorem:2}, where $\overline{sa^*}$ is a subset of the final $sa$ for recording the starting positions of all the S*-type suffixes in $x$. We prove this theorem using Lemma~\ref{lemma:1} and Theorem~\ref{theorem:1}.
 
 {\color{red}
-\begin{lemma} \label{lemma:4}
-    Assume the induction phase at the top recursion level is correctly implemented, the output $sa[0, n)$ of an IS suffix sorting algorithm is the SA for the input string $x[0, n)$ if and only if the following conditions are satisfied for all $i \in [0, n_1)$:
-
-	(1) $sa^*[i]$ is a permutation of all the S*-type suffixes and  $sa^*[0]=n-1$. \\
-	(2) $sa^*[i] = \overline{sa^*}[i]$. \\p
-	(3) $sa[i]$ is equal to the value calculated by S\ref{induction_phase:1}''-S\ref{induction_phase:4}''. \\
-
-\end{lemma}
+\begin{theorem} \label{theorem:2}
+	For any IS suffix sorting algorithm, its output $sa[0, n)$ is the SA for the input string $x[0, n)$ if and only if the following conditions are satisfied for all $i \in [0, n_1)$:
+	\begin{enumerate}[(1)]
+		\item $sa^*[i]$ is a permutation of all S*-type suffixes and  $sa^*[0]=n-1$.
+		\item $sa^*[i] = \overline{sa^*}[i]$.
+		\item $sa$ is a permutation of all suffixes.
+		\end{enumerate}
+\end{theorem}
 
 \begin{IEEEproof}
 	We only prove the sufficiency as the necessity is clear.

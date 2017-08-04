@@ -244,11 +244,12 @@ As shown in Lemma~\ref{lemma:4}, our second method uses a different way to check
 {\color{red}
 \begin{lemma} \label{lemma:4}
     Assume the induction phase at the top recursion level is correctly implemented, the output $sa[0, n)$ of an IS suffix sorting algorithm is the SA for the input string $x[0, n)$ if and only if the following conditions are satisfied for all $i \in [0, n_1)$:
-
-	(1) $sa^*[i]$ is a permutation of all the S*-type suffixes and  $sa^*[0]=n-1$. \\
-	(2) $sa^*[i] = \overline{sa^*}[i]$. \\p
-	(3) $sa[i]$ is equal to the value calculated by S\ref{induction_phase:1}''-S\ref{induction_phase:4}''. \\
-
+    
+    \begin{enumerate}[(1)]
+		\item $sa^*[i]$ is a permutation of all the S*-type suffixes and  $sa^*[0]=n-1$.
+		\item $sa^*[i] = \overline{sa^*}[i]$.
+		\item $sa$ is a permutation of all suffixes.
+		\end{enumerate}
 \end{lemma}
 
 \begin{IEEEproof}
