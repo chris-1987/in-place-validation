@@ -44,7 +44,7 @@
 \IEEEtitleabstractindextext{%
 \begin{abstract}
 
-Suffix array~(SA) can be built by the induced sorting~(IS) method on both internal and external memory models. We propose two methods that enable any IS suffix sorter to build and check an SA simultaneously. The first method can check both suffix and longest common prefix~(LCP) arrays for strings drawn from constant alphabets, while the second method is applicable to checking SA for strings of any alphabets. By combining our methods with the Karp-Rabin fingerprinting function, we design two probablistic algorithms that perform verification with a neligible error probability. These algorithms are rather lightweight in terms of time and space. Particularly, the algorithm designed by the second method only takes linear time and constant space when running in external memory. For a further study, we integrate the checking algorithm designed by the second method into the existing suffix sorter DSA-IS to evaluate the checking overhead, where the time, space and I/O consumptions for verification are considerably smaller than that for construction in the experiments. This convinces us that the proposed checking methods, together with the state-of-the-art IS suffix sorters, could constitute efficient solutions for both construction and verification.
+Suffix array~(SA) can be built by the induced sorting~(IS) method on both internal and external memory models. We propose two methods that enable any IS suffix sorter to build and check an SA simultaneously. The first method can check both suffix and longest common prefix~(LCP) arrays, while the second method is applicable to checking SA only. By combining our methods with the Karp-Rabin fingerprinting function, we design two probablistic algorithms that perform verification with a neligible error probability. These algorithms are rather lightweight in terms of time and space. Particularly, the algorithm designed by the second method only takes linear time and constant space when running in external memory. For a further study, we integrate the checking algorithm designed by the second method into the existing suffix sorting algorithm DSA-IS to evaluate the checking overhead, where the time, space and I/O consumptions for verification are considerably smaller than that for construction in the experiments. This convinces us that the proposed checking methods, together with the state-of-the-art IS suffix sorters, could constitute efficient solutions for both construction and verification.
 
 \end{abstract}
 
@@ -206,16 +206,16 @@ A running example of S\ref{induction_phase:2}-Sp\ref{induction_phase:4} is shown
 
 \begin{IEEEproof} Given two suffixes placed at $sa[i]$ and $sa[j]$ and their successors placed at $sa[p]$ and $sa[q]$, we prove the statement as follows.
 
-Because S\ref{induction_phase:1}-S\ref{induction_phase:4} are correctly implemented, $i < j \iff (x[sa[i]], p) < (x[sa[j]], q)$. This satisfies the second condition of Lemma~\ref{lemma:1}. 
+Because S\ref{induction_phase:1}-S\ref{induction_phase:4} are correctly implemented, $i < j \iff (x[sa[i]], p) < (x[sa[j]], q)$. This satisfies the second condition of Lemma~\ref{lemma:1}.
 
 Further, suppose $sa[i] = sa[j]$ and $i \ne j$, then $sa[p] = sa[q]$ and $p \ne q$. Repeatedly replacing $(i, j)$ with $(p, q)$ until $\sf suf(sa[i])$ is S*-type, then $sa^*$ contain duplicate elements. Because $sa^*$ is correctly computed, each element in $sa^*$ must be unique. This leads to a contradiction.
 \end{IEEEproof}
- 
+
 The above lemma indicates that, if the first condition of Lemma~\ref{lemma:2} is true, we can check the correctness of $sa^*$ instead of $sa$ at the top recursion level to perform SA verification. It should be noticed that the code snippet for the induction phase at the top recursion level only consists of tens of C++ code lines. This is considerable smaller than the whole program for a disk-based suffix sorting algorithm. Following the idea, we assume S\ref{induction_phase:1}-S\ref{induction_phase:4} are correctly implemented and propose two methods for checking computation errors caused by implementation bugs and I/O errors caused by hardware malfunctions. The algorithms designed by these methods can be seamlessly integrated into any IS suffix sorting algorithms for building and checking an SA at the same time.
 
 \subsubsection{Method A} \label{sec:proposals:method_a}
 
-Our first method is directly extended from Lemma~\ref{lemma:2}. 
+Our first method is directly extended from Lemma~\ref{lemma:2}.
 
 \begin{lemma} \label{lemma:3}
 	Assume the induction phase at the top recursion level is correctly implemented, the output $sa[0, n)$ of an IS suffix sorting algorithm is the SA for the input string $x[0, n)$ if and only if the following conditions are satisfied: \\
@@ -224,70 +224,84 @@ Our first method is directly extended from Lemma~\ref{lemma:2}.
 	
 \end{lemma}
 
-The first condition of Lemma~\ref{lemma:3} can be checked by a sparse SA checker like~\cite{wu2017}. Notice that each suffix induced into $sa$ will be latter scanned for inducing the order of its predecessor during S\ref{induction_phase:2}'' and S\ref{induction_phase:4}''. The second condition intends for detecting I/O errors and can be checked by determining whether the induced and scanned values for each suffix are equal. The problem to be solved here is that when a suffix is induced into a bucket, its corresponding value in $sa$ may not be scanned at once. Our solution is to integrate the checking process into the building process, by ensuring the sequence of values placed at a bucket is identical to that scanned later. For the purpose, we use a fingerprinting function to increasingly compute the fingerprints of both sequences and check their equality in constant time at the end of the induction phase. If the two fingerprints for each bucket are equal, then the second condition of Lemma~\ref{lemma:3} will be seen with a high probability. As a result, $sa$ can be built and probabilistically checked at the same time. In this way, we design Algorithm~\ref{alg:1} to probabilistically check $sa[0, n)$ during the induction phase at the top recursion level of an IS suffix sorting algorithm. 
+The first condition of Lemma~\ref{lemma:3} can be checked by a sparse SA checker like~\cite{wu2017}. Notice that each suffix induced into $sa$ will be latter scanned for inducing the order of its predecessor during S\ref{induction_phase:2}'' and S\ref{induction_phase:4}''. The second condition intends for detecting I/O errors and can be checked by determining whether the induced and scanned values for each suffix are equal. The problem to be solved here is that when a suffix is induced into a bucket, its corresponding value in $sa$ may not be scanned at once. Our solution is to integrate the checking process into the building process, by ensuring the sequence of values placed at a bucket is identical to that scanned later. For the purpose, we use a fingerprinting function to increasingly compute the fingerprints of both sequences and check their equality in constant time at the end of the induction phase. If the two fingerprints for each bucket are equal, then the second condition of Lemma~\ref{lemma:3} will be seen with a high probability. As a result, $sa$ can be built and probabilistically checked at the same time. It should be noticed that this method can be also applied to checking the longest common prefix array when it is being built from $lcp^*$ following the IS principle~\cite{Fischer11}. As a result, we design Algorithm~\ref{alg:2} to probabilistically check $sa$ and $lcp$ during the induction phase at the top recursion level.
 
-	
-\begin{theorem} \label{theorem:1}
-    Assume the induction phase at the top recursion level is correctly implemented, the output $sa[0, n)$ for the input string $x[0, n)$ if and only if the following conditions are satisfied for all $c \in \Sigma$: \\
-	(1) $sa^*$ is correct.\\
-	(2) The fingerprints of ${\sf sa_{I1}}(c)$ and ${\sf sa_{S1}}(c)$ are equal. \\
-	(3) The fingerprints of ${\sf sa_{I2}}(c)$ and ${\sf sa_{S2}}(c)$ are equal. \\
-	
-\end{theorem}
+\SetKwProg{Fn}{Function}{}{}
 
-In Algorithm~\ref{alg:1}, ${\sf sa_{I1}}(c)$ and ${\sf sa_{I2}}(c)$ are two sequences respectively induced into ${\sf sa\_bkt_L}$ and ${\sf sa\_bkt_S}$, while ${\sf sa_{S1}}(c)$ and ${\sf sa_{S2}}(c)$ are two sequences respectively scanned from ${\sf sa\_bkt_L}$ and ${\sf sa\_bkt_S}$. It should be noticed that Method A can be also applied to checking $lcp$ when it is being built from $lcp^*$ following the IS principle~\cite{Fischer11}. 
+\begin{algorithm*}
+
+	\caption{The Algorithm Based on Lemma~\ref{lemma:3}.}
+	
+	\label{alg:2}
+	
+	%\SetAlgoNoLine
+	\Fn{{\sf CheckByMethodA}}{
+
+        Check the correctness of $sa^*$ and $lcp^*$ by the method proposed in~\cite{wu2017}. \\
+
+        Compute the fingerprints of ${\sf sa_{I1}}(c)$, ${\sf sa_{S1}}(c)$, ${\sf lcp_{I1}}(c)$ and ${\sf lcp_{S1}}(c)$ when inducing the order and the LCP-values of L-type suffixes. \\
+
+        Check if ${\sf sa_{I1}}(c) = {\sf sa_{S1}}(c)$ and ${\sf lcp_{I1}}(c) = {\sf lcp_{S1}}(c)$. \\
+		
+        Compute the fingerprints of ${\sf sa_{I2}}(c)$, ${\sf sa_{S2}}(c)$, ${\sf lcp_{I2}}(c)$ and ${\sf lcp_{S2}}(c)$ when inducing the order and the LCP-values of S-type suffixes. \\
+
+        Check if ${\sf sa_{I2}}(c) = {\sf sa_{S2}}(c)$, ${\sf lcp_{I2}}(c) = {\sf lcp_{S2}}(c)$. \\
+	}
+	\end{algorithm*}
+
 
 \subsubsection{Method B}\label{sec:proposals:method_b}
 
-As shown in Lemma~\ref{lemma:4}, our second method uses a different way to check the correctness of $sa^*$. Before the presentation, we first introduce a notation called $\overline{sa^*}$. The same as $sa^*$, $\overline{sa^*}$ also represents the suffix array for all the S*-type suffixes. Both two integer arrays are computed at the top recursion level of an IS suffix sorting algorithm. To be specific, $sa^*$ is computed from $sa_1$ and $\overline{sa^*}$ is retrieved from the constructed $sa$.
+Method B uses a different way to check the correctness of $sa^*$ in Lemma~\ref{lemma:4}. Before our presentation, we first introduce a notation called $\overline{sa^*}$. The same as $sa^*$, $\overline{sa^*}$ also represents the suffix array for all the S*-type suffixes. Both of them are computed during the induction phase at the top recursion level of an IS suffix sorting algorithm. To be specific, $sa^*$ is computed from $sa_1$ and $\overline{sa^*}$ is retrieved from the constructed $sa$.
 
 {\color{red}
 \begin{lemma} \label{lemma:4}
     Assume the induction phase at the top recursion level is correctly implemented, the output $sa[0, n)$ of an IS suffix sorting algorithm is the SA for the input string $x[0, n)$ if and only if the following conditions are satisfied for all $i \in [0, n_1)$:
 
-	(1) $sa^*[i]$ is a permutation of all the S*-type suffixes and  $sa^*[0]=n-1$. \\
-	(2) $sa^*[i] = \overline{sa^*}[i]$. \\p
+	(1) $sa^*[i]$ is a permutation of all the S*-type suffixes. \\
+	(2) $sa^*[i] = \overline{sa^*}[i]$. \\
 	(3) $sa[i]$ is equal to the value calculated by S\ref{induction_phase:1}''-S\ref{induction_phase:4}''. \\
 
 \end{lemma}
 
 \begin{IEEEproof}
-	We only prove the sufficiency as the necessity is clear.
 
-	Case 1: Suppose all the S*-type suffixes are correctly sorted, $sa$ is correct by Lemma \ref{lemma:3}.
-		
-	Case 2: Notice that the suffix inducing process at the top level is correctly implemented by Assumption xxx.
-	Suppose any two S*-type suffixes are not correctly sorted, i.e. ${\sf suf}(sa^*[i_0])>{\sf suf}(sa^*[j_0])$ and $i_0<j_0$. By condition (2), we have ${\sf suf}(\overline{sa^*}[i_0])>{\sf suf}(\overline{sa^*}[j_0])$. Because the order of ${\sf suf}(\overline{sa^*}[i_0])$ and ${\sf suf}(\overline{sa^*}[j_0])$ is induced from ${\sf suf}(sa^*[i_1])$ and ${\sf suf}(sa^*[j_1])$, where ${\sf sub}(\overline{sa^*}[i_0], sa^*[i_1])$ and ${\sf sub}(\overline{sa^*}[j_0], sa^*[j_1])$ are two LMS-substrings, there must be ${\sf suf}(sa^*[i_1])>{\sf suf}(sa^*[j_1])$ and $i_1<j_1$. Repeating this reasoning process, because condition (1), we must see ${\sf suf}(sa^*[i_k])>{\sf suf}(sa^*[j_k])$ and ${\sf suf}(sa^*[i_{k+1}])<{\sf suf}(sa^*[j_{k+1}])$, where $i_k<j_k$ and $i_{k+1}<j_{k+1}$. However, given ${\sf suf}(sa^*[i_{k+1}])<{\sf suf}(sa^*[j_{k+1}])$, the inducing process will produce ${\sf suf}(\overline{sa^*}[i_k])<{\sf suf}(\overline{sa^*}[j_k])$ , which implies ${\sf suf}(sa^*[i_k])<{\sf suf}(sa^*[j_k])$ because condition (2), leading to a contradiction.
-	
-	Given condition (2), the two sets of suffixes induced from any two LMS suffixes will not overlap (explain this...), hence the $sa$ produced by the inducing processing must be a permutation of all suffixes.
+    We only prove the sufficiency as the necessity is clear.
+
+    Case 1: Suppose all the S*-type suffixes are correctly sorted in $sa^*$, then $sa$ is right according to Lemma~\ref{lemma:3}.
+
+    Case 2: Suppose any two S*-type suffixes are not corrected sorted, i.e., $\sf suf(sa^*[i_0]) > \sf suf(sa^*[j_0])$ and $i_0 < j_0$. By condition (2), we have $\sf suf(\overline{sa^*}[i_0] > \sf suf(\overline{sa^*}[j_0])$. Given that the order of $\sf suf(\overline{sa^*}[i_0]$ and $\sf suf(\overline{sa^*}[j_0])$ are induced from ${\sf suf}(sa^*[i_1])$ and ${\sf suf}(sa^*[j_1])$, then ${\sf sub}(\overline{sa^*}[i_0], sa^*[i_1])$ and ${\sf sub}(\overline{sa^*}[j_0], sa^*[j_1])$ are two LMS-substrings and there must be ${\sf suf}(sa^*[i_1])>{\sf suf}(sa^*[j_1])$ and $i_1 < j_1$. Repeating this reasoning process, because condition (1), we must see ${\sf suf}(sa^*[i_k])>{\sf suf}(sa^*[j_k])$ and ${\sf suf}(sa^*[i_{k+1}])<{\sf suf}(sa^*[j_{k+1}])$, where $i_k < j_k$ and $i_{k+1} < j_{k+1}$. However, given ${\sf suf}(sa^*[i_{k+1}])<{\sf suf}(sa^*[j_{k+1}])$, the inducing process will produce ${\sf suf}(\overline{sa^*}[i_k])<{\sf suf}(\overline{sa^*}[j_k])$ , which implies ${\sf suf}(sa^*[i_k])<{\sf suf}(sa^*[j_k])$ because condition (2), leading to a contradiction.
 	
 \end{IEEEproof}
 }	
 
-The first condition of Theorem~\ref{theorem:2} is naturally satisfied when computing $sa^*$ from $sa_1$. A naive solution for checking the second condition is to keep a copy of $\overline{sa^*}$ when computing $sa$ from $sa^*$ and compare it with $sa^*$ afterward. This takes linear time, space and I/O overhead. We prefer to check equality of them by comparing their fingerprints, which can be calculated during the scan of these arrays in S\ref{induction_phase:1}'' and S\ref{induction_phase:3}''.
+The first condition of Lemma~\ref{lemma:4} is naturally satisfied when computing $sa^*$ from $sa_1$. We reuse the fingerprinting function to probabilistically check the third condition. This method is also applied to checking the second condition by computing and comparing the fingerprints of $sa^*$ and $\overline{sa^*}$. Specifically, the fingerprint of $sa^*$ is calculated when it is being scanned in S$\ref{induction_phase:1}''$. Because $\overline{sa^*}$ is a subset of $sa$, the fingerprint of $\overline{sa^*}$ is calculated when the S-type suffixes are being induced in S$\ref{induction_phase:4}''$.
 
-\begin{corollary} \label{corollary:2}
-	$sa[0, n)$ is the SA for the input string $x[0, n)$ with a high probability if the following conditions are satisfied for all $i \in [0, n_1)$: \\
-	(1) $sa^*[i]$ is a permutation of all the S*-type suffixes and  $sa^*[0]=n-1$. \\
-	(2) The fingerprints of $sa^*$ and $\overline{sa^*}$ are equal. \\
-\end{corollary}
+\SetKwProg{Fn}{Function}{}{}
 
-As can be seen in Fig.~\ref{fig:example1}, both $sa^*$ and $\overline{sa^*}$ contain items $\{14, 8, 5, 2\}$ arranged in the same order. By using the fingerprinting function introduced in the next subsection, the fingerprints can be calculated in linear time using constant space. This implies another probabilistic algorithm designed by Method B.
+\begin{algorithm*}
+
+	\caption{The Algorithm Based on Lemma~\ref{lemma:4}.}
+	
+	\label{alg:3}
+	
+	%\SetAlgoNoLine
+	\Fn{{\sf CheckByMethodB}}{
+
+        Compute the fingerprints of $sa^*$, ${\sf sa_{I1}}(c)$ and ${\sf sa_{S1}}(c)$ when inducing the order and the LCP-values of L-type suffixes. \\
+
+        Check if ${\sf sa_{I1}}(c) = {\sf sa_{S1}}(c)$ and ${\sf lcp_{I1}}(c) = {\sf lcp_{S1}}(c)$ by comparing their fingerprints. \\
+		
+        Compute the fingerprints of $\overline{sa^*}$, ${\sf sa_{I2}}(c)$ and ${\sf sa_{S2}}(c)$ when inducing the order and the LCP-values of S-type suffixes. \\
+
+        Check if ${\sf sa_{I2}}(c) = {\sf sa_{S2}}(c)$p by comparing their fingerprints. \\
+
+        Check if $sa^* = \overline{sa^*}$ by comparing their fingerprints. \\
+	}
+\end{algorithm*}
+
 
 \subsection{Fingerprinting Function}
-
-\begin{figure}[htbp!]
-	\centering
-	
-	\includegraphics[width = 0.9\columnwidth]{example2.pdf}
-	
-	\caption{An example for calculating fingerprints by Karp-Rabin fingerprinting function.}
-	
-	\label{fig:example2}
-	
-\end{figure}
-
-Methods A and B check equality of two integer arrays by computing and comparing their fingerprints. In our programs, we select the Karp-Rabin fingerprinting function to compute the fingerprints in need. As depicted in Fig.~\ref{fig:example2}, the fingerprint of $A$ is calculated according to Formulas~\ref{formula:1}-\ref{formula:2}, where $L$ is a prime and $\delta$ is an integer randomly chosen from $[1, L)$. It should be noticed that two equal arrays must have an identical fingerprint, but the inverse is not always true. Fortunately, the error probability can be reduced to a negligible level by setting $L$ to a large value.
 
 \begin{formula} \label{formula:1}${\sf fp}(A[0, -1]) = 0$.
 \end{formula}
@@ -295,8 +309,23 @@ Methods A and B check equality of two integer arrays by computing and comparing 
 \begin{formula} \label{formula:2}${\sf fp}(A[0, i]) = {\sf fp}(A[0, i - 1]) \cdot {\delta} + A[i]\mod L$ for $i \ge 0$.
 \end{formula}
 
+The proposed two methods check equality of two arrays by comparing their fingerprints, which can be calculated using a hash function. Notice that two equal arrays must share an identical hash value, but the inverse is not always true. To lower the error probability of a false match, we prefer using the Karp-Rabin fingerprinting function to compute the required values following Formulas~\ref{formula:1}-\ref{formula:2}, where $L$ is a prime and $delta$ is an integer randomly chosen from $[1, L)$. By setting $L$ to a large value, the error probability can be reduced to a negligible level. In Fig.~\ref{fig:example2}, we depict an example for computing the integer array $A$, where $A$ is identical to $sa^*$ and $\overline{sa^*}$ in Fig.~\ref{fig:example1}. Given $L = 23$ and $\delta = 5$, we first compute the fingerprint of $A[0, 0]$ in line 4. Because $\sf fp(A[0, -1]) = 0$, $\sf fp(A[0, 0]) = (0 \cdot 5 + 14) \, mod \, 23 = 14$. By iteratively computing the fingerprints of the prefixes of $A$ according to Formula~\ref{formula:2}, we finally obtain the fingerprints of the whole array in line 7.
 
+\begin{figure}[htbp!]
+	\centering
+	
+	\includegraphics[width = 1\columnwidth]{example2.pdf}
+	
+	\caption{An example for calculating fingerprints by Karp-Rabin fingerprinting function.}
+	
+	\label{fig:example2}
+	
+\end{figure}
 
+\subsection{Complexity Analysis}
+
+It takes linear time and constant RAM space for computing the required fingerprints in Algorithm~\ref{alg:2} and Algorithm~\ref{alg:3}. Further, the bottleneck of Algorithm~\ref{alg:2} lies in checking $sa^*$ following the idea presented in~\cite{wu2017}. Specifically, given two suffixes, say $\sf suf(i)$ and $\sf suf(j)$, and their LCP-value, say $d$, we compute and compare the fingerprints of $\sf sub(i, i + d - 1)$ and $\sf sub(j, j + d - 1)$. If the fingerprints are equal and the order of $x[i + d]$ and $x[j + d]$ correspond to that of $\sf suf(i)$ and $\sf suf(j)$, it is believed that the suffixes are correctly sorted and their LCP-value is right. When implemented in external memory, the checking processes for any number of suffix pairs can be done in batch within a sorting complexity. Because at most one out of every two suffixes is S*-type (typically one-third in real-world data sets) and the checking process is only executed at the top recursion level, the checking consumption taken by Algorithm~\ref{alg:2} is much less than the building consumption taken by any disk-based IS suffix sorting algorithm.
+ 
 \section{Experiments} \label{sec:experiments}
 
 For implementation simplicity, we engineer DSA-IS and DSA-IS+ by the STXXL's containers~(vector, sorter, priority queue and stream). The experimental platform is a desktop computer equipped with an Intel Xeon E3-1220 V2 CPU, 4GiB RAM and 500GiB HD. All the programs are complied by gcc/g++ 4.8.4 with -O3 options under Ubuntu 14.04 64-bit operating system. In our experiments, three performance metrics are investigated for the programs running on the corpora listed in Table~\ref{tbl:corpora}, where each metric is measured as a mean of two runs.
