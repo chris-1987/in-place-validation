@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.8.2)  8 AUG 2017 21:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.8.2)  9 AUG 2017 09:47
 entering extended mode
 **./draft.tex
 (draft.tex
@@ -694,7 +694,7 @@ d-to.pdf> <./construction_ct_guten-eps-converted-to.pdf>] [9
 Here is how much of TeX's memory you used:
  4949 strings out of 493323
  75947 string characters out of 3139043
- 163408 words of memory out of 3000000
+ 162408 words of memory out of 3000000
  8357 multiletter control sequences out of 15000+200000
  54024 words of font info for 128 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -718,7 +718,7 @@ onts/type1/urw/palatino/uplb8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw
 /palatino/uplbi8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/upl
 r8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplri8a.pfb><D:/P
 rogram Files/MiKTeX 2.9/fonts/type1/urw/zapfding/uzdr.pfb>
-Output written on draft.pdf (9 pages, 592695 bytes).
+Output written on draft.pdf (9 pages, 592607 bytes).
 PDF statistics:
  203 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

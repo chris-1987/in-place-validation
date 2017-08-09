@@ -205,7 +205,7 @@ A running example of S\ref{induction_phase:2}''-S\ref{induction_phase:4}'' is sh
 
 
 \begin{lemma} \label{lemma:2}
-    $sa[0, n)$ is the SA for $x[0, n)$ if and only if the following conditions are satisfied: \\
+    For any IS suffix sorting algorithm, its output $sa[0, n)$ is the SA for $x[0, n)$ if and only if the following conditions are satisfied at the top recursion level: \\
     (1) $sa^*$ is correctly computed. \\
     (2) S\ref{induction_phase:1}''-S\ref{induction_phase:4}'' are correctly implemented. \\
 \end{lemma}
@@ -277,12 +277,12 @@ According to Lemma~\ref{lemma:4}, Method B uses a different way to check the cor
 
     Case 1: Suppose all the S*-type suffixes are correctly sorted in $sa^*$, then $sa$ is right according to Lemma~\ref{lemma:3}.
 
-    Case 2: Suppose any two S*-type suffixes are not corrected sorted, i.e., ${\sf suf}(sa^*[i_0]) > {\sf suf}(sa^*[j_0])$ and $i_0 < j_0$. By condition (2), we have ${\sf suf}(\overline{sa^*}[i_0] > {\sf suf}(\overline{sa^*}[j_0])$. Given that the order of ${\sf suf}(\overline{sa^*}[i_0])$ and ${\sf suf}(\overline{sa^*}[j_0])$ are induced from ${\sf suf}(sa^*[i_1])$ and ${\sf suf}(sa^*[j_1])$, then ${\sf sub}(\overline{sa^*}[i_0], sa^*[i_1])$ and ${\sf sub}(\overline{sa^*}[j_0], sa^*[j_1])$ are two S*-type substrings and there must be ${\sf suf}(sa^*[i_1])>{\sf suf}(sa^*[j_1])$ and $i_1 < j_1$. Repeating this reasoning process, because condition (1), we must see ${\sf suf}(sa^*[i_k])>{\sf suf}(sa^*[j_k])$ and ${\sf suf}(sa^*[i_{k+1}])<{\sf suf}(sa^*[j_{k+1}])$, where $i_k < j_k$ and $i_{k+1} < j_{k+1}$. However, given ${\sf suf}(sa^*[i_{k+1}])<{\sf suf}(sa^*[j_{k+1}])$, the inducing process will produce ${\sf suf}(\overline{sa^*}[i_k])<{\sf suf}(\overline{sa^*}[j_k])$ , which implies ${\sf suf}(sa^*[i_k])<{\sf suf}(sa^*[j_k])$ because condition (2), leading to a contradiction.
+    Case 2: Suppose any two S*-type suffixes are not correctly sorted, i.e., ${\sf suf}(sa^*[i_0]) > {\sf suf}(sa^*[j_0])$ and $i_0 < j_0$. By condition (2), we have ${\sf suf}(\overline{sa^*}[i_0] > {\sf suf}(\overline{sa^*}[j_0])$. Given that the order of ${\sf suf}(\overline{sa^*}[i_0])$ and ${\sf suf}(\overline{sa^*}[j_0])$ are induced from ${\sf suf}(sa^*[i_1])$ and ${\sf suf}(sa^*[j_1])$, then ${\sf sub}(\overline{sa^*}[i_0], sa^*[i_1])$ and ${\sf sub}(\overline{sa^*}[j_0], sa^*[j_1])$ are two S*-type substrings and there must be ${\sf suf}(sa^*[i_1])>{\sf suf}(sa^*[j_1])$ and $i_1 < j_1$. Repeating this reasoning process, because condition (1), we must see ${\sf suf}(sa^*[i_k])>{\sf suf}(sa^*[j_k])$ and ${\sf suf}(sa^*[i_{k+1}])<{\sf suf}(sa^*[j_{k+1}])$, where $i_k < j_k$ and $i_{k+1} < j_{k+1}$. However, given ${\sf suf}(sa^*[i_{k+1}])<{\sf suf}(sa^*[j_{k+1}])$, the inducing process will produce ${\sf suf}(\overline{sa^*}[i_k])<{\sf suf}(\overline{sa^*}[j_k])$ , which implies ${\sf suf}(sa^*[i_k])<{\sf suf}(sa^*[j_k])$ because condition (2), leading to a contradiction.
 	
 \end{IEEEproof}
 	
 
-The first condition of Lemma~\ref{lemma:4} is naturally satisfied when computing $sa^*$ from $sa_1$ in S\ref{induction_phase:1}. The second condition is probabilistically checked by computing and comparing the fingerprints of $sa^*$ and $\overline{sa^*}$. The fingerprint of $sa^*$ is computed when placing the elements of $sa^*$ into $sa$ in S\ref{induction_phase:2}, while the fingerprint of $\overline{sa^*}$ is computed when inducing the S*-type suffixes into $sa$.
+The first condition of Lemma~\ref{lemma:4} is naturally satisfied when computing $sa^*$ from $sa_1$ in S\ref{induction_phase:1}''. The second condition is probabilistically checked by computing and comparing the fingerprints of $sa^*$ and $\overline{sa^*}$. The fingerprint of $sa^*$ is computed when placing the elements of $sa^*$ into $sa$ in S\ref{induction_phase:2}'', while the fingerprint of $\overline{sa^*}$ is computed when inducing the S*-type suffixes into $sa$.
 
 \SetKwProg{Fn}{Function}{}{}
 
@@ -331,7 +331,7 @@ The proposed two methods check equality of two arrays (or sub-arrays) by compari
 
 \subsection{Complexity Analysis}
 
-Assuming the induction phase at the top recursion level is correctly implemented, the bottleneck of Algorithms~\ref{alg:2} and~\ref{alg:3} occur when checking $sa^*$. For Algorithm~\ref{alg:2}, we apply the method proposed in~\cite{wu2017} to ensure the correctness of $sa^*$ within the sorting complexity. Specifically, given two suffixes, i.e. ${\sf suf}(i)$ and ${\sf suf}(j)$, and their LCP-value $d$, we compute and compare the fingerprints of ${\sf sub}(i, i + d - 1)$ and ${\sf sub}(j, j + d - 1)$. If the fingerprints are equal and the order of $x[i + d]$ and $x[j + d]$ corresponds to that of ${\sf suf}(i)$ and ${\sf suf}(j)$, then the suffixes are correctly sorted and their LCP-value is right with a high probability. Because at most one out of every two suffixes is S*-type (commonly one-third in real-world data sets) and the checking process is only executed during the induction phase at the top recursion level, the checking overhead is much less than the building consumption. This conclusion is also true for Algorithm~\ref{alg:3}, where the checking overhead is mainly taken by computing fingerprints in need.
+Assuming the induction phase at the top recursion level is correctly implemented, the bottleneck of Algorithms~\ref{alg:2} and~\ref{alg:3} occur when checking $sa^*$. For Algorithm~\ref{alg:2}, we apply the method proposed in~\cite{wu2017} to ensure the correctness of $sa^*$ within the sorting complexity. Specifically, given two suffixes, i.e. ${\sf suf}(i)$ and ${\sf suf}(j)$, and their LCP-value $\ell$, we compute and compare the fingerprints of ${\sf sub}(i, i + \ell - 1)$ and ${\sf sub}(j, j + \ell - 1)$. If the fingerprints are equal and the order of $x[i + \ell]$ and $x[j + \ell]$ corresponds to that of ${\sf suf}(i)$ and ${\sf suf}(j)$, then the suffixes are correctly sorted and their LCP-value is right with a high probability. Because at most one out of every two suffixes is S*-type (commonly one-third in real-world data sets) and the checking process is only executed during the induction phase at the top recursion level, the checking overhead is much less than the building consumption. This conclusion is also true for Algorithm~\ref{alg:3}, where the checking overhead is mainly taken by computing fingerprints in need.
  
 \section{Experiments} \label{sec:experiments}
 
