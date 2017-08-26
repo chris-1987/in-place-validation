@@ -74,13 +74,13 @@ R.~Karp and M.~Rabin, ``{Efficient Randomized Pattern Matching Algorithms},''
   \emph{IBM Journal of Research and Development}, vol.~31, no.~2, pp. 249--260,
   March 1987.
 
+\bibitem{Fischer11}
+J.~Fischer, ``{Inducing the LCP-array},'' in \emph{In Workshop on Algorithms
+  and Data Structures}, 2011, pp. 374--385.
+
 \bibitem{wu2017}
 Y.~Wu, G.~Nong, W.~H. Chan, and L.~B. Han, ``{Checking Big Suffix and LCP
   Arrays by Probabilistic Methods},'' \emph{IEEE Transactions on Computers},
   2017.
-
-\bibitem{Fischer11}
-J.~Fischer, ``{Inducing the LCP-array},'' in \emph{In Workshop on Algorithms
-  and Data Structures}, 2011, pp. 374--385.
 
 \end{thebibliography}
