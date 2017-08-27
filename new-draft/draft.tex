@@ -28,7 +28,7 @@
 
 \begin{document}
 
-\title{Building and Checking a Suffix Array by Induced Sorting}
+\title{Building and Checking Suffix Array by Induced Sorting Method}
 
 \author{Yi~Wu,
 	Ge~Nong,
@@ -44,7 +44,7 @@
 \IEEEtitleabstractindextext{%
 \begin{abstract}
 	
-A suffix array~(SA) can be built on both internal and external memory models following the induced sorting~(IS) principle. We propose two methods for checking an SA when it is being built by any IS suffix sorter. The first method can be used to probabilistically check both suffix and longest common prefix~(LCP) arrays, while the second method is for checking SA deterministically. To achieve a good performance, we combine the Karp-Rarbin fingerprinting techinque into our methods to design two algorithms that perform checking correctly with a negligible error probability. The algorithm designed by the first method has an integer sorting complexity, while the algorithm designed by the second method runs within linear time and constant RAM space. We integrate the algorithm designed by the second method into the existing disk-based suffix sorting algorithm DSA-IS for evaluation, where the experimental results indicate that the checking overhead is considerably smaller than the building consumption.
+A suffix array~(SA) can be built on both internal and external memory models using the induced sorting~(IS) method. We propose two methods for checking an SA when it is being built by any IS builder. The first method is probabilistic and can be used to check both suffix and longest common prefix~(LCP) arrays, while the second method is deterministic and designed for checking SA only. To achieve a good performance, we combine the Karp-Rarbin fingerprinting techinque into our methods to design two algorithms that perform checking correctly with a negligible error probability. The algorithm designed by the first method has an integer sorting complexity, while the algorithm designed by the second method runs within linear time and constant RAM space. We integrate the algorithm designed by the second method into the existing disk-based suffix sorting algorithm DSA-IS for evaluation, where the experimental results indicate that the checking overhead is considerably smaller than the building consumption.
 
 \end{abstract}
 
@@ -76,11 +76,11 @@ While the research on developing various SA builders using the IS method is evol
 A constructed SA should be checked to detect potential errors caused by implementation bugs and other malfunctions. 
 The software packages for DC3 and eSAIS provide a checker based on the idea presented in~\cite{Dementiev2008a}. 
 When running on external-memory model, the cost taken by this checker is rather high as it performs two passes of integer sorts for arranging $\mathcal{O}(n)$ fixed-size tuples. 
-We propose in this paper two methods that enable the IS method to build and check an SA at the same time. 
-Our first method is probabilistic and can be extended to check both suffix and LCP arrays, while the second method is deterministic and designed for checking SA only. 
-By combining the Karp-Rabin fingerprinting technique~\cite{Karp1987}, we design two probabilistic algorithms to perform checking correctly with a negligible error probability. The key operation of both algorithms is to check equality of two integer sequences by computing and comparing their fingerprints. As will be shown, the algorithm designed by the first method checks an SA within a integer sorting complexity and the algorithm designed by the second method checks an SA in linear time. For a further study, we first use new substring sorting and naming methods to improve the design of DSA-IS and then integrate the algorithm designed by the second method into the adapted DSA-IS for evaluation. Our experimental results indicate that the time, space and I/O volume for checking SA is negligible in comparison with that for building SA.
+We propose in this paper two methods that enable the IS method to build and check an SA simultaneously. 
+Our first method is probabilistic and can be used to check both suffix and LCP arrays, while the second method is deterministic and designed for checking SA only. 
+We design two probabilistic algorithms by the proposed methods to perform checking correctly with a negligible error probability. A key operation of the algorithms is to check equality of two integer sequences by comparing their fingerprints, where the fingerprints are computed using the Karp-Rabin fingerprinting technique~\cite{Karp1987}. As will be shown, the algorithm designed by the first method checks an SA within an integer sorting complexity, while the algorithm designed by the second method checks an SA using linear time and constant RAM space. For a further study, we employ new substring sorting and naming methods to improve the design of DSA-IS and integrate the algorithm designed by the second method into the adapted DSA-IS for evaluation. Our experimental results indicate that the time, space and I/O volume for checking SA is negligible in comparison with that for building SA.
 
-The rest of this paper is organized as follows. Section~\ref{sec:preliminaries} introduces some notations and symbols for presentation convenience. Section~\ref{sec:builder} gives an overview of the existing IS suffix sorting algorithms and show the details of our new substring sorting and naming methods specific for DSA-IS. Section~\ref{sec:checkers} presents the proposed checking methods and the probabilistic algorithms designed by them. Sections~\ref{sec:experiments} and~\ref{sec:conclusion} show the experimental results and the concluding remarks, respectively.
+The rest of this paper is organized as follows. Section~\ref{sec:preliminaries} introduces some notations and symbols for presentation convenience. Section~\ref{sec:builder} gives an overview of the existing IS suffix sorting algorithms and describes our new substring sorting and naming methods for DSA-IS. Section~\ref{sec:checkers} presents the proposed checking methods and the probabilistic algorithms. Sections~\ref{sec:experiments} and~\ref{sec:conclusion} show the experimental results and the concluding remarks, respectively.
 
 \section{Preliminaries}~\label{sec:preliminaries}
 
@@ -88,7 +88,7 @@ Given a string $x[0,n)$ drawn from a full-ordered alphabet $\Sigma$, we assume t
 
 Characters in $x$ are classified into two categories: L-type and S-type. We say $x[i]$ is S-type if (1) $i = n - 1$ or (2) $x[i] = x[i + 1]$ and $x[i + 1]$ is S-type; otherwise $x[i]$ is L-type. Further, if $x[i]$ and $x[i - 1]$ are respectively S-type/L-type and L-type/S-type, then $x[i]$ is also called S*-type/L*-type. We use an array $t$ to record the type of all the characters in $x$, where $t[i] = 1$ or $0$ if $x[i]$ is S-type or L-type, respectively. The type of a substring or suffix is determined by that of its heading character. In the rest of this paper, we only consider substrings ending with an S*-type character.
 
-Given two characters $x[i]$ and $x[i + 1]$, we say $x[i]$ is the predecessor of $x[i + 1]$ and $x[i + 1]$ is the successor of $x[i]$. We define the predecessor-successor relationship between ${\sf suf}(i)/{\sf sub}(i, j)$ and ${\sf suf}(i + 1)/{\sf sub}(i + 1, j)$.
+Given two characters $x[i]$ and $x[i + 1]$, we say $x[i]$ is the predecessor of $x[i + 1]$ and $x[i + 1]$ is the successor of $x[i]$. We define the predecessor-successor relationship between ${\sf suf}(i)/{\sf sub}(i, j)$ and ${\sf suf}(i + 1)/{\sf sub}(i + 1, j)$ as well.
 
 Partition $x$ into multiple S*-type substrings, each substring contains two S*-type characters and any two neighboring substrings overlap an S*-type character. We produce a reduced string $x_1$ by replacing each substring with its name, where the name represents the rank of this	 substring among all. We interchangeably use "rank" and "name"  to indicate the lexical order of a substring.
 
@@ -96,7 +96,7 @@ The suffix array $sa$ arranges all the suffixes of $x$ in their lexical order, w
 
 The LCP array $lcp$ records the LCP-value of each pair of neighboring suffixes in $sa$. We assume $lcp[0] = 0$ and let $lcp[i] = \ell$ for $i \in [1, n)$, where $\ell$ is the LCP-value of ${\sf suf}(sa[i])$ and ${\sf suf}(sa[i - 1])$.
 
-All the suffixes in $sa$ are naturally grouped into multiple buckets. Each bucket occupies a contiguous interval in $sa$ and contains all the suffixes with a same heading character. Without loss of generality, we denote by ${\sf sa\_bkt}(c_0)$ the bucket for suffixes starting with $c_0$, where ${\sf sa\_bkt}(c_0)$ can be naturally divided into two parts ${\sf sa\_bkt_L}(c_0)$ and ${\sf sa\_bkt_S}(c_0)$ that contain L-type and S-type suffixes, respectively. Similarly, we define ${\sf lcp\_bkt}(c_0)$, ${\sf lcp\_bkt_L}(c_0)$ and ${\sf lcp\_bkt_S}(c_0)$ on $lcp$ for $c_0 \in \Sigma$.
+All the suffixes in $sa$ are naturally grouped into multiple buckets. Each bucket occupies a contiguous interval in $sa$ and contains all the suffixes with a same heading character. Without loss of generality, we denote by ${\sf sa\_bkt}(c_0)$ the bucket for suffixes starting with $c_0$, where ${\sf sa\_bkt}(c_0)$ can be naturally divided into left and right parts ${\sf sa\_bkt_L}(c_0)$ and ${\sf sa\_bkt_S}(c_0)$ that contain L-type and S-type suffixes, respectively. Similarly, we define ${\sf lcp\_bkt}(c_0)$, ${\sf lcp\_bkt_L}(c_0)$ and ${\sf lcp\_bkt_S}(c_0)$ on $lcp$ for $c_0 \in \Sigma$.
 
 Let $n_1 = \|x_1\|$, we use $sa^*[0, n_1)$ and $lcp^*[0, n_1)$ to denote the suffix and LCP arrays for S*-type suffixes in $x$, respectively. Specifically, $sa^*[i]$ records the starting position of the $(i + 1)$-th smallest S*-type substring, while $lcp^*[i]$ records the LCP-value of ${\sf suf}(sa^*[i])$ and ${\sf suf}(sa^*[i - 1])$.
 
@@ -145,28 +145,28 @@ During the execution of a reduction/induction phase, all the substrings/suffixes
 
 \begin{enumerate}[S1]
 	
-	\item Split $x$ into blocks and sort substrings/suffixes in each block by calling SA-IS. The heading characters in need are copied to external memory in their access order. \label{dsais_sorting_method:1}
+	\item Split $x$ into blocks and sort substrings/suffixes in each block by the internal-memory IS method. Copy the heading characters of the induced substrings/suffixes to external memory in access order. \label{dsais_sorting_method:1}
 	
-	\item Sort the substrings/suffixes in $x$ according to the lexical order of their heading characters and the ranks of their successors by using an external-memory heap. \label{dsais_sorting_method:2}
+	\item Sort the substrings/suffixes in $x$ according to the lexical order of their heading characters and the ranks of their successors by a disk-based heap. \label{dsais_sorting_method:2}
 \end{enumerate}
 
-S\ref{dsais_sorting_method:2} induces the lexical order of substrings/suffixes by using an external-memory heap. It continually pops the top substring/suffix from the heap and induces its predecessors into the heap according to the rank of the top substring/suffix and the heading character of the predecessors. For all the induced substrings/suffixes, their heading characters are already arranged in access order on disk by S\ref{dsais_sorting_method:1} and thus can be retrieved from external memory by sequential I/O operations before use. As shown in Section~\ref{sec:experiments}, our program for DSA-IS requires less disk space than that for eSAIS, but the former runs slower than the latter due to the large I/O volume for sorting and naming S*-type substrings during the reduction phase. To improve the performance, we propose new substring sorting and naming methods in the following.
+S\ref{dsais_sorting_method:2} adapts the internal-memory IS method for running on external memory model by using a disk-based heap. It continually pops the top substring/suffix from the heap and induces its predecessor into the heap. For all the induced substrings/suffixes, their heading characters are already arranged in access order on disk at the end of S\ref{dsais_sorting_method:1} and thus can be retrieved from external memory by sequential I/O operations before use. As shown in Section~\ref{sec:experiments}, our program for DSA-IS requires less disk space than that for eSAIS, but the former runs slower than the latter due to the large I/O volume for sorting and naming S*-type substrings in the reduction phase. To improve the performance, we propose new substring sorting and naming methods in the following.
 
 \subsection{Improvements on DSA-IS}
 
-All the substrings are classified into long and short categories with respect to whether or not containing more than $D$ characters. The new substring sorting method mainly consists of the three steps below:
+All the S*-type substrings are classified into long and short categories with respect to whether or not containing more than $D$ characters. The new substring sorting method mainly consists of the three steps below:
 
 \begin{enumerate}[S1']
-	\item Reuse S\ref{dsais_sorting_method:1} to sort all the substrings in each block. Copy the heading characters of the induced long substrings to external memory in access order and copy the induced short S*-type substrings to external memory in sorted order.~\label{dsaism_sorting_method:1}
+	\item Reuse S\ref{dsais_sorting_method:1} to sort all the substrings in each block. Copy the heading characters of the induced substrings contained in the long S*-type substrings to external memory in access order and copy the induced short S*-type substrings to external memory in sorted order.~\label{dsaism_sorting_method:1}
 		
-	\item Reuse S\ref{dsais_sorting_method:2} to sort the long substrings in $x$. Copy the leftmost $D$ characters of the long S*-type substrings to external memory in sorted order.~\label{dsaism_sorting_method:2}
+	\item Reuse S\ref{dsais_sorting_method:2} to sort the substrings contained in the long S*-type substrings in $x$. Copy the leftmost $D$ characters of the long S*-type substrings to external memory in sorted order.~\label{dsaism_sorting_method:2}
 	
-	\item Merge all the short and long by a multi-way sorter.~\label{dsaism_sorting_method:3}
+	\item Merge all the short and long S*-type substrings using a multi-way sorter.~\label{dsaism_sorting_method:3}
 \end{enumerate}
 
-The short S*-type substrings in each block are already sorted and organized as a sequence in external memory after S\ref{dsaism_sorting_method:1}', while the long S*-type substrings in $x$ are already sorted and organized as a sequence in external memory after S\ref{dsaism_sorting_method:2}'. Assume $x$ is split into $k$ blocks, the multi-way sorter in S\ref{dsaism_sorting_method:3}' maintains an internal-memory heap to determine the lexical order of substrings belonging to different sequences. The heap contains at most $k + 1$ substrings at any point of time. It performs a literal string comparison to compare any two S*-type substrings in $\mathcal{O}(D)$\footnote{If the leftmost $D$ characters of a long S*-type substring is equal to a short S*-type substring, then the short is lexicographically greater than the long.}. 
+S\ref{dsaism_sorting_method:1}' separately sorts the short S*-type substrings in each block and organizes them as a sequence in external memory, while S\ref{dsaism_sorting_method:2}' sorts the long S*-type substrings in $x$ and organizes them as a sequence in external memory. Assume $x$ is partitioned into $k$ blocks, S\ref{dsaism_sorting_method:3}' maintains an internal-memory heap for the multi-way sorter to determine the lexical order of substrings from different sequences. The heap contains at most $k + 1$ substrings at any point of time, it performs a literal comparison to compare two S*-type substrings in $\mathcal{O}(D)$ time\footnote{If the leftmost $D$ characters of a long S*-type substring is equal to a short S*-type substring, then the latter is lexicographically greater than the former.}. 
 
-The above sorting method has a good performance if $D$ is small and the majority of S*-type substrings in $x$ are short. This is commonly satisfied in real-world datasets. We next describe a method for naming the S*-type substrings when they are being sorted by S\ref{dsaism_sorting_method:1}'-S\ref{dsaism_sorting_method:3}'. The key operation is to check equality of two substrings successively popped from the heap in S\ref{dsaism_sorting_method:3}'. If either of the substrings is short, then we literally compare them in $\mathcal{O}(D)$ time. Otherwise, we check whether their ranks are equal by comparing their heading characters and the ranks of their successors in S\ref{dsaism_sorting_method:2}'. For the same purpose, SAIS-PQ also applies a similar technique to merge the substring sorting and naming processes. Our experiments in Section~\ref{sec:experiments} show that, by using the new substring sorting and naming methods, the adapted DSA-IS, called DSA-IS+, only takes half as much disk space as eSAIS.
+The above sorting method can achieve an ideal performance if $D$ is small and the majority of S*-type substrings in $x$ are short. This feature is commonly satisfied in real-world datasets. Next, we describe a method for naming all the S*-type substrings when they are being sorted by S\ref{dsaism_sorting_method:1}'-S\ref{dsaism_sorting_method:3}'. Specifically, for two substrings successively popped from the heap in S\ref{dsaism_sorting_method:3}', this method checks their equality as following: if either of the substrings is short, then we literally compare them in $\mathcal{O}(D)$ time; otherwise, we check whether their ranks are equal by comparing their heading characters and the ranks of their successors in S\ref{dsaism_sorting_method:2}'. It should be noticed that SAIS-PQ also uses a similar technique to merge the substring sorting and naming processes. Our experiments in Section~\ref{sec:experiments} demonstrate that, by using the new substring sorting and naming methods, the adapted DSA-IS, called DSA-IS+, only takes half as much disk space as eSAIS.
 
 \section{Checkers}~\label{sec:checkers}
 
@@ -180,7 +180,7 @@ We describe below the main idea of the existing checker presented in~\cite{Demen
 	(2) ${\sf r_i < r_j} \Leftrightarrow (x[i], r_{i + 1}) < (x[i], r_{j + 1})$ for $ i, j \in [0, n)$ and $i\ne j$, where $r_i$ and $r_j$ represent the ranks of ${\sf suf}(i)$ and ${\sf suf}(j)$ among all the suffixes, respectively. \\
 \end{lemma}
 
-\begin{IEEEproof} If condition (1) is true, then $sa$ is a permutation of all the suffixes in $x$. If condition (2) is true, then the lexical order of any two neighboring suffixes in $sa$ is determined by comparing their heading characters and the ranks of their successors. As a result, all the suffixes in $x$ are sorted following the induced sorting principle.
+\begin{IEEEproof} If condition (1) is true, then $sa$ is a permutation of all the suffixes in $x$. If condition (2) is true, then the lexical order of any two neighboring suffixes in $sa$ is determined by comparing their heading characters and the ranks of their successors. As a result, all the suffixes in $x$ are sorted following the IS principle.
 
 \end{IEEEproof}
 
@@ -191,7 +191,7 @@ The disk-based implementation of this checker conducts two passes of integer sor
 Recall that, an IS suffix sorting algorithm recursively executes the reduction phase to compute the reduced string $x_1$ until $x_1$ contains no duplicate characters. Afterward, it produces $sa_1$ from $x_1$ and recursively executes the induction phase to compute $sa$ until reaching the top recursion level, where the induction phase consists of the following steps:
 
 \begin{enumerate}[S1'']
-	\item sort the starting positions of all the S*-type suffixes with their ranks indicated by $sa_1$ to produce $sa^*$ \label{induction_phase:1}.
+	\item Sort the starting positions of all the S*-type suffixes with their ranks indicated by $sa_1$ to produce $sa^*$ \label{induction_phase:1}.
 
 	\item Clear $sa$. Scan $sa^*$ leftward with $i$ decreasing from $n_1 - 1$ to $0$. For each scanned item $sa^*[i]$, insert it into the rightmost empty position of ${\sf sa\_bkt_S}(x[sa^*[i]])$. \label{induction_phase:2}
 	
@@ -201,7 +201,7 @@ Recall that, an IS suffix sorting algorithm recursively executes the reduction p
 	
 \end{enumerate}
 
-A running example of S\ref{induction_phase:2}''-S\ref{induction_phase:4}'' is shown in Fig.~\ref{fig:example1}. Given $sa^*$ is already known, line 6 inserts each S*-type suffix into the corresponding bucket. For example, ${\sf suf}(2)$, ${\sf suf}(5)$, ${\sf suf}(8)$ are sequentially placed into the current rightmost empty position of ${\sf sa\_bkt}(i)$, where the insertion order corresponds to their sorted order indicated by $sa^*$. The next step is to find the leftmost position of each bucket (marked by the symbol $\wedge$) and scan $sa$ rightward for inducing the order of L-type suffixes. For this, we first check $sa[0] = 14$ (marked by the symbol @) and induce the predecessor of ${\sf suf}(14)$ in lines 8-9. Because $x[13] = i$ is L-type, we put ${\sf suf}(13)$ into the current leftmost empty position in ${\sf sa\_bkt_L}(i)$. To step through $sa$ in this way, we get all the L-type suffixes sorted in line 17. Afterward, we find the rightmost position of each bucket and scan $sa$ leftward for inducing the order of S-type suffixes. When scanning $sa[14] = 4$ in lines 19-20, we see $x[3] = i$ is S-type and thus put ${\sf suf}(3)$ into the current rightmost empty position in ${\sf sa\_bkt_S}(i)$. Following the same idea, we get all the S-type suffixes sorted in line 28. Following the discussion, we show in Lemma~\ref{lemma:2} a set of sufficient conditions for checking SA.
+A running example of S\ref{induction_phase:2}''-S\ref{induction_phase:4}'' is shown in Fig.~\ref{fig:example1}. Given $sa^*$ is already known, line 6 inserts each S*-type suffix into the corresponding bucket. For example, ${\sf suf}(2)$, ${\sf suf}(5)$, ${\sf suf}(8)$ are sequentially placed into the current rightmost empty position of ${\sf sa\_bkt}(i)$, where the insertion order corresponds to their sorted order indicated by $sa^*$. The next step is to find the leftmost position of each bucket (marked by the symbol $\wedge$) and scan $sa$ rightward for inducing the order of L-type suffixes. For this, we first check $sa[0] = 14$ (marked by the symbol @) and induce the predecessor of ${\sf suf}(14)$ in lines 8-9. Because $x[13] = i$ is L-type, we put ${\sf suf}(13)$ into the current leftmost empty position in ${\sf sa\_bkt_L}(i)$. To step through $sa$ in this way, we get all the L-type suffixes sorted in line 17. Afterward, we find the rightmost position of each bucket and scan $sa$ leftward for inducing the order of S-type suffixes. When scanning $sa[14] = 4$ in lines 19-20, we see $x[3] = i$ is S-type and thus put ${\sf suf}(3)$ into the current rightmost empty position in ${\sf sa\_bkt_S}(i)$. Following the same idea, we get all the S-type suffixes sorted in line 28. Based on the previous discussion, we show in Lemma~\ref{lemma:2} a set of sufficient conditions for checking SA.
 
 
 \begin{figure}[t]
@@ -222,7 +222,7 @@ A running example of S\ref{induction_phase:2}''-S\ref{induction_phase:4}'' is sh
     (2) S\ref{induction_phase:1}''-S\ref{induction_phase:4}'' are correctly implemented. \\
 \end{lemma}
 
-\begin{IEEEproof} Given two suffixes placed at $sa[i]$ and $sa[j]$ and their successors placed at $sa[p]$ and $sa[q]$ at the top recursion level, we prove the statement as follows.
+\begin{IEEEproof} Given ${\sf suf}(sa[i])$ and ${\sf suf}(sa[j])$ induced from ${\sf suf}(sa[p])$ and ${\sf suf}(sa[q])$ at the top recursion level, we prove the statement as follows.
 
 Because S\ref{induction_phase:1}''-S\ref{induction_phase:4}'' are correctly implemented, $i < j \iff (x[sa[i]], p) < (x[sa[j]], q)$. This satisfies the second condition of Lemma~\ref{lemma:1}.
 
@@ -230,22 +230,22 @@ Suppose $sa[i] = sa[j]$ and $i \ne j$, because S\ref{induction_phase:1}''-S\ref{
 
 \end{IEEEproof}
 
-Lemma~\ref{lemma:2} shows that we can check the correctness of $sa^*$ instead of $sa$ at the top recursion level to perform SA verification if the first condition of Lemma~\ref{lemma:2} is always true. In fact, the code snippet for the induction phase at the top recursion level only consists of tens of C++ code lines. This is considerably smaller than the whole program for a disk-based suffix sorting algorithm. Following the idea, we assume S\ref{induction_phase:1}''-S\ref{induction_phase:4}'' are correctly implemented and propose two methods for checking computation errors caused by implementation bugs and other malfunctions. These methods adopt different ways to ensure the correctness of $sa^*$. Particularly, our first method can be used to check both suffix and LCP arrays.  
+Lemma~\ref{lemma:2} indicates that we can check $sa^*$ instead to perform SA verification at the top recursion level if the second condition of Lemma~\ref{lemma:2} is always true. In fact, the code snippet for the induction phase at the top recursion level only consists of tens of C++ code lines. This is considerably smaller than the whole program for a disk-based IS suffix sorting algorithm. Following the idea, we assume S\ref{induction_phase:1}''-S\ref{induction_phase:4}'' are correctly implemented and propose in this section two methods for checking SA, where the methods adopt different approaches to ensure the correctness of $sa^*$. In particular, our first method can be used to check both suffix and LCP arrays.
 
 \subsubsection{Method A} \label{sec:proposals:method_a}
 
-The induced sorting method can be applied to building LCP array as well~\cite{Fischer11}. That is, the LCP-value of two substrings can be induced from that of their successors as following: the LCP-value is equal to zero if the two substrings have different heading characters; otherwise, the LCP-value is one greater than that of their successors. Assume the induction phase for inducing $sa$ and $lcp$ from $sa^*$ and $lcp^*$ is correctly implemented at the top recursion level, we show in Lemma~\ref{lemma:3} a set of conditions for checking both $sa$ and $lcp$ when they are built by an IS builder like~\cite{Fischer11, Bingmann12}.
+The IS method can be applied to constructing LCP array as well~\cite{Fischer11}. The LCP-value of two substrings is induced from that of their successors as following: the LCP-value is equal to zero if the two substrings have different heading characters; otherwise, the LCP-value is one greater than that of their successors. Assume the induction phase for inducing $sa$ and $lcp$ from $sa^*$ and $lcp^*$ is correctly implemented at the top recursion level, we show in Lemma~\ref{lemma:3} a set of conditions for checking both $sa$ and $lcp$ when they are built by an IS builder like~\cite{Fischer11, Bingmann12}.
 
 \begin{lemma} \label{lemma:3}
 	Assume the induction phase at the top recursion level is correctly implemented, the output $sa[0, n)$ and $lcp[0, n)$ of an IS builder are the suffix and LCP arrays for the input string $x[0, n)$ with a high probability if the following conditions are satisfied: \\
-	(1) $sa^*$ and $lcp^*$ are correct according to the checking result of the sparse suffix and LCP arrays probabilistic checker~\cite{wu2017}. \\
+	(1) $sa^*$ and $lcp^*$ are checked to be correct using the sparse suffix and LCP arrays probabilistic checker~\cite{wu2017}. \\
 	(2) $sa[i]$ and $lcp[i]$ are equal to the values induced into the corresponding positions of $sa$ and $lcp$ during the induction phase, for $i \in [0, n)$. \\
 \end{lemma}
 
 
-The checker in~\cite{wu2017} verifies $sa^*$ and $lcp^*$ within an integer sorting complexity. For each pair of neighboring suffixes in the given $sa$, it first employs the Karp-Rabin fingerprinting technique to compute the fingerprints of their leftmost $\ell$ characters, where $\ell$ is their LCP-value indicated by the given $lcp$. If the two fingerprints are equal, then it continues to check if the lexical order of  their $(\ell + 1)$-th characters corresponds to that of themselves indicated by the given $sa$. The second condition in Lemma~\ref{lemma:3} is intended for detecting malfunctions other than implementation bugs. Because each suffix induced into $sa/lcp$ will be latter scanned for inducing the order of its predecessor, this condition can be checked by determining whether the induced and scanned values for each suffix are equal. The problem here is that when a suffix is induced into a bucket, its corresponding value in $sa$ may not be scanned at once. Our solution is to ensure the sequence of values placed at a bucket is identical to that scanned latter. For the purpose, we reuse the Karp-Rabin fingerprinting technique to increasingly compute the fingerprints of both sequences and check their equality in constant time at the end of induction phase. If the two fingerprints for each bucket are equal, then the second condition of Lemma~\ref{lemma:3} will be seen with a high probability. As a result, $sa$ and $lcp$ can be built and probabilistically checked at the same time. 
+The checker in~\cite{wu2017} verifies $sa^*$ and $lcp^*$ within an integer sorting complexity. For each pair of neighboring suffixes in the given $sa$, it first employs the Karp-Rabin fingerprinting technique to compute the fingerprints of their leftmost $\ell$ characters, where $\ell$ is their LCP-value indicated by the given $lcp$. If the two fingerprints are equal, then it continues to check if the lexical order of  their $(\ell + 1)$-th characters corresponds to that of themselves indicated by the given $sa$. The second condition in Lemma~\ref{lemma:3} is intended for detecting malfunctions other than implementation bugs. Because each suffix induced into $sa/lcp$ will be latter scanned for inducing its predecessor, this condition can be checked by determining whether the induced and scanned values for each item in $sa/lcp$ are equal. The problem here is that when an item is induced into a bucket of $sa/lcp$, its corresponding value in $sa/lcp$ may not be scanned at once. Our solution is to ensure the sequence of values placed at a bucket is identical to that scanned latter. For the purpose, we reuse the Karp-Rabin fingerprinting technique to increasingly compute the fingerprints of both sequences and check their equality in constant time at the end of induction phase. If the two fingerprints for each bucket are equal, then the second condition of Lemma~\ref{lemma:3} will be seen with a high probability. As a result, $sa$ and $lcp$ can be built and probabilistically checked at the same time. 
 
-We design Algorithm~\ref{alg:2} to check $sa$ and $lcp$ when they are induced from $sa^*$ and $lcp^*$ at the top recursion level of an IS builder. In this algorithm, ${\sf sa_{I1}}(c)$ and ${\sf sa_{I2}}(c)$ are two sequences respectively induced into ${\sf sa\_bkt_L}(c)$ and ${\sf sa\_bkt_S}(c)$, while ${\sf sa_{S1}}(c)$ and ${\sf sa_{S2}}(c)$ are two sequences respectively scanned from ${\sf sa\_bkt_L}(c)$ and ${\sf sa\_bkt_S}(c)$. The algorithm computes and compares the fingerprints of these sequences and those of ${\sf lcp_{I1}}(c)/{\sf lcp_{I2}}(c)$ and ${\sf lcp_{S1}}(c)/{\sf lcp_{S2}}(c)$ to check the second condition of Lemma~\ref{lemma:3}. 
+We design Algorithm~\ref{alg:2} to check $sa$ and $lcp$ when inducing them from $sa^*$ and $lcp^*$ using the IS method. For any $c \in \Sigma$, ${\sf sa_{I1}}(c)$ and ${\sf sa_{I2}}(c)$ are two integer sequences respectively induced into ${\sf sa\_bkt_L}(c)$ and ${\sf sa\_bkt_S}(c)$, while ${\sf sa_{S1}}(c)$ and ${\sf sa_{S2}}(c)$ are two integer sequences respectively scanned from the left and right parts of the same bucket in $sa$. Algorithm~\ref{alg:2} computes and compares the fingerprints of these sequences to check the second condition of Lemma~\ref{lemma:3}. 
 
 \SetKwProg{Fn}{Function}{}{}
 
@@ -256,7 +256,7 @@ We design Algorithm~\ref{alg:2} to check $sa$ and $lcp$ when they are induced fr
 	\label{alg:2}
 	
 	%\SetAlgoNoLine
-	\Fn{{\sf CheckByMethodA}($x, sa^*, lcp^*$)}{
+	\Fn{{\sf CheckerA}($x, sa^*, lcp^*$)}{
 
         Verify $sa^*$ and $lcp^*$ by the checker presented in~\cite{wu2017}. \\
 
@@ -273,7 +273,7 @@ We design Algorithm~\ref{alg:2} to check $sa$ and $lcp$ when they are induced fr
 
 \subsubsection{Method B}\label{sec:proposals:method_b}
 
-Method B is deterministic and specific for checking SA only. It uses a different way to ensure the correctness of $sa^*$. Before our presentation, we first introduces a notation called $\overline{sa^*}$. The same as $sa^*$, $\overline{sa^*}$ also represents the suffix array for all the S*-type suffixes. Both $sa^*$ and $\overline{sa^*}$ are computed during the induction phase at the top recursion level, where the former is calculated from $sa_1$ in S\ref{induction_phase:1}'' and the latter is computed when inducing the S*-type suffixes into $sa$ in S\ref{induction_phase:4}''. 
+Method B is deterministic and specific for checking SA. Before our presentation, we first introduces a notation called $\overline{sa^*}$. The same as $sa^*$, $\overline{sa^*}$ also represents the SA for all the S*-type suffixes in $x$. Both $sa^*$ and $\overline{sa^*}$ are computed during the induction phase at the top recursion level, where the former is calculated from $sa_1$ in S\ref{induction_phase:1}'' and the latter is figured out when inducing S*-type suffixes into $sa$ in S\ref{induction_phase:4}''. 
 
 \begin{lemma} \label{lemma:4}
     Assume the induction phase at the top recursion level is correctly implemented, the output $sa[0, n)$ of an IS suffix sorter is the SA for the input string $x[0, n)$ if the following conditions are satisfied:
@@ -293,7 +293,7 @@ Method B is deterministic and specific for checking SA only. It uses a different
 \end{IEEEproof}
 	
 
-The first condition of Lemma~\ref{lemma:4} is naturally satisfied when computing $sa^*$ from $sa_1$ in S\ref{induction_phase:1}''. One way for deterministically checking the second condition is to copy both $sa^*$ and $\overline{sa^*}$ to external memory and compare their elements one by one after the induction phase. Algorithm~\ref{alg:3} applies a more space efficient way to checking equality of the two integer sequences with a negligible error probability. It reuses the Karp-Rabin fingerprinting technique to compute and compare the fingerprints of $sa^*$ and $\overline{sa^*}$, where the fingerprint of $sa^*$ is computed when placing the elements of $sa^*$ into $sa$ in S\ref{induction_phase:2}'' and the fingerprint of $\overline{sa^*}$ is computed when inducing the S*-type suffixes into $sa$ in S\ref{induction_phase:4}''. 
+The first condition of Lemma~\ref{lemma:4} is naturally satisfied when computing $sa^*$ from $sa_1$ in S\ref{induction_phase:1}''. One way for deterministically checking the second condition is to copy both $sa^*$ and $\overline{sa^*}$ to external memory and compare their elements one by one after the induction phase. Algorithm~\ref{alg:3} applies a more space efficient way to checking equality of $sa^*$ and $\overline{sa^*}$ with a negligible error probability. It employs the Karp-Rabin fingerprinting technique to compute and compare the fingerprints of the two integer sequences, where the fingerprint of $sa^*$ is computed when placing its elements into $sa$ in S\ref{induction_phase:2}'' and the fingerprint of $\overline{sa^*}$ is computed when inducing the S*-type suffixes into $sa$ in S\ref{induction_phase:4}''. 
 
 
 \SetKwProg{Fn}{Function}{}{}
@@ -305,7 +305,7 @@ The first condition of Lemma~\ref{lemma:4} is naturally satisfied when computing
 	\label{alg:3}
 	
 	%\SetAlgoNoLine
-	\Fn{{\sf CheckByMethodB}($x, sa^*$)}{
+	\Fn{{\sf CheckerB}($x, sa^*$)}{
 
         Compute the fingerprints of $sa^*$ when inducing the order of L-type suffixes. \\
 		
@@ -318,7 +318,7 @@ The first condition of Lemma~\ref{lemma:4} is naturally satisfied when computing
 
 \subsection{Fingerprinting Function}
 
-Both Algorithms~\ref{alg:2} and ~\ref{alg:3} check equality of sequences by comparing their fingerprints. We can use any rolling hash function to compute the fingerprints in need. Notice that two equal sequences must be mapped to an identical hash value, but the inverse is not always true. To lower the error probability of a false match, we prefer using the Karp-Rabin fingerprinting techniques to compute these values following Formulas~\ref{formula:1}-\ref{formula:2}, where $L$ is a prime and $\delta$ is an integer randomly chosen from $[1, L)$. By setting $L$ to a large value, the error probability can be reduced to a negligible level. In Fig.~\ref{fig:example2}, we depict an example for computing the integer array $A$ identical to $sa^*$ and $\overline{sa^*}$ in Fig.~\ref{fig:example1}. Given $L = 23$ and $\delta = 5$, we first compute the fingerprint of $A[0, 0]$ in line 4. Because $\sf fp(A[0, -1]) = 0$, $\sf fp(A[0, 0]) = (0 \cdot 5 + 14) \, mod \, 23 = 14$.  By iteratively computing the fingerprints in this way, we finally obtain the fingerprint of $A$ in line 7.
+Both Algorithms~\ref{alg:2} and ~\ref{alg:3} check equality of sequences by comparing their fingerprints. We can use any rolling hash function to compute the fingerprints in need. Notice that two equal sequences must be mapped to an identical hash value, but the inverse is not always true. To lower the error probability of a false match, we prefer using the Karp-Rabin fingerprinting technique to compute these values following Formulas~\ref{formula:1}-\ref{formula:2}, where $L$ is a prime and $\delta$ is an integer randomly chosen from $[1, L)$. By setting $L$ to a large value, the error probability can be reduced to a negligible level. We depict an example in Fig.~\ref{fig:example2} for computing an integer array $A$, where the array is equal to $sa^*$ and $\overline{sa^*}$ shown in Fig.~\ref{fig:example1}. Given $L = 23$ and $\delta = 5$, we first compute the fingerprint of $A[0, 0]$ in line 4. Because $\sf fp(A[0, -1]) = 0$, we have $\sf fp(A[0, 0]) = (0 \cdot 5 + 14) \, mod \, 23 = 14$.  By iteratively computing the fingerprints of prefixes of $A$ in this way, we finally obtain ${\sf fp}(A[0, 3])$ in line 7.
 
 \begin{formula} \label{formula:1}${\sf fp}(A[0, -1]) = 0$.
 \end{formula}
@@ -331,7 +331,7 @@ Both Algorithms~\ref{alg:2} and ~\ref{alg:3} check equality of sequences by comp
 	
 	\includegraphics[width = 1\columnwidth]{example2.pdf}
 	
-	\caption{An example for calculating fingerprints by Karp-Rabin fingerprinting function.}
+	\caption{An example for calculating fingerprints using the Karp-Rabin fingerprinting technique.}
 	
 	\label{fig:example2}
 	
@@ -339,7 +339,7 @@ Both Algorithms~\ref{alg:2} and ~\ref{alg:3} check equality of sequences by comp
 
 \subsection{Complexity Analysis}
 
-Algorithms~\ref{alg:2} and ~\ref{alg:3} take linear time and constant RAM space for computing the target sequences by the Karp-Rabin fingerprinting technique. Algorithm~\ref{alg:2} also employs the checker presented in~\cite{wu2017} to verify $sa^*$ and $lcp^*$ within an integer sorting complexity. Because at most one out of every two suffixes is S*-type and the checking process is only executed at the top recursion level, the overhead for checking $sa^*$ and $lcp^*$ is considerably smaller than that for constructing the two arrays by an IS builder.
+Algorithm~\ref{alg:3} takes linear time and constant RAM space to compute the required fingerprints. For Algorithm~\ref{alg:2}, it requires $\mathcal{O}(\|\Sigma\|)$ RAM space to cache the fingerprints of induced and scanned values in $sa$ and $lcp$ buckets. Besides, Algorithm~\ref{alg:2} also employs the checker presented in~\cite{wu2017} to verify $sa^*$ and $lcp^*$ within an integer sorting complexity. Because at most one out of every two suffixes is S*-type and the checking process is only executed at the top recursion level, the overhead for checking $sa^*$ and $lcp^*$ is much less than that for building the two arrays by an IS builder.
 
 \section{Experiments} \label{sec:experiments}
 
@@ -455,7 +455,7 @@ Rather than designing an I/O layer for efficient I/O operations, we currently us
 
 \section{Conclusion} \label{sec:conclusion}
 
-By assuming the induction phase at the top recursion level is correctly implemented, we propose two methods that enable an IS builder to build and check an SA simultaneously. The probabilistic algorithm designed by Method B is rather lightweight, it takes negligible time and space to run compared to the existing IS suffix sorting and checking algorithms. We also made our first attempt to improve the performance of DSA-IS using new substring sorting and naming methods. Our program for the adapted algorithm DSA-IS+ runs as fast as that for eSAIS and consumes only half as much disk space as the latter on various real-world datasets. We are now designing and implementing a novel IS suffix sorter that takes no more than 1n work space on external memory model. Theoretically, this suffix sorter has a better space performance than fSAIS under the same circumstances. 
+By assuming the induction phase at the top recursion level is correctly implemented, we propose two methods that enable any IS builder to build and check an SA simultaneously. The probabilistic algorithm designed by Method B is rather lightweight, it takes negligible time and space to run compared to the existing IS suffix sorting and checking algorithms. We also made our first attempt to improve the performance of DSA-IS using new substring sorting and naming methods. Our program for the adapted algorithm DSA-IS+ runs as fast as that for eSAIS and consumes only half as much disk space as the latter on various real-world datasets. We are now designing and implementing a novel IS suffix sorter that takes no more than 1n work space on external memory model. Theoretically, this suffix sorter has a better space performance than fSAIS under the same circumstances. 
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,bibfile}

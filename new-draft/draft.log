@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.8.2)  27 AUG 2017 04:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.8.2)  27 AUG 2017 15:22
 entering extended mode
 **./draft.tex
 (draft.tex
@@ -498,7 +498,9 @@ Underfull \hbox (badness 7451) in paragraph at lines 366--366
 \OT1/ppl/m/n/8.03 at $ftp : / / ftp . expasy . org / databases / . . . /
  []
 
-[5 <./example2.pdf>]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
 Package epstopdf Info: Source file: <construction_pdu_enwiki.eps>
 (epstopdf)                    date: 2017-08-08 21:09:49
 (epstopdf)                    size: 11223 bytes
@@ -511,7 +513,7 @@ df>
 (epstopdf)             \includegraphics on input line 380.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_pdu_enwiki-eps-converted-to.pdf, id=84, 420.57124pt x 316.18124pt
+<construction_pdu_enwiki-eps-converted-to.pdf, id=56, 420.57124pt x 316.18124pt
 >
 File: construction_pdu_enwiki-eps-converted-to.pdf Graphic file (type pdf)
  <use construction_pdu_enwiki-eps-converted-to.pdf>
@@ -530,7 +532,7 @@ df>
 (epstopdf)             \includegraphics on input line 380.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_iov_enwiki-eps-converted-to.pdf, id=85, 420.57124pt x 316.18124pt
+<construction_iov_enwiki-eps-converted-to.pdf, id=57, 420.57124pt x 316.18124pt
 >
 File: construction_iov_enwiki-eps-converted-to.pdf Graphic file (type pdf)
  <use construction_iov_enwiki-eps-converted-to.pdf>
@@ -549,7 +551,7 @@ converted-to.pdf construction_ct_enwiki.eps>
 (epstopdf)             \includegraphics on input line 380.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_ct_enwiki-eps-converted-to.pdf, id=86, 420.57124pt x 316.18124pt>
+<construction_ct_enwiki-eps-converted-to.pdf, id=58, 420.57124pt x 316.18124pt>
 File: construction_ct_enwiki-eps-converted-to.pdf Graphic file (type pdf)
 <use construction_ct_enwiki-eps-converted-to.pdf>
 Package pdftex.def Info: construction_ct_enwiki-eps-converted-to.pdf used on in
@@ -567,7 +569,7 @@ converted-to.pdf construction_pdu_guten.eps>
 (epstopdf)             \includegraphics on input line 387.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_pdu_guten-eps-converted-to.pdf, id=87, 420.57124pt x 316.18124pt>
+<construction_pdu_guten-eps-converted-to.pdf, id=59, 420.57124pt x 316.18124pt>
 File: construction_pdu_guten-eps-converted-to.pdf Graphic file (type pdf)
 <use construction_pdu_guten-eps-converted-to.pdf>
 Package pdftex.def Info: construction_pdu_guten-eps-converted-to.pdf used on in
@@ -585,7 +587,7 @@ converted-to.pdf construction_iov_guten.eps>
 (epstopdf)             \includegraphics on input line 387.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_iov_guten-eps-converted-to.pdf, id=88, 420.57124pt x 316.18124pt>
+<construction_iov_guten-eps-converted-to.pdf, id=60, 420.57124pt x 316.18124pt>
 File: construction_iov_guten-eps-converted-to.pdf Graphic file (type pdf)
 <use construction_iov_guten-eps-converted-to.pdf>
 Package pdftex.def Info: construction_iov_guten-eps-converted-to.pdf used on in
@@ -603,7 +605,7 @@ onverted-to.pdf construction_ct_guten.eps>
 (epstopdf)             \includegraphics on input line 387.
 Package epstopdf Info: Output file is already uptodate.
 
-<construction_ct_guten-eps-converted-to.pdf, id=89, 420.57124pt x 316.18124pt>
+<construction_ct_guten-eps-converted-to.pdf, id=61, 420.57124pt x 316.18124pt>
 File: construction_ct_guten-eps-converted-to.pdf Graphic file (type pdf)
 
 <use construction_ct_guten-eps-converted-to.pdf>
@@ -618,6 +620,7 @@ File: omsphv.fd
 )
 LaTeX Font Info:    Font shape `OMS/phv/m/n' in size <8.03> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 388.
+ [5 <./example2.pdf>]
 Package epstopdf Info: Source file: <verification_pdu.eps>
 (epstopdf)                    date: 2017-08-08 21:09:49
 (epstopdf)                    size: 1427889 bytes
@@ -628,7 +631,6 @@ Package epstopdf Info: Source file: <verification_pdu.eps>
 ted-to.pdf verification_pdu.eps>
 (epstopdf)             \includegraphics on input line 421.
 Package epstopdf Info: Output file is already uptodate.
-
 <verification_pdu-eps-converted-to.pdf, id=90, 420.57124pt x 317.185pt>
 File: verification_pdu-eps-converted-to.pdf Graphic file (type pdf)
 
@@ -707,7 +709,7 @@ onts/type1/urw/palatino/uplb8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw
 /palatino/uplbi8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/upl
 r8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/palatino/uplri8a.pfb><D:/P
 rogram Files/MiKTeX 2.9/fonts/type1/urw/zapfding/uzdr.pfb>
-Output written on draft.pdf (9 pages, 593226 bytes).
+Output written on draft.pdf (9 pages, 593213 bytes).
 PDF statistics:
  203 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
